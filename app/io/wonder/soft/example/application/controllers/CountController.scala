@@ -1,4 +1,4 @@
-package controllers
+package io.wonder.soft.example.application.controllers
 
 import javax.inject._
 
