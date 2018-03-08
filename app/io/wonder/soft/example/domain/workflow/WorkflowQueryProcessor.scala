@@ -27,4 +27,17 @@ object WorkflowQueryProcessor {
     }
   }
 
+  def searchSchemesBySchemeId(id: Int): Option[WorkflowSchemeEntity] = {
+    (DB localTx { implicit session =>
+      withSQL {
+        select.from(WorkflowSchemes as wsm)
+          .innerJoin(WorkflowStatuses as wss)
+          .on(wsm.statusId, wss.id)
+          .where(sqls.eq(wsm.id, id))
+      }.map(res => (WorkflowSchemes(wsm)(res), WorkflowStatuses(wss)(res))).single().apply()
+    }).map{ case (scheme: WorkflowSchemes, status: WorkflowStatuses) =>
+      WorkflowFactory.createSchemeEntity(scheme, status)
+    }
+  }
+
 }

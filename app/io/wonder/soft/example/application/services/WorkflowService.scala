@@ -5,6 +5,10 @@ import io.wonder.soft.example.domain.workflow.entity.{WorkflowSchemeEntity, Work
 
 object WorkflowService {
 
+  def listStatus: List[WorkflowStatusEntity] = {
+    WorkflowQueryProcessor.searchStatuses
+  }
+
   def createStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] =
       WorkflowStatusRepository.create(workflowStatusEntity)
 
@@ -15,11 +19,19 @@ object WorkflowService {
     WorkflowQueryProcessor.searchSchemes(workflowId)
   }
 
-  def createScheme(workflowSchemeEntity: WorkflowSchemeEntity): Either[Exception, WorkflowSchemeEntity] = {
-    val maybeEntity = WorkflowFactory.createSchemeEntity(workflowSchemeEntity)
+  def findScheme(id: Int): Either[Exception, WorkflowSchemeEntity] = {
+    WorkflowQueryProcessor.searchSchemesBySchemeId(id) match {
+      case Some(entity) => Right(entity)
+      case None => Left(new RuntimeException("not found scheme id"))
+    }
+  }
 
-    maybeEntity match {
-      case Some(entity) =>
+  def createScheme(schemeEntity: WorkflowSchemeEntity): Either[Exception, WorkflowSchemeEntity] = {
+    val maybeStatus = WorkflowStatusRepository.find(schemeEntity.status.get.id)
+
+    maybeStatus match {
+      case Some(statusEntity) =>
+        val entity = WorkflowFactory.createSchemeEntity(schemeEntity, statusEntity)
         WorkflowSchemeRepository.create(entity)
 
       case None =>

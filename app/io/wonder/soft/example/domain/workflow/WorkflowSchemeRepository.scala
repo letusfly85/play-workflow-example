@@ -12,8 +12,8 @@ object WorkflowSchemeRepository extends Repository[WorkflowSchemeEntity] {
 
   val wsc = WorkflowSchemes.column
 
-  override def find(workflowId: Int): Option[WorkflowSchemeEntity] = {
-    val maybeSchemes = WorkflowSchemes.findBy(sqls.eq(WorkflowSchemes.column.workflowId, workflowId))
+  override def find(id: Int): Option[WorkflowSchemeEntity] = {
+    val maybeSchemes = WorkflowSchemes.find(id)
     maybeSchemes.flatMap[WorkflowSchemeEntity](schemes => Some(schemes))
   }
 

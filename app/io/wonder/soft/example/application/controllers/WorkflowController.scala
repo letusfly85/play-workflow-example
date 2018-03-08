@@ -4,7 +4,6 @@ import javax.inject._
 
 import io.wonder.soft.example.application.services.WorkflowService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowSchemeEntity, WorkflowStatusEntity}
-import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor}
 import play.api.Logger
 import play.api.mvc._
 import play.api.libs.json._
@@ -13,9 +12,7 @@ import play.api.libs.json._
 class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def listStatus = Action {
-    val list = WorkflowQueryProcessor.searchStatuses()
-
-    Ok(Json.toJson(list))
+    Ok(Json.toJson(WorkflowService.listStatus))
   }
 
   def createStatus = Action { implicit request =>
@@ -40,13 +37,10 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
     }
   }
 
-  def findScheme(workflowId: String) = Action {
-    //TODO search by processor and create a scheme by factory
-    val maybeScheme = WorkflowFactory.createSchemeEntity(workflowId.toInt)
-
-    maybeScheme match {
-      case Some(schemeEntity) => Ok(Json.toJson(schemeEntity))
-      case None => NotFound(JsObject.empty)
+  def findScheme(id: String) = Action {
+    WorkflowService.findScheme(id.toInt) match {
+      case Right(schemeEntity) => Ok(Json.toJson(schemeEntity))
+      case Left(e) => NotFound(JsObject.empty)
     }
   }
 
