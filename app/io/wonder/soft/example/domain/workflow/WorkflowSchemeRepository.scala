@@ -6,15 +6,20 @@ import io.wonder.soft.example.domain.{Entity, Repository}
 import scalikejdbc._
 
 object WorkflowSchemeRepository extends Repository {
+  import WorkflowSchemeEntity._
 
-  override def find(id: Int): Option[WorkflowSchemeEntity] = {
-    val maybeSchemes = WorkflowSchemes.findBy(sqls.eq(WorkflowSchemes.column.workflowId, id))
+  override def find(workflowId: Int): Option[WorkflowSchemeEntity] = {
+    val maybeSchemes = WorkflowSchemes.findBy(sqls.eq(WorkflowSchemes.column.workflowId, workflowId))
     maybeSchemes match {
-      case Some(schemes) =>
-        WorkflowFactory.createSchemeEntityFromModel(schemes)
-
+      case Some(schemes) => Some(schemes)
       case None => None
     }
+  }
+
+  def findStatusId(workflowId: Int): Option[Int] = {
+    WorkflowSchemes.findBy(
+      sqls.eq(WorkflowSchemes.column.workflowId, workflowId)).map(scheme => scheme.statusId
+    )
   }
 
   override def create(entity: Entity): Either[Exception, WorkflowSchemeEntity] =

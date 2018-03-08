@@ -2,7 +2,7 @@ package io.wonder.soft.example.application.controllers
 
 import javax.inject._
 
-import io.wonder.soft.example.domain.workflow.{WorkflowQueryProcessor, WorkflowSchemeRepository}
+import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor}
 import play.api.mvc._
 import play.api.libs.json._
 
@@ -16,7 +16,8 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
   }
 
   def findScheme(workflowId: String) = Action {
-    val maybeScheme = WorkflowSchemeRepository.find(workflowId.toInt)
+    //TODO search by processor and create a scheme by factory
+    val maybeScheme = WorkflowFactory.createSchemeEntity(workflowId.toInt)
 
     maybeScheme match {
       case Some(schemeEntity) => Ok(Json.toJson(schemeEntity))
