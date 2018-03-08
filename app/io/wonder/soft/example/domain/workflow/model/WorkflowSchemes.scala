@@ -1,13 +1,13 @@
 package io.wonder.soft.example.domain.workflow.model
 
-import org.joda.time.DateTime
 import scalikejdbc._
+import org.joda.time.{DateTime}
 
 case class WorkflowSchemes(
   id: Int,
   workflowId: Int,
   name: String,
-  statusId: String,
+  statusId: Int,
   schemeStepId: Int,
   schemeStepLabel: String,
   isFirstStep: Boolean,
@@ -23,8 +23,6 @@ case class WorkflowSchemes(
 
 
 object WorkflowSchemes extends SQLSyntaxSupport[WorkflowSchemes] {
-
-  override val schemaName = None // Some("simple_workflow")
 
   override val tableName = "workflow_schemes"
 
@@ -83,7 +81,7 @@ object WorkflowSchemes extends SQLSyntaxSupport[WorkflowSchemes] {
   def create(
     workflowId: Int,
     name: String,
-    statusId: String,
+    statusId: Int,
     schemeStepId: Int,
     schemeStepLabel: String,
     isFirstStep: Boolean,

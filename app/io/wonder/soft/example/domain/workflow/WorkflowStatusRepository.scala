@@ -7,7 +7,12 @@ import io.wonder.soft.example.domain.workflow.model.WorkflowStatuses
 object WorkflowStatusRepository extends Repository {
   import WorkflowStatusEntity._
 
-  override def find(id: Int): Option[WorkflowStatusEntity] = None
+  override def find(id: Int): Option[WorkflowStatusEntity] = {
+    WorkflowStatuses.find(id) match {
+      case Some(status) => Some(status)
+      case None => None
+    }
+  }
 
   override def create(entity: Entity): Either[Exception, WorkflowStatusEntity] =
     Left(new RuntimeException(""))

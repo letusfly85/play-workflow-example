@@ -10,7 +10,7 @@ CREATE TABLE workflow_schemes (
   id                INT AUTO_INCREMENT,
   workflow_id       INT NOT NULL,
   name              VARCHAR(300) NOT NULL,
-  status_id         VARCHAR(300) NOT NULL,
+  status_id         INT NOT NULL,
   scheme_step_id    INT NOT NULL,
   scheme_step_label VARCHAR(300) NOT NULL,
   is_first_step     BOOLEAN NOT NULL DEFAULT FALSE,
