@@ -9,9 +9,10 @@ case class WorkflowTransitions(
   name: String,
   fromStepId: Int,
   toStepId: Int,
-  taskId: Int,
+  taskGroupId: Option[Int] = None,
   createdAt: Option[DateTime] = None,
-  updatedAt: Option[DateTime] = None) {
+  updatedAt: Option[DateTime] = None,
+  isDefined: Boolean) {
 
   def save()(implicit session: DBSession = WorkflowTransitions.autoSession): WorkflowTransitions = WorkflowTransitions.save(this)(session)
 
@@ -24,7 +25,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
 
   override val tableName = "workflow_transitions"
 
-  override val columns = Seq("id", "workflow_id", "name", "from_step_id", "to_step_id", "task_id", "created_at", "updated_at")
+  override val columns = Seq("id", "workflow_id", "name", "from_step_id", "to_step_id", "task_group_id", "created_at", "updated_at", "is_defined")
 
   def apply(wt: SyntaxProvider[WorkflowTransitions])(rs: WrappedResultSet): WorkflowTransitions = apply(wt.resultName)(rs)
   def apply(wt: ResultName[WorkflowTransitions])(rs: WrappedResultSet): WorkflowTransitions = new WorkflowTransitions(
@@ -33,9 +34,10 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
     name = rs.get(wt.name),
     fromStepId = rs.get(wt.fromStepId),
     toStepId = rs.get(wt.toStepId),
-    taskId = rs.get(wt.taskId),
+    taskGroupId = rs.get(wt.taskGroupId),
     createdAt = rs.get(wt.createdAt),
-    updatedAt = rs.get(wt.updatedAt)
+    updatedAt = rs.get(wt.updatedAt),
+    isDefined = rs.get(wt.isDefined)
   )
 
   val wt = WorkflowTransitions.syntax("wt")
@@ -79,18 +81,20 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
     name: String,
     fromStepId: Int,
     toStepId: Int,
-    taskId: Int,
+    taskGroupId: Option[Int] = None,
     createdAt: Option[DateTime] = None,
-    updatedAt: Option[DateTime] = None)(implicit session: DBSession = autoSession): WorkflowTransitions = {
+    updatedAt: Option[DateTime] = None,
+    isDefined: Boolean)(implicit session: DBSession = autoSession): WorkflowTransitions = {
     val generatedKey = withSQL {
       insert.into(WorkflowTransitions).namedValues(
         column.workflowId -> workflowId,
         column.name -> name,
         column.fromStepId -> fromStepId,
         column.toStepId -> toStepId,
-        column.taskId -> taskId,
+        column.taskGroupId -> taskGroupId,
         column.createdAt -> createdAt,
-        column.updatedAt -> updatedAt
+        column.updatedAt -> updatedAt,
+        column.isDefined -> isDefined
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -100,9 +104,10 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
       name = name,
       fromStepId = fromStepId,
       toStepId = toStepId,
-      taskId = taskId,
+      taskGroupId = taskGroupId,
       createdAt = createdAt,
-      updatedAt = updatedAt)
+      updatedAt = updatedAt,
+      isDefined = isDefined)
   }
 
   def batchInsert(entities: Seq[WorkflowTransitions])(implicit session: DBSession = autoSession): List[Int] = {
@@ -112,25 +117,28 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
         'name -> entity.name,
         'fromStepId -> entity.fromStepId,
         'toStepId -> entity.toStepId,
-        'taskId -> entity.taskId,
+        'taskGroupId -> entity.taskGroupId,
         'createdAt -> entity.createdAt,
-        'updatedAt -> entity.updatedAt))
+        'updatedAt -> entity.updatedAt,
+        'isDefined -> entity.isDefined))
     SQL("""insert into workflow_transitions(
       workflow_id,
       name,
       from_step_id,
       to_step_id,
-      task_id,
+      task_group_id,
       created_at,
-      updated_at
+      updated_at,
+      is_defined
     ) values (
       {workflowId},
       {name},
       {fromStepId},
       {toStepId},
-      {taskId},
+      {taskGroupId},
       {createdAt},
-      {updatedAt}
+      {updatedAt},
+      {isDefined}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -142,9 +150,10 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
         column.name -> entity.name,
         column.fromStepId -> entity.fromStepId,
         column.toStepId -> entity.toStepId,
-        column.taskId -> entity.taskId,
+        column.taskGroupId -> entity.taskGroupId,
         column.createdAt -> entity.createdAt,
-        column.updatedAt -> entity.updatedAt
+        column.updatedAt -> entity.updatedAt,
+        column.isDefined -> entity.isDefined
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity
