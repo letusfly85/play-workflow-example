@@ -15,4 +15,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET     /api/workflow/statuses              io.wonder.soft.example.application.controllers.WorkflowController.statusList
 
+POST    /api/workflow/statuses              io.wonder.soft.example.application.controllers.WorkflowController.createStatus
+
 GET     /api/workflow/schemes/:workflowId   io.wonder.soft.example.application.controllers.WorkflowController.findScheme(workflowId: String)

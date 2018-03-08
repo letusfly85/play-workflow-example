@@ -2,12 +2,37 @@ package io.wonder.soft.example.application.controllers
 
 import javax.inject._
 
-import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor}
+import com.google.gson.JsonObject
+import io.wonder.soft.example.domain.workflow.entity.WorkflowStatusEntity
+import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor, WorkflowStatusRepository}
+import play.api.Logger
 import play.api.mvc._
 import play.api.libs.json._
 
 @Singleton
 class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+
+  def createStatus = Action { implicit request =>
+    request.body.asJson match {
+      case Some(json) =>
+        Json.fromJson[WorkflowStatusEntity](json) match {
+          case JsSuccess(statusEntity, _) =>
+            WorkflowStatusRepository.create(statusEntity) match {
+              case Right(_) => Created(Json.toJson(statusEntity))
+              case Left(e) =>
+                Logger.info(e.toString())
+                InternalServerError(JsObject.empty)
+            }
+
+          case JsError(e) =>
+            Logger.info(e.toString())
+            InternalServerError(JsObject.empty)
+        }
+
+      case None =>
+        InternalServerError(JsObject.empty)
+    }
+  }
 
   def statusList = Action {
     val list = WorkflowQueryProcessor.searchStatuses()

@@ -4,6 +4,8 @@ import io.wonder.soft.example.domain.workflow.entity.WorkflowStatusEntity
 import io.wonder.soft.example.domain.{Entity, Repository}
 import io.wonder.soft.example.domain.workflow.model.WorkflowStatuses
 
+import scala.util.{Failure, Success, Try}
+
 object WorkflowStatusRepository extends Repository {
   import WorkflowStatusEntity._
 
@@ -14,12 +16,20 @@ object WorkflowStatusRepository extends Repository {
     }
   }
 
-  override def create(entity: Entity): Either[Exception, WorkflowStatusEntity] =
-    Left(new RuntimeException(""))
+  override def create(entity: Entity): Either[Throwable, WorkflowStatusEntity] = {
+    val status = entity.asInstanceOf[WorkflowStatusEntity]
+    Try {
+      WorkflowStatuses.create(name = status.name).save()
+
+    } match {
+      case Success(_) => Right(status)
+      case Failure(e) => Left(e)
+    }
+  }
 
   override def destroy(id: Int): Option[WorkflowStatusEntity] = None
 
-  override def update(entity: Entity): Either[Exception, WorkflowStatusEntity] =
-    Left(new RuntimeException(""))
+  //TODO
+  override def update(entity: Entity): Either[Throwable, WorkflowStatusEntity] = ???
 
 }
