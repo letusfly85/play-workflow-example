@@ -34,6 +34,28 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
     }
   }
 
+  def updateStatus = Action { implicit request =>
+    request.body.asJson match {
+      case Some(json) =>
+        Json.fromJson[WorkflowStatusEntity](json) match {
+          case JsSuccess(statusEntity, _) =>
+            WorkflowService.updateStatus(statusEntity) match {
+              case Right(_) => Created(Json.toJson(statusEntity))
+              case Left(e) =>
+                Logger.info(e.toString())
+                InternalServerError(JsObject.empty)
+            }
+
+          case JsError(e) =>
+            Logger.info(e.toString())
+            InternalServerError(JsObject.empty)
+        }
+
+      case None =>
+        InternalServerError(JsObject.empty)
+    }
+  }
+
   def statusList = Action {
     val list = WorkflowQueryProcessor.searchStatuses()
 

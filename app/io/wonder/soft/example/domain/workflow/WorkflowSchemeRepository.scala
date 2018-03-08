@@ -20,12 +20,12 @@ object WorkflowSchemeRepository extends Repository[WorkflowSchemeEntity] {
   }
 
   //TODO
-  override def create(entity: WorkflowSchemeEntity): Either[Throwable, WorkflowSchemeEntity] = ???
+  override def create(entity: WorkflowSchemeEntity): Either[Exception, WorkflowSchemeEntity] = ???
 
   //TODO
   override def destroy(id: Int): Option[WorkflowSchemeEntity] = None
 
   //TODO
-  override def update(entity: WorkflowSchemeEntity): Either[Throwable, WorkflowSchemeEntity] = ???
+  override def update(entity: WorkflowSchemeEntity): Either[Exception, WorkflowSchemeEntity] = ???
 
 }

@@ -8,36 +8,45 @@ import scalikejdbc._
 import scala.util.{Failure, Success, Try}
 
 object WorkflowStatusRepository extends Repository[WorkflowStatusEntity] {
+  val wsc = WorkflowStatuses.column
+
   import WorkflowStatusEntity._
 
-  val wsc = WorkflowStatuses.column
-  override def find(id: Int): Option[WorkflowStatusEntity] = {
-    WorkflowStatuses.find(id) match {
-      case Some(status) => Some(status)
-      case None => None
-    }
-  }
+  override def find(id: Int): Option[WorkflowStatusEntity] =
+    WorkflowStatuses.find(id).flatMap(status => Some(status))
 
-  override def create(entity: WorkflowStatusEntity): Either[Throwable, WorkflowStatusEntity] = {
-    val status = entity.asInstanceOf[WorkflowStatusEntity]
+  override def create(entity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] = {
     Try {
       DB localTx {implicit session =>
         withSQL {
           insert.into(WorkflowStatuses).namedValues(
-            wsc.name -> status.name
+            wsc.name -> entity.name
           )
         }.update().apply()
       }
 
     } match {
-      case Success(_) => Right(status)
-      case Failure(e) => Left(e)
+      case Success(_) => Right(entity)
+      case Failure(e) => Left(new Exception(e))
+    }
+  }
+
+  override def update(entity: WorkflowStatusEntity): Either[RuntimeException, WorkflowStatusEntity] = {
+    Try {
+      WorkflowStatuses.find(entity.id) match {
+        case Some(statuses) =>
+          statuses.copy(name = entity.name).save()
+          Right(entity)
+
+        case None =>
+          Left(new RuntimeException("")) //TODO
+      }
+
+    } match {
+      case Success(result) => result
+      case Failure(e) => Left(new RuntimeException(e))
     }
   }
 
   override def destroy(id: Int): Option[WorkflowStatusEntity] = None
-
-  //TODO
-  override def update(entity: WorkflowStatusEntity): Either[Throwable, WorkflowStatusEntity] = ???
-
 }

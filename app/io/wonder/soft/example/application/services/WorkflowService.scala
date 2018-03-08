@@ -5,13 +5,10 @@ import io.wonder.soft.example.domain.workflow.entity.WorkflowStatusEntity
 
 object WorkflowService {
 
-  def createStatus(workflowStatus: WorkflowStatusEntity): Either[Throwable, WorkflowStatusEntity] = {
-    try {
+  def createStatus(workflowStatus: WorkflowStatusEntity): Either[Throwable, WorkflowStatusEntity] =
       WorkflowStatusRepository.create(workflowStatus)
 
-    } catch {
-      case e: Exception => Left(e)
-    }
-  }
+  def updateStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Throwable, WorkflowStatusEntity] =
+    WorkflowStatusRepository.update(workflowStatusEntity)
 
 }
