@@ -3,7 +3,7 @@ package io.wonder.soft.example.application.controllers
 import javax.inject._
 
 import io.wonder.soft.example.application.services.WorkflowService
-import io.wonder.soft.example.domain.workflow.entity.WorkflowStatusEntity
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowSchemeEntity, WorkflowStatusEntity}
 import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor}
 import play.api.Logger
 import play.api.mvc._
@@ -41,6 +41,28 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
           case JsSuccess(statusEntity, _) =>
             WorkflowService.updateStatus(statusEntity) match {
               case Right(_) => Created(Json.toJson(statusEntity))
+              case Left(e) =>
+                Logger.info(e.toString())
+                InternalServerError(JsObject.empty)
+            }
+
+          case JsError(e) =>
+            Logger.info(e.toString())
+            InternalServerError(JsObject.empty)
+        }
+
+      case None =>
+        InternalServerError(JsObject.empty)
+    }
+  }
+
+  def createScheme = Action { implicit request =>
+    request.body.asJson match {
+      case Some(json) =>
+        Json.fromJson[WorkflowSchemeEntity](json) match {
+          case JsSuccess(schemeEntity, _) =>
+            WorkflowService.createScheme(schemeEntity) match {
+              case Right(_) => Created(Json.toJson(schemeEntity))
               case Left(e) =>
                 Logger.info(e.toString())
                 InternalServerError(JsObject.empty)

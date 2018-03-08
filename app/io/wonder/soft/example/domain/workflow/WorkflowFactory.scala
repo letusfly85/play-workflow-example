@@ -20,5 +20,10 @@ object WorkflowFactory {
     }
   }
 
+  def createSchemeEntity(workflowSchemeEntity: WorkflowSchemeEntity): Option[WorkflowSchemeEntity] = {
+    val maybeStatus = WorkflowStatusRepository.find(workflowSchemeEntity.status.get.id)
+
+    maybeStatus.flatMap(status => Some(workflowSchemeEntity.copy(status = Some(status))))
+  }
 
 }

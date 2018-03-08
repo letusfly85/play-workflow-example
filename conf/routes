@@ -20,3 +20,5 @@ POST    /api/workflow/statuses              io.wonder.soft.example.application.c
 PUT     /api/workflow/statuses              io.wonder.soft.example.application.controllers.WorkflowController.updateStatus
 
 GET     /api/workflow/schemes/:workflowId   io.wonder.soft.example.application.controllers.WorkflowController.findScheme(workflowId: String)
+
+POST    /api/workflow/schemes               io.wonder.soft.example.application.controllers.WorkflowController.createScheme
