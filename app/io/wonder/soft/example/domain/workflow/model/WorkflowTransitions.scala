@@ -7,7 +7,6 @@ case class WorkflowTransitions(
   id: Int,
   workflowId: Int,
   name: String,
-  statusId: String,
   fromStepId: Int,
   toStepId: Int,
   taskId: Int,
@@ -23,18 +22,15 @@ case class WorkflowTransitions(
 
 object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
 
-  override val schemaName = None //Some("simple_workflow")
-
   override val tableName = "workflow_transitions"
 
-  override val columns = Seq("id", "workflow_id", "name", "status_id", "from_step_id", "to_step_id", "task_id", "created_at", "updated_at")
+  override val columns = Seq("id", "workflow_id", "name", "from_step_id", "to_step_id", "task_id", "created_at", "updated_at")
 
   def apply(wt: SyntaxProvider[WorkflowTransitions])(rs: WrappedResultSet): WorkflowTransitions = apply(wt.resultName)(rs)
   def apply(wt: ResultName[WorkflowTransitions])(rs: WrappedResultSet): WorkflowTransitions = new WorkflowTransitions(
     id = rs.get(wt.id),
     workflowId = rs.get(wt.workflowId),
     name = rs.get(wt.name),
-    statusId = rs.get(wt.statusId),
     fromStepId = rs.get(wt.fromStepId),
     toStepId = rs.get(wt.toStepId),
     taskId = rs.get(wt.taskId),
@@ -81,7 +77,6 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
   def create(
     workflowId: Int,
     name: String,
-    statusId: String,
     fromStepId: Int,
     toStepId: Int,
     taskId: Int,
@@ -91,7 +86,6 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
       insert.into(WorkflowTransitions).namedValues(
         column.workflowId -> workflowId,
         column.name -> name,
-        column.statusId -> statusId,
         column.fromStepId -> fromStepId,
         column.toStepId -> toStepId,
         column.taskId -> taskId,
@@ -104,7 +98,6 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
       id = generatedKey.toInt,
       workflowId = workflowId,
       name = name,
-      statusId = statusId,
       fromStepId = fromStepId,
       toStepId = toStepId,
       taskId = taskId,
@@ -117,7 +110,6 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
       Seq(
         'workflowId -> entity.workflowId,
         'name -> entity.name,
-        'statusId -> entity.statusId,
         'fromStepId -> entity.fromStepId,
         'toStepId -> entity.toStepId,
         'taskId -> entity.taskId,
@@ -126,7 +118,6 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
     SQL("""insert into workflow_transitions(
       workflow_id,
       name,
-      status_id,
       from_step_id,
       to_step_id,
       task_id,
@@ -135,7 +126,6 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
     ) values (
       {workflowId},
       {name},
-      {statusId},
       {fromStepId},
       {toStepId},
       {taskId},
@@ -150,7 +140,6 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
         column.id -> entity.id,
         column.workflowId -> entity.workflowId,
         column.name -> entity.name,
-        column.statusId -> entity.statusId,
         column.fromStepId -> entity.fromStepId,
         column.toStepId -> entity.toStepId,
         column.taskId -> entity.taskId,

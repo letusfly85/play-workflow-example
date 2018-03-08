@@ -25,7 +25,6 @@ CREATE TABLE workflow_transitions (
   id                INT AUTO_INCREMENT,
   workflow_id       INT NOT NULL,
   name              VARCHAR(300) NOT NULL,
-  status_id         VARCHAR(300) NOT NULL,
   from_step_id      INT NOT NULL,
   to_step_id        INT NOT NULL,
   task_id           INT NOT NULL,
