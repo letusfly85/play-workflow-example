@@ -1,13 +1,13 @@
 package io.wonder.soft.example.domain
 
-trait Repository {
+trait Repository[E <: Entity] {
 
-  def find(id: Int): Option[Entity]
+  def find(id: Int): Option[E]
 
-  def create(entity: Entity): Either[Throwable, Entity]
+  def create(entity: E): Either[Throwable, E]
 
-  def destroy(id: Int): Option[Entity]
+  def destroy(id: Int): Option[E]
 
-  def update(entity: Entity): Either[Throwable, Entity]
+  def update(entity: E): Either[Throwable, E]
 
 }

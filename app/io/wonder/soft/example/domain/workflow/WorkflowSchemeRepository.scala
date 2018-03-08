@@ -2,10 +2,10 @@ package io.wonder.soft.example.domain.workflow
 
 import io.wonder.soft.example.domain.workflow.entity.WorkflowSchemeEntity
 import io.wonder.soft.example.domain.workflow.model.WorkflowSchemes
-import io.wonder.soft.example.domain.{Entity, Repository}
+import io.wonder.soft.example.domain.Repository
 import scalikejdbc._
 
-object WorkflowSchemeRepository extends Repository {
+object WorkflowSchemeRepository extends Repository[WorkflowSchemeEntity] {
   import WorkflowSchemeEntity._
 
   override def find(workflowId: Int): Option[WorkflowSchemeEntity] = {
@@ -20,12 +20,12 @@ object WorkflowSchemeRepository extends Repository {
   }
 
   //TODO
-  override def create(entity: Entity): Either[Throwable, WorkflowSchemeEntity] = ???
+  override def create(entity: WorkflowSchemeEntity): Either[Throwable, WorkflowSchemeEntity] = ???
 
   //TODO
   override def destroy(id: Int): Option[WorkflowSchemeEntity] = None
 
   //TODO
-  override def update(entity: Entity): Either[Throwable, WorkflowSchemeEntity] = ???
+  override def update(entity: WorkflowSchemeEntity): Either[Throwable, WorkflowSchemeEntity] = ???
 
 }
