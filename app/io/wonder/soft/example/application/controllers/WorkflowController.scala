@@ -12,6 +12,12 @@ import play.api.libs.json._
 @Singleton
 class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
+  def listStatus = Action {
+    val list = WorkflowQueryProcessor.searchStatuses()
+
+    Ok(Json.toJson(list))
+  }
+
   def createStatus = Action { implicit request =>
     request.body.asJson match {
       case Some(json) =>
@@ -28,6 +34,26 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
             Logger.info(e.toString())
             InternalServerError(JsObject.empty)
         }
+
+      case None =>
+        InternalServerError(JsObject.empty)
+    }
+  }
+
+  def findScheme(workflowId: String) = Action {
+    //TODO search by processor and create a scheme by factory
+    val maybeScheme = WorkflowFactory.createSchemeEntity(workflowId.toInt)
+
+    maybeScheme match {
+      case Some(schemeEntity) => Ok(Json.toJson(schemeEntity))
+      case None => NotFound(JsObject.empty)
+    }
+  }
+
+  def listScheme = Action { implicit request =>
+    request.getQueryString("workflow-id") match {
+      case Some(workflowId) =>
+        Ok(Json.toJson(WorkflowService.listScheme(workflowId.toInt)))
 
       case None =>
         InternalServerError(JsObject.empty)
@@ -75,22 +101,6 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
 
       case None =>
         InternalServerError(JsObject.empty)
-    }
-  }
-
-  def statusList = Action {
-    val list = WorkflowQueryProcessor.searchStatuses()
-
-    Ok(Json.toJson(list))
-  }
-
-  def findScheme(workflowId: String) = Action {
-    //TODO search by processor and create a scheme by factory
-    val maybeScheme = WorkflowFactory.createSchemeEntity(workflowId.toInt)
-
-    maybeScheme match {
-      case Some(schemeEntity) => Ok(Json.toJson(schemeEntity))
-      case None => NotFound(JsObject.empty)
     }
   }
 

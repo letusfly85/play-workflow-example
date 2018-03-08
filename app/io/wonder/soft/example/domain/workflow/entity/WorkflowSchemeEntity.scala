@@ -49,4 +49,8 @@ object WorkflowSchemeEntity {
       model.isLastStep
     )
   }
+
+  implicit def convertFromModels(models: List[WorkflowSchemes]): List[WorkflowSchemeEntity] = {
+    models.map(convertFromModel)
+  }
 }

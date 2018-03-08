@@ -1,6 +1,6 @@
 package io.wonder.soft.example.application.services
 
-import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowSchemeRepository, WorkflowStatusRepository}
+import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor, WorkflowSchemeRepository, WorkflowStatusRepository}
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowSchemeEntity, WorkflowStatusEntity}
 
 object WorkflowService {
@@ -10,6 +10,10 @@ object WorkflowService {
 
   def updateStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] =
     WorkflowStatusRepository.update(workflowStatusEntity)
+
+  def listScheme(workflowId: Int): List[WorkflowSchemeEntity] = {
+    WorkflowQueryProcessor.searchSchemes(workflowId)
+  }
 
   def createScheme(workflowSchemeEntity: WorkflowSchemeEntity): Either[Exception, WorkflowSchemeEntity] = {
     val maybeEntity = WorkflowFactory.createSchemeEntity(workflowSchemeEntity)
