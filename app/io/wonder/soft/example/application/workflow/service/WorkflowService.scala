@@ -1,7 +1,7 @@
-package io.wonder.soft.example.application.services
+package io.wonder.soft.example.application.workflow.service
 
-import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor, WorkflowSchemeRepository, WorkflowStatusRepository}
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowSchemeEntity, WorkflowStatusEntity}
+import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor, WorkflowSchemeRepository, WorkflowStatusRepository}
 
 object WorkflowService {
 

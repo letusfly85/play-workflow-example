@@ -1,12 +1,12 @@
-package io.wonder.soft.example.application.controllers
+package io.wonder.soft.example.application.workflow.controller
 
 import javax.inject._
 
-import io.wonder.soft.example.application.services.WorkflowService
+import io.wonder.soft.example.application.workflow.service.WorkflowService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowSchemeEntity, WorkflowStatusEntity}
 import play.api.Logger
-import play.api.mvc._
 import play.api.libs.json._
+import play.api.mvc._
 
 @Singleton
 class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {

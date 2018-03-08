@@ -13,14 +13,14 @@ GET     /message                    io.wonder.soft.example.application.controlle
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /api/workflow/statuses              io.wonder.soft.example.application.controllers.WorkflowController.listStatus
+GET     /api/workflow/statuses      io.wonder.soft.example.application.workflow.controller.WorkflowController.listStatus
 
-POST    /api/workflow/statuses              io.wonder.soft.example.application.controllers.WorkflowController.createStatus
+POST    /api/workflow/statuses      io.wonder.soft.example.application.workflow.controller.WorkflowController.createStatus
 
-PUT     /api/workflow/statuses              io.wonder.soft.example.application.controllers.WorkflowController.updateStatus
+PUT     /api/workflow/statuses      io.wonder.soft.example.application.workflow.controller.WorkflowController.updateStatus
 
-GET     /api/workflow/schemes/:id           io.wonder.soft.example.application.controllers.WorkflowController.findScheme(id: String)
+GET     /api/workflow/schemes/:id   io.wonder.soft.example.application.workflow.controller.WorkflowController.findScheme(id: String)
 
-GET     /api/workflow/schemes               io.wonder.soft.example.application.controllers.WorkflowController.listScheme
+GET     /api/workflow/schemes       io.wonder.soft.example.application.workflow.controller.WorkflowController.listScheme
 
-POST    /api/workflow/schemes               io.wonder.soft.example.application.controllers.WorkflowController.createScheme
+POST    /api/workflow/schemes       io.wonder.soft.example.application.workflow.controller.WorkflowController.createScheme
