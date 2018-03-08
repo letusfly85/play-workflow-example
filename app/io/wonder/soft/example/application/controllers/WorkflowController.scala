@@ -15,7 +15,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
     Ok(Json.toJson(list))
   }
 
-  def findScheme(workflowId: String) = {
+  def findScheme(workflowId: String) = Action {
     val maybeScheme = WorkflowSchemeRepository.find(workflowId.toInt)
 
     maybeScheme match {
