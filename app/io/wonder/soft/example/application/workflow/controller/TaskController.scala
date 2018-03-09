@@ -4,6 +4,7 @@ import javax.inject._
 
 import io.wonder.soft.example.application.workflow.service.TaskService
 import io.wonder.soft.example.domain.workflow.entity.TaskEntity
+import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
@@ -24,7 +25,9 @@ class TaskController @Inject()(cc: ControllerComponents) extends AbstractControl
               case Left(e) => InternalServerError(JsObject.empty)
             }
 
-          case JsError(e) => BadRequest(JsObject.empty)
+          case JsError(e) =>
+            Logger.info(e.toString())
+            BadRequest(JsObject.empty)
         }
 
       case None =>

@@ -20,3 +20,5 @@ POST    /api/workflow/schemes       io.wonder.soft.example.application.workflow.
 
 GET     /api/workflow/tasks         io.wonder.soft.example.application.workflow.controller.TaskController.listTask
 
+POST    /api/workflow/tasks         io.wonder.soft.example.application.workflow.controller.TaskController.createTask
+
