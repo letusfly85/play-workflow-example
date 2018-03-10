@@ -19,7 +19,7 @@
           </template>
           <b-dropdown-item href="#">Profile</b-dropdown-item>
           <b-dropdown-item href="#/password/change">Password Change</b-dropdown-item>
-          <b-dropdown-item-button v-on:click="signOut">Sign Out</b-dropdown-item-button>
+          <b-dropdown-item-button>Sign Out</b-dropdown-item-button>
         </b-nav-item-dropdown>
 
       </b-navbar-nav>

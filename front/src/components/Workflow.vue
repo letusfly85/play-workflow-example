@@ -6,7 +6,7 @@
 </template>
 
 <script>
-// import ApiClient from './utils/ApiClient'
+import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
 
@@ -17,6 +17,15 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  created: function () {
+    let targetPath = '/api/workflow/definitions'
+
+    ApiClient.search(targetPath, (response) => {
+      console.log(response)
+    }, (error) => {
+      console.log(error)
+    })
   }
 }
 </script>
