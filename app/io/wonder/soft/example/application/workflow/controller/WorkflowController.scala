@@ -3,7 +3,7 @@ package io.wonder.soft.example.application.workflow.controller
 import javax.inject._
 
 import io.wonder.soft.example.application.workflow.service.WorkflowService
-import io.wonder.soft.example.domain.workflow.entity.{WorkflowSchemeEntity, WorkflowStatusEntity}
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity}
 import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
@@ -37,17 +37,17 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
     }
   }
 
-  def findScheme(id: String) = Action {
-    WorkflowService.findScheme(id.toInt) match {
+  def findDefinition(id: String) = Action {
+    WorkflowService.findDefinition(id.toInt) match {
       case Right(schemeEntity) => Ok(Json.toJson(schemeEntity))
       case Left(e) => NotFound(JsObject.empty)
     }
   }
 
-  def listScheme = Action { implicit request =>
+  def listDefinition = Action { implicit request =>
     request.getQueryString("workflow-id") match {
       case Some(workflowId) =>
-        Ok(Json.toJson(WorkflowService.listScheme(workflowId.toInt)))
+        Ok(Json.toJson(WorkflowService.listDefinition(workflowId.toInt)))
 
       case None =>
         InternalServerError(JsObject.empty)
@@ -76,12 +76,12 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
     }
   }
 
-  def createScheme = Action { implicit request =>
+  def createDefinition = Action { implicit request =>
     request.body.asJson match {
       case Some(json) =>
-        Json.fromJson[WorkflowSchemeEntity](json) match {
+        Json.fromJson[WorkflowDefinitionEntity](json) match {
           case JsSuccess(schemeEntity, _) =>
-            WorkflowService.createScheme(schemeEntity) match {
+            WorkflowService.createDefinition(schemeEntity) match {
               case Right(_) => Created(Json.toJson(schemeEntity))
               case Left(e) =>
                 Logger.info(e.toString())

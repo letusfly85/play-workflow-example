@@ -4,21 +4,20 @@
 # ~~~~
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /api/workflow/statuses      io.wonder.soft.example.application.workflow.controller.WorkflowController.listStatus
+GET     /api/workflow/statuses          io.wonder.soft.example.application.workflow.controller.WorkflowController.listStatus
 
-POST    /api/workflow/statuses      io.wonder.soft.example.application.workflow.controller.WorkflowController.createStatus
+POST    /api/workflow/statuses          io.wonder.soft.example.application.workflow.controller.WorkflowController.createStatus
 
-PUT     /api/workflow/statuses      io.wonder.soft.example.application.workflow.controller.WorkflowController.updateStatus
+PUT     /api/workflow/statuses          io.wonder.soft.example.application.workflow.controller.WorkflowController.updateStatus
 
-GET     /api/workflow/schemes/:id   io.wonder.soft.example.application.workflow.controller.WorkflowController.findScheme(id: String)
+GET     /api/workflow/definitions/:id   io.wonder.soft.example.application.workflow.controller.WorkflowController.findDefinition(id: String)
 
-GET     /api/workflow/schemes       io.wonder.soft.example.application.workflow.controller.WorkflowController.listScheme
+GET     /api/workflow/definitions       io.wonder.soft.example.application.workflow.controller.WorkflowController.listDefinition
 
-POST    /api/workflow/schemes       io.wonder.soft.example.application.workflow.controller.WorkflowController.createScheme
+POST    /api/workflow/definitions       io.wonder.soft.example.application.workflow.controller.WorkflowController.createDefinition
 
-GET     /api/workflow/tasks         io.wonder.soft.example.application.workflow.controller.TaskController.listTask
+GET     /api/workflow/tasks             io.wonder.soft.example.application.workflow.controller.TaskController.listTask
 
-POST    /api/workflow/tasks         io.wonder.soft.example.application.workflow.controller.TaskController.createTask
-
+POST    /api/workflow/tasks             io.wonder.soft.example.application.workflow.controller.TaskController.createTask

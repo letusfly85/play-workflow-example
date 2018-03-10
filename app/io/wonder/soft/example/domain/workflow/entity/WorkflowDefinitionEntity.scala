@@ -1,12 +1,12 @@
 package io.wonder.soft.example.domain.workflow.entity
 
 import io.wonder.soft.example.domain.Entity
-import io.wonder.soft.example.domain.workflow.model.WorkflowSchemes
+import io.wonder.soft.example.domain.workflow.model.WorkflowDefinitions
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 
-final case class WorkflowSchemeEntity(
+final case class WorkflowDefinitionEntity(
                    workflowId: Int,
                    name: String,
                    status: Option[WorkflowStatusEntity],
@@ -17,8 +17,8 @@ final case class WorkflowSchemeEntity(
                  ) extends Entity
 
 
-object WorkflowSchemeEntity {
-  implicit def workflowSchemeReads: Reads[WorkflowSchemeEntity] = (
+object WorkflowDefinitionEntity {
+  implicit def workflowDefinitionReads: Reads[WorkflowDefinitionEntity] = (
     (JsPath \ "workflow_id").read[Int] and
     (JsPath \ "name").read[String] and
     (JsPath \ "status").readNullable[WorkflowStatusEntity] and
@@ -26,9 +26,9 @@ object WorkflowSchemeEntity {
     (JsPath \ "step_label").read[String] and
     (JsPath \ "is_first_step").read[Boolean] and
     (JsPath \ "is_last_step").read[Boolean]
-  )(WorkflowSchemeEntity.apply _)
+  )(WorkflowDefinitionEntity.apply _)
 
-  implicit def workflowSchemeWrites: Writes[WorkflowSchemeEntity] = (
+  implicit def workflowDefinitionWrites: Writes[WorkflowDefinitionEntity] = (
     (JsPath \ "workflow_id").write[Int] and
     (JsPath \ "name").write[String] and
     (JsPath \ "status").writeNullable[WorkflowStatusEntity] and
@@ -36,10 +36,10 @@ object WorkflowSchemeEntity {
     (JsPath \ "step_label").write[String] and
     (JsPath \ "is_first_step").write[Boolean] and
     (JsPath \ "is_last_step").write[Boolean]
-  )(unlift(WorkflowSchemeEntity.unapply))
+  )(unlift(WorkflowDefinitionEntity.unapply))
 
-  implicit def convertFromModel(model: WorkflowSchemes): WorkflowSchemeEntity = {
-    WorkflowSchemeEntity(
+  implicit def convertFromModel(model: WorkflowDefinitions): WorkflowDefinitionEntity = {
+    WorkflowDefinitionEntity(
       model.workflowId,
       model.name,
       None,
@@ -50,7 +50,7 @@ object WorkflowSchemeEntity {
     )
   }
 
-  implicit def convertFromModels(models: List[WorkflowSchemes]): List[WorkflowSchemeEntity] = {
+  implicit def convertFromModels(models: List[WorkflowDefinitions]): List[WorkflowDefinitionEntity] = {
     models.map(convertFromModel)
   }
 }
