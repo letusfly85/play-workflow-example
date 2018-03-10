@@ -9,7 +9,7 @@ case class WorkflowTransitions(
   name: String,
   fromStepId: Int,
   toStepId: Int,
-  taskGroupId: Option[Int] = None,
+  conditionSuiteId: Option[Int] = None,
   createdAt: Option[DateTime] = None,
   updatedAt: Option[DateTime] = None,
   isDefined: Boolean) {
@@ -25,7 +25,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
 
   override val tableName = "workflow_transitions"
 
-  override val columns = Seq("id", "workflow_id", "name", "from_step_id", "to_step_id", "task_group_id", "created_at", "updated_at", "is_defined")
+  override val columns = Seq("id", "workflow_id", "name", "from_step_id", "to_step_id", "condition_suite_id", "created_at", "updated_at", "is_defined")
 
   def apply(wt: SyntaxProvider[WorkflowTransitions])(rs: WrappedResultSet): WorkflowTransitions = apply(wt.resultName)(rs)
   def apply(wt: ResultName[WorkflowTransitions])(rs: WrappedResultSet): WorkflowTransitions = new WorkflowTransitions(
@@ -34,7 +34,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
     name = rs.get(wt.name),
     fromStepId = rs.get(wt.fromStepId),
     toStepId = rs.get(wt.toStepId),
-    taskGroupId = rs.get(wt.taskGroupId),
+    conditionSuiteId = rs.get(wt.conditionSuiteId),
     createdAt = rs.get(wt.createdAt),
     updatedAt = rs.get(wt.updatedAt),
     isDefined = rs.get(wt.isDefined)
@@ -81,7 +81,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
     name: String,
     fromStepId: Int,
     toStepId: Int,
-    taskGroupId: Option[Int] = None,
+    conditionSuiteId: Option[Int] = None,
     createdAt: Option[DateTime] = None,
     updatedAt: Option[DateTime] = None,
     isDefined: Boolean)(implicit session: DBSession = autoSession): WorkflowTransitions = {
@@ -91,7 +91,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
         column.name -> name,
         column.fromStepId -> fromStepId,
         column.toStepId -> toStepId,
-        column.taskGroupId -> taskGroupId,
+        column.conditionSuiteId -> conditionSuiteId,
         column.createdAt -> createdAt,
         column.updatedAt -> updatedAt,
         column.isDefined -> isDefined
@@ -104,7 +104,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
       name = name,
       fromStepId = fromStepId,
       toStepId = toStepId,
-      taskGroupId = taskGroupId,
+      conditionSuiteId = conditionSuiteId,
       createdAt = createdAt,
       updatedAt = updatedAt,
       isDefined = isDefined)
@@ -117,7 +117,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
         'name -> entity.name,
         'fromStepId -> entity.fromStepId,
         'toStepId -> entity.toStepId,
-        'taskGroupId -> entity.taskGroupId,
+        'conditionSuiteId -> entity.conditionSuiteId,
         'createdAt -> entity.createdAt,
         'updatedAt -> entity.updatedAt,
         'isDefined -> entity.isDefined))
@@ -126,7 +126,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
       name,
       from_step_id,
       to_step_id,
-      task_group_id,
+      condition_suite_id,
       created_at,
       updated_at,
       is_defined
@@ -135,7 +135,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
       {name},
       {fromStepId},
       {toStepId},
-      {taskGroupId},
+      {conditionSuiteId},
       {createdAt},
       {updatedAt},
       {isDefined}
@@ -150,7 +150,7 @@ object WorkflowTransitions extends SQLSyntaxSupport[WorkflowTransitions] {
         column.name -> entity.name,
         column.fromStepId -> entity.fromStepId,
         column.toStepId -> entity.toStepId,
-        column.taskGroupId -> entity.taskGroupId,
+        column.conditionSuiteId -> entity.conditionSuiteId,
         column.createdAt -> entity.createdAt,
         column.updatedAt -> entity.updatedAt,
         column.isDefined -> entity.isDefined
