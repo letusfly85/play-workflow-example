@@ -18,6 +18,10 @@ GET     /api/workflow/definitions       io.wonder.soft.example.application.workf
 
 POST    /api/workflow/definitions       io.wonder.soft.example.application.workflow.controller.WorkflowController.createDefinition
 
+GET     /api/workflow/transitions/:id   io.wonder.soft.example.application.workflow.controller.WorkflowController.listTransition(id: String)
+
+POST    /api/workflow/transitions       io.wonder.soft.example.application.workflow.controller.WorkflowController.createTransition
+
 GET     /api/workflow/tasks             io.wonder.soft.example.application.workflow.controller.TaskController.listTask
 
 POST    /api/workflow/tasks             io.wonder.soft.example.application.workflow.controller.TaskController.createTask

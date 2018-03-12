@@ -3,7 +3,7 @@ package io.wonder.soft.example.application.workflow.controller
 import javax.inject._
 
 import io.wonder.soft.example.application.workflow.service.WorkflowService
-import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity}
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
@@ -83,6 +83,38 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
           case JsSuccess(schemeEntity, _) =>
             WorkflowService.createDefinition(schemeEntity) match {
               case Right(_) => Created(Json.toJson(schemeEntity))
+              case Left(e) =>
+                Logger.info(e.toString())
+                InternalServerError(JsObject.empty)
+            }
+
+          case JsError(e) =>
+            Logger.info(e.toString())
+            InternalServerError(JsObject.empty)
+        }
+
+      case None =>
+        InternalServerError(JsObject.empty)
+    }
+  }
+
+  def listTransition(workflowId: String) = Action { implicit request =>
+    request.getQueryString("workflow-id") match {
+      case Some(workflowId) =>
+        Ok(Json.toJson(WorkflowService.listTransition(workflowId.toInt)))
+
+      case None =>
+        InternalServerError(JsObject.empty)
+    }
+  }
+
+  def createTransition = Action { implicit request =>
+    request.body.asJson match {
+      case Some(json) =>
+        Json.fromJson[WorkflowTransitionEntity](json) match {
+          case JsSuccess(transitionEntity, _) =>
+            WorkflowService.createTransition(transitionEntity) match {
+              case Right(_) => Created(Json.toJson(transitionEntity))
               case Left(e) =>
                 Logger.info(e.toString())
                 InternalServerError(JsObject.empty)

@@ -2,7 +2,7 @@ package io.wonder.soft.example.application.workflow.service
 
 import io.wonder.soft.example.application.ApplicationService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
-import io.wonder.soft.example.domain.workflow.{WorkflowDefinitionRepository, WorkflowFactory, WorkflowQueryProcessor, WorkflowStatusRepository}
+import io.wonder.soft.example.domain.workflow._
 
 object WorkflowService extends ApplicationService {
 
@@ -32,7 +32,7 @@ object WorkflowService extends ApplicationService {
 
     maybeStatus match {
       case Some(statusEntity) =>
-        val entity = WorkflowFactory.createDefinitionEntity(schemeEntity, statusEntity)
+        val entity = WorkflowFactory.buildDefinitionEntity(schemeEntity, statusEntity)
         WorkflowDefinitionRepository.create(entity)
 
       case None =>
@@ -41,7 +41,8 @@ object WorkflowService extends ApplicationService {
   }
 
   //TODO implement
-  def listTransition(workflowId: Int): List[WorkflowTransitionEntity] = List.empty[WorkflowTransitionEntity]
+  def listTransition(workflowId: Int): List[WorkflowTransitionEntity] =
+    WorkflowQueryProcessor.searchTransitions(workflowId)
 
   //TODO implement
   def findTransition(workflowId: Int, fromStepId: Int, toStepId: Int): Either[Exception, WorkflowTransitionEntity] =
@@ -49,6 +50,6 @@ object WorkflowService extends ApplicationService {
 
   //TODO implement
   def createTransition(transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity] =
-    Left(new RuntimeException(""))
+    WorkflowTransitionRepository.create(transitionEntity)
 
 }
