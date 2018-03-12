@@ -1,8 +1,8 @@
 package io.wonder.soft.example.application.workflow.service
 
 import io.wonder.soft.example.application.ApplicationService
-import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity}
-import io.wonder.soft.example.domain.workflow.{WorkflowFactory, WorkflowQueryProcessor, WorkflowDefinitionRepository, WorkflowStatusRepository}
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
+import io.wonder.soft.example.domain.workflow.{WorkflowDefinitionRepository, WorkflowFactory, WorkflowQueryProcessor, WorkflowStatusRepository}
 
 object WorkflowService extends ApplicationService {
 
@@ -39,5 +39,16 @@ object WorkflowService extends ApplicationService {
         Left(new RuntimeException(""))
     }
   }
+
+  //TODO implement
+  def listTransition(workflowId: Int): List[WorkflowTransitionEntity] = List.empty[WorkflowTransitionEntity]
+
+  //TODO implement
+  def findTransition(workflowId: Int, fromStepId: Int, toStepId: Int): Either[Exception, WorkflowTransitionEntity] =
+    Left(new RuntimeException(""))
+
+  //TODO implement
+  def createTransition(transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity] =
+    Left(new RuntimeException(""))
 
 }

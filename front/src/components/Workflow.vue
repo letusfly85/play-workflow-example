@@ -19,7 +19,7 @@ export default {
     }
   },
   created: function () {
-    let targetPath = '/api/workflow/definitions'
+    let targetPath = '/api/workflow/definitions?workflow-id=1'
 
     ApiClient.search(targetPath, (response) => {
       console.log(response)
