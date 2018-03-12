@@ -4,7 +4,7 @@ import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, 
 
 object WorkflowFactory {
 
-  def createDefinitionEntity(schemeEntity: WorkflowDefinitionEntity, statusEntity: WorkflowStatusEntity): WorkflowDefinitionEntity = {
+  def buildDefinitionEntity(schemeEntity: WorkflowDefinitionEntity, statusEntity: WorkflowStatusEntity): WorkflowDefinitionEntity = {
     schemeEntity.copy(status = Some(statusEntity))
   }
 
