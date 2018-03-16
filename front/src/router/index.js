@@ -17,6 +17,11 @@ export default new Router({
       component: Workflow
     },
     {
+      path: '/workflows',
+      name: 'Workflow',
+      component: Workflow
+    },
+    {
       path: '/statuses',
       name: 'Status',
       component: Status

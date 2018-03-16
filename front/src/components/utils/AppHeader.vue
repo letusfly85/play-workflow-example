@@ -33,7 +33,6 @@
 export default {
   name: 'AppHeader',
   created: function () {
-    console.log('init')
   }
 }
 </script>
