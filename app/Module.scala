@@ -1,6 +1,8 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
 
+import io.wonder.soft.example.application.workflow.service.WorkflowService
+
 /**
  * This class is a Guice module that tells Guice how to bind several
  * different types. This Guice module is created when the Play
@@ -14,6 +16,8 @@ import java.time.Clock
 class Module extends AbstractModule {
 
   override def configure() = {
+    bind(classOf[WorkflowService])
+
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
   }

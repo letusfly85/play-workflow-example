@@ -9,10 +9,10 @@ import play.api.libs.json._
 import play.api.mvc._
 
 @Singleton
-class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class WorkflowController @Inject()(service: WorkflowService, cc: ControllerComponents) extends AbstractController(cc) {
 
   def listStatus = Action {
-    Ok(Json.toJson(WorkflowService.listStatus))
+    Ok(Json.toJson(service.listStatus))
   }
 
   def createStatus = Action { implicit request =>
@@ -20,7 +20,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
       case Some(json) =>
         Json.fromJson[WorkflowStatusEntity](json) match {
           case JsSuccess(statusEntity, _) =>
-            WorkflowService.createStatus(statusEntity) match {
+            service.createStatus(statusEntity) match {
               case Right(_) => Created(Json.toJson(statusEntity))
               case Left(e) =>
                 Logger.info(e.toString())
@@ -38,7 +38,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
   }
 
   def findDefinition(id: String) = Action {
-    WorkflowService.findDefinition(id.toInt) match {
+    service.findDefinition(id.toInt) match {
       case Right(schemeEntity) => Ok(Json.toJson(schemeEntity))
       case Left(e) => NotFound(JsObject.empty)
     }
@@ -47,7 +47,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
   def listDefinition = Action { implicit request =>
     request.getQueryString("workflow-id") match {
       case Some(workflowId) =>
-        Ok(Json.toJson(WorkflowService.listDefinition(workflowId.toInt)))
+        Ok(Json.toJson(service.listDefinition(workflowId.toInt)))
 
       case None =>
         InternalServerError(JsObject.empty)
@@ -59,7 +59,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
       case Some(json) =>
         Json.fromJson[WorkflowStatusEntity](json) match {
           case JsSuccess(statusEntity, _) =>
-            WorkflowService.updateStatus(statusEntity) match {
+            service.updateStatus(statusEntity) match {
               case Right(_) => Created(Json.toJson(statusEntity))
               case Left(e) =>
                 Logger.info(e.toString())
@@ -81,7 +81,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
       case Some(json) =>
         Json.fromJson[WorkflowDefinitionEntity](json) match {
           case JsSuccess(schemeEntity, _) =>
-            WorkflowService.createDefinition(schemeEntity) match {
+            service.createDefinition(schemeEntity) match {
               case Right(_) => Created(Json.toJson(schemeEntity))
               case Left(e) =>
                 Logger.info(e.toString())
@@ -101,7 +101,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
   def listTransition(workflowId: String) = Action { implicit request =>
     request.getQueryString("workflow-id") match {
       case Some(workflowId) =>
-        Ok(Json.toJson(WorkflowService.listTransition(workflowId.toInt)))
+        Ok(Json.toJson(service.listTransition(workflowId.toInt)))
 
       case None =>
         InternalServerError(JsObject.empty)
@@ -113,7 +113,7 @@ class WorkflowController @Inject()(cc: ControllerComponents) extends AbstractCon
       case Some(json) =>
         Json.fromJson[WorkflowTransitionEntity](json) match {
           case JsSuccess(transitionEntity, _) =>
-            WorkflowService.createTransition(transitionEntity) match {
+            service.createTransition(transitionEntity) match {
               case Right(_) => Created(Json.toJson(transitionEntity))
               case Left(e) =>
                 Logger.info(e.toString())

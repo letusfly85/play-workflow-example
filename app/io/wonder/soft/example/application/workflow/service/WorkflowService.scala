@@ -7,7 +7,7 @@ import io.wonder.soft.example.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.example.domain.workflow.query.WorkflowQueryProcessor
 import io.wonder.soft.example.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository, WorkflowTransitionRepository}
 
-object WorkflowService extends ApplicationService {
+class WorkflowService extends ApplicationService {
 
   def listStatus: List[WorkflowStatusEntity] = {
     WorkflowQueryProcessor.searchStatuses
