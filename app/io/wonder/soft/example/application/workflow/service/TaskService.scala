@@ -1,8 +1,9 @@
 package io.wonder.soft.example.application.workflow.service
 
 import io.wonder.soft.example.application.ApplicationService
-import io.wonder.soft.example.domain.workflow.{TaskQueryProcessor, TaskRepository}
 import io.wonder.soft.example.domain.workflow.entity.TaskEntity
+import io.wonder.soft.example.domain.workflow.query.TaskQueryProcessor
+import io.wonder.soft.example.domain.workflow.repository.TaskRepository
 
 object TaskService extends ApplicationService {
 

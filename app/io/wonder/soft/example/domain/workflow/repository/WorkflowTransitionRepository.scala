@@ -1,8 +1,8 @@
-package io.wonder.soft.example.domain.workflow
+package io.wonder.soft.example.domain.workflow.repository
 
 import io.wonder.soft.example.domain.Repository
 import io.wonder.soft.example.domain.workflow.entity.WorkflowTransitionEntity
-import io.wonder.soft.example.domain.workflow.model. WorkflowTransitions
+import io.wonder.soft.example.domain.workflow.model.WorkflowTransitions
 import scalikejdbc._
 
 import scala.util.{Failure, Success, Try}

@@ -1,4 +1,4 @@
-package io.wonder.soft.example.domain.workflow
+package io.wonder.soft.example.domain.workflow.factory
 
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity}
 

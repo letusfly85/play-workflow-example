@@ -1,4 +1,4 @@
-package io.wonder.soft.example.domain.workflow
+package io.wonder.soft.example.domain.workflow.query
 
 import io.wonder.soft.example.domain.workflow.entity.TaskEntity
 import io.wonder.soft.example.domain.workflow.model.Tasks

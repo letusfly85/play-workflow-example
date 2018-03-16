@@ -3,6 +3,9 @@ package io.wonder.soft.example.application.workflow.service
 import io.wonder.soft.example.application.ApplicationService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.example.domain.workflow._
+import io.wonder.soft.example.domain.workflow.factory.WorkflowFactory
+import io.wonder.soft.example.domain.workflow.query.WorkflowQueryProcessor
+import io.wonder.soft.example.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository, WorkflowTransitionRepository}
 
 object WorkflowService extends ApplicationService {
 

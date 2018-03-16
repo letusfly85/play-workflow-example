@@ -1,6 +1,7 @@
-package io.wonder.soft.example.domain.workflow
+package io.wonder.soft.example.domain.workflow.query
 
 import io.wonder.soft.example.domain.workflow.entity._
+import io.wonder.soft.example.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.example.domain.workflow.model.{WorkflowDefinitions, WorkflowStatuses, WorkflowTransitions}
 import scalikejdbc._
 
