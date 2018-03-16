@@ -20,8 +20,8 @@
         <b-form-select v-model="form.status" :options="statuses" class="mb-3"></b-form-select>
         <b-form-input value="" v-model="form.step_label" class="form-control"></b-form-input>
         <br/>
-        <b-form-checkbox value="" v-model="form.is_first_step" class="form-control" style="float: left; width: 40%"></b-form-checkbox>
-        <b-form-checkbox value="" v-model="form.is_last_step" class="form-control" style="width: 40%;"></b-form-checkbox>
+        <b-form-checkbox value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%"></b-form-checkbox>
+        <b-form-checkbox value=true v-model="form.is_last_step" class="form-control" style="width: 40%;"></b-form-checkbox>
         <br/><br/>
         <b-button type="submit" class="btn-success">Add Workflow Record</b-button>
       </div>
@@ -69,8 +69,8 @@ export default {
         step_id: (maxStepId + 1),
         step_label: this.form.step_label,
         status: this.form.status,
-        is_first_step: this.form.is_first_step,
-        is_last_step: this.form.is_last_step
+        is_first_step: Boolean(this.form.is_first_step),
+        is_last_step: Boolean(this.form.is_last_step)
       }
       console.log(param)
 
