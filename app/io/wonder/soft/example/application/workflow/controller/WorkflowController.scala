@@ -8,6 +8,8 @@ import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
+import scala.util.{Failure, Success, Try}
+
 @Singleton
 class WorkflowController @Inject()(service: WorkflowService, cc: ControllerComponents) extends AbstractController(cc) {
 
@@ -76,6 +78,32 @@ class WorkflowController @Inject()(service: WorkflowService, cc: ControllerCompo
     }
   }
 
+
+  implicit def transJsResultToEither[T](jsResult: JsResult[T]): Either[JsError, T] = jsResult match {
+    case JsSuccess(t, _) => Right(t)
+    case JsError(errors) => Left(JsError(errors))
+  }
+
+  //todo use cats
+  //import cats.implicits._
+  def createDefinition = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        schemeEntity <- Json.fromJson[WorkflowDefinitionEntity](json).right
+        entity <- service.createDefinition(schemeEntity).right
+      } yield entity
+
+    } match {
+      case Success(resultEntity) => resultEntity match {
+        case Right(entity) => Created(Json.toJson(entity))
+        case Left(e) => InternalServerError(JsObject.empty)
+      }
+      case Failure(_) => InternalServerError(JsObject.empty)
+    }
+  }
+
+  /*
   def createDefinition = Action { implicit request =>
     request.body.asJson match {
       case Some(json) =>
@@ -97,6 +125,7 @@ class WorkflowController @Inject()(service: WorkflowService, cc: ControllerCompo
         InternalServerError(JsObject.empty)
     }
   }
+  */
 
   def listTransition(workflowId: String) = Action { implicit request =>
     request.getQueryString("workflow-id") match {

@@ -30,6 +30,7 @@ class WorkflowService extends ApplicationService {
     }
   }
 
+  //def createDefinition(schemeEntity: WorkflowDefinitionEntity): Option[WorkflowDefinitionEntity] = {
   def createDefinition(schemeEntity: WorkflowDefinitionEntity): Either[Exception, WorkflowDefinitionEntity] = {
     val maybeStatus = WorkflowStatusRepository.find(schemeEntity.status.get.id)
 
@@ -38,8 +39,17 @@ class WorkflowService extends ApplicationService {
         val entity = WorkflowFactory.buildDefinitionEntity(schemeEntity, statusEntity)
         WorkflowDefinitionRepository.create(entity)
 
+        /*
+        WorkflowDefinitionRepository.create(entity) match {
+          case Right(_) => Some(entity)
+          case Left(_) => None
+        }
+        */
+
       case None =>
         Left(new RuntimeException(""))
+
+        // gtNone
     }
   }
 
