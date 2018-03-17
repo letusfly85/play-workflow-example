@@ -95,8 +95,8 @@ class WorkflowController @Inject()(service: WorkflowService, cc: ControllerCompo
       } yield entity
 
     } match {
-      case Success(resultEntity) => resultEntity match {
-        case Right(entity) => Created(Json.toJson(entity))
+      case Success(either) => either match {
+        case Right(definitionEntity) => Created(Json.toJson(definitionEntity))
         case Left(e) => InternalServerError(JsObject.empty)
       }
       case Failure(_) => InternalServerError(JsObject.empty)

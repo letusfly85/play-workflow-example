@@ -1,23 +1,27 @@
 package io.wonder.soft.example.application.workflow.service
 
+import javax.inject.Inject
+
 import io.wonder.soft.example.application.ApplicationService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
-import io.wonder.soft.example.domain.workflow._
 import io.wonder.soft.example.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.example.domain.workflow.query.WorkflowQueryProcessor
 import io.wonder.soft.example.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository, WorkflowTransitionRepository}
 
-class WorkflowService extends ApplicationService {
+class WorkflowService @Inject()
+  (workflowStatusRepository: WorkflowStatusRepository,
+   workflowDefinitionRepository: WorkflowDefinitionRepository)
+  extends ApplicationService {
 
   def listStatus: List[WorkflowStatusEntity] = {
     WorkflowQueryProcessor.searchStatuses
   }
 
   def createStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] =
-      WorkflowStatusRepository.create(workflowStatusEntity)
+      workflowStatusRepository.create(workflowStatusEntity)
 
   def updateStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] =
-    WorkflowStatusRepository.update(workflowStatusEntity)
+    workflowStatusRepository.update(workflowStatusEntity)
 
   def listDefinition(workflowId: Int): List[WorkflowDefinitionEntity] = {
     WorkflowQueryProcessor.searchDefinitions(workflowId)
@@ -30,26 +34,16 @@ class WorkflowService extends ApplicationService {
     }
   }
 
-  //def createDefinition(schemeEntity: WorkflowDefinitionEntity): Option[WorkflowDefinitionEntity] = {
   def createDefinition(schemeEntity: WorkflowDefinitionEntity): Either[Exception, WorkflowDefinitionEntity] = {
-    val maybeStatus = WorkflowStatusRepository.find(schemeEntity.status.get.id)
+    val maybeStatus = workflowStatusRepository.find(schemeEntity.status.get.id)
 
     maybeStatus match {
       case Some(statusEntity) =>
         val entity = WorkflowFactory.buildDefinitionEntity(schemeEntity, statusEntity)
-        WorkflowDefinitionRepository.create(entity)
-
-        /*
-        WorkflowDefinitionRepository.create(entity) match {
-          case Right(_) => Some(entity)
-          case Left(_) => None
-        }
-        */
+        workflowDefinitionRepository.create(entity)
 
       case None =>
         Left(new RuntimeException(""))
-
-        // gtNone
     }
   }
 

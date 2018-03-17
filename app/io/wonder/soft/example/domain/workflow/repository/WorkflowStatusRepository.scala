@@ -7,7 +7,7 @@ import scalikejdbc._
 
 import scala.util.{Failure, Success, Try}
 
-object WorkflowStatusRepository extends Repository[WorkflowStatusEntity] {
+class WorkflowStatusRepository extends Repository[WorkflowStatusEntity] {
   val wsc = WorkflowStatuses.column
 
   import WorkflowStatusEntity._
