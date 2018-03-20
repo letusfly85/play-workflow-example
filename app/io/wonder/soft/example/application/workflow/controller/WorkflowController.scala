@@ -5,7 +5,6 @@ import javax.inject._
 import io.wonder.soft.example.application.helper.JsResultHelper
 import io.wonder.soft.example.application.workflow.service.WorkflowService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
-import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
@@ -21,24 +20,36 @@ class WorkflowController @Inject()
   }
 
   def createStatus = Action { implicit request =>
-    request.body.asJson match {
-      case Some(json) =>
-        Json.fromJson[WorkflowStatusEntity](json) match {
-          case JsSuccess(statusEntity, _) =>
-            service.createStatus(statusEntity) match {
-              case Right(_) => Created(Json.toJson(statusEntity))
-              case Left(e) =>
-                Logger.info(e.toString())
-                InternalServerError(JsObject.empty)
-            }
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        statusEntity <- Json.fromJson[WorkflowStatusEntity](json).right
+        entity <- service.createStatus(statusEntity).right
+      } yield entity
 
-          case JsError(e) =>
-            Logger.info(e.toString())
-            InternalServerError(JsObject.empty)
-        }
+    } match {
+      case Success(either) => either match {
+        case Right(statusEntity) => Created(Json.toJson(statusEntity))
+        case Left(e) => InternalServerError(JsObject.empty)
+      }
+      case Failure(_) => InternalServerError(JsObject.empty)
+    }
+  }
 
-      case None =>
-        InternalServerError(JsObject.empty)
+  def updateStatus = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        statusEntity <- Json.fromJson[WorkflowStatusEntity](json).right
+        entity <- service.updateStatus(statusEntity).right
+      } yield entity
+
+    } match {
+      case Success(either) => either match {
+        case Right(statusEntity) => Created(Json.toJson(statusEntity))
+        case Left(e) => InternalServerError(JsObject.empty)
+      }
+      case Failure(_) => InternalServerError(JsObject.empty)
     }
   }
 
@@ -58,29 +69,6 @@ class WorkflowController @Inject()
         InternalServerError(JsObject.empty)
     }
   }
-
-  def updateStatus = Action { implicit request =>
-    request.body.asJson match {
-      case Some(json) =>
-        Json.fromJson[WorkflowStatusEntity](json) match {
-          case JsSuccess(statusEntity, _) =>
-            service.updateStatus(statusEntity) match {
-              case Right(_) => Created(Json.toJson(statusEntity))
-              case Left(e) =>
-                Logger.info(e.toString())
-                InternalServerError(JsObject.empty)
-            }
-
-          case JsError(e) =>
-            Logger.info(e.toString())
-            InternalServerError(JsObject.empty)
-        }
-
-      case None =>
-        InternalServerError(JsObject.empty)
-    }
-  }
-
 
   //todo use cats
   //import cats.implicits._
@@ -112,24 +100,19 @@ class WorkflowController @Inject()
   }
 
   def createTransition = Action { implicit request =>
-    request.body.asJson match {
-      case Some(json) =>
-        Json.fromJson[WorkflowTransitionEntity](json) match {
-          case JsSuccess(transitionEntity, _) =>
-            service.createTransition(transitionEntity) match {
-              case Right(_) => Created(Json.toJson(transitionEntity))
-              case Left(e) =>
-                Logger.info(e.toString())
-                InternalServerError(JsObject.empty)
-            }
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        transitionEntity <- Json.fromJson[WorkflowTransitionEntity](json).right
+        entity <- service.createTransition(transitionEntity).right
+      } yield entity
 
-          case JsError(e) =>
-            Logger.info(e.toString())
-            InternalServerError(JsObject.empty)
-        }
-
-      case None =>
-        InternalServerError(JsObject.empty)
+    } match {
+      case Success(either) => either match {
+        case Right(transitionEntity) => Created(Json.toJson(transitionEntity))
+        case Left(e) => InternalServerError(JsObject.empty)
+      }
+      case Failure(_) => InternalServerError(JsObject.empty)
     }
   }
 
