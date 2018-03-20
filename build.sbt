@@ -54,12 +54,12 @@ libraryDependencies ++= {
     "com.typesafe.play" %% "play-mailer-guice" % "6.0.1",
     "com.enragedginger" %% "akka-quartz-scheduler" % "1.6.1-akka-2.5.x",
 
+    "org.typelevel" %% "cats-core" % "1.0.1",
+
     "com.typesafe.play" %% "play-specs2" % "2.6.7" % Test,
     "org.specs2" %% "specs2" % "2.5" % Test
   )
 }
-
-unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
 
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -76,7 +76,9 @@ scalacOptions ++= Seq(
   // Play has a lot of issues with unused imports and unsued params
   // https://github.com/playframework/playframework/issues/6690
   // https://github.com/playframework/twirl/issues/105
-  "-Xlint:-unused,_"
+  "-Xlint:-unused,_",
+  // https://github.com/typelevel/cats
+  "-Ypartial-unification"
 )
 
 //********************************************************
