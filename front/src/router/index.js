@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Workflow from '@/components/Workflow'
+import Transition from '@/components/Transition'
 import Status from '@/components/Status'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -25,6 +26,11 @@ export default new Router({
       path: '/statuses',
       name: 'Status',
       component: Status
+    },
+    {
+      path: '/transitions',
+      name: 'Transition',
+      component: Transition
     }
   ]
 })

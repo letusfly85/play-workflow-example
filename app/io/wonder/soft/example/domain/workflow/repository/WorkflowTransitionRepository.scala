@@ -11,17 +11,17 @@ object WorkflowTransitionRepository extends Repository[WorkflowTransitionEntity]
 
   val wtc = WorkflowTransitions.column
 
-  import WorkflowTransitionEntity._
-
-  override def find(id: Int): Option[WorkflowTransitionEntity] =
-    WorkflowTransitions.find(id).flatMap(transitions => Some(transitions))
+  override def find(id: Int): Option[WorkflowTransitionEntity] = ???
 
   override def create(entity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity] = {
     Try {
       DB localTx {implicit session =>
         withSQL {
           insert.into(WorkflowTransitions).namedValues(
-            wtc.name -> entity.name
+            wtc.workflowId -> entity.workflowId,
+            wtc.name -> entity.name,
+            wtc.fromStepId -> entity.fromStep.schemeStepId,
+            wtc.toStepId -> entity.toStep.schemeStepId
           )
         }.update().apply()
       }
@@ -36,8 +36,8 @@ object WorkflowTransitionRepository extends Repository[WorkflowTransitionEntity]
     Try {
       WorkflowTransitions.findBy(sqls
           .eq(wtc.workflowId, entity.workflowId)
-          .eq(wtc.fromStepId, entity.fromStepId)
-          .eq(wtc.toStepId, entity.toStepId)) match {
+          .eq(wtc.fromStepId, entity.fromStep.schemeStepId)
+          .eq(wtc.toStepId, entity.toStep.schemeStepId)) match {
         case Some(transitions) =>
           transitions.copy(name = entity.name).save()
           Right(entity)

@@ -7,6 +7,8 @@
 
       <b-navbar-nav>
         <b-nav-item href="#/workflows">Workflows</b-nav-item>
+        <b-nav-item href="#/transitions">Transitions</b-nav-item>
+        <b-nav-item href="#/statuses">Status List</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->

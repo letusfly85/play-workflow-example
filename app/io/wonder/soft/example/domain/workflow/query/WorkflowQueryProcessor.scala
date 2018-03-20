@@ -8,9 +8,11 @@ import scalikejdbc._
 object WorkflowQueryProcessor {
   import WorkflowStatusEntity._
 
-  val wsm = WorkflowDefinitions.syntax("wsm")
-  val wss = WorkflowStatuses.syntax("wss")
-  val wts = WorkflowTransitions.syntax("wtc")
+  // syntax
+  val wd = WorkflowDefinitions.syntax("wd")
+  val wd_to = WorkflowDefinitions.syntax("wd_to")
+  val ws = WorkflowStatuses.syntax("ws")
+  val wt = WorkflowTransitions.syntax("wt")
 
   def searchStatuses(): List[WorkflowStatusEntity] = {
     WorkflowStatuses.findAll()
@@ -19,11 +21,11 @@ object WorkflowQueryProcessor {
   def searchDefinitions(workflowId: Int): List[WorkflowDefinitionEntity] = {
     (DB localTx { implicit session =>
       withSQL {
-        select.from(WorkflowDefinitions as wsm)
-          .innerJoin(WorkflowStatuses as wss)
-          .on(wsm.statusId, wss.id)
-          .where(sqls.eq(wsm.workflowId, workflowId))
-      }.map(res => (WorkflowDefinitions(wsm)(res), WorkflowStatuses(wss)(res))).list().apply()
+        select.from(WorkflowDefinitions as wd)
+          .innerJoin(WorkflowStatuses as ws)
+          .on(wd.statusId, ws.id)
+          .where(sqls.eq(wd.workflowId, workflowId))
+      }.map(res => (WorkflowDefinitions(wd)(res), WorkflowStatuses(ws)(res))).list().apply()
     }).map{ case (scheme: WorkflowDefinitions, status: WorkflowStatuses) =>
       WorkflowFactory.buildDefinitionEntity(scheme, status)
     }
@@ -32,17 +34,31 @@ object WorkflowQueryProcessor {
   def searchDefinitionsByDefinitionId(id: Int): Option[WorkflowDefinitionEntity] = {
     (DB localTx { implicit session =>
       withSQL {
-        select.from(WorkflowDefinitions as wsm)
-          .innerJoin(WorkflowStatuses as wss)
-          .on(wsm.statusId, wss.id)
-          .where(sqls.eq(wsm.id, id))
-      }.map(res => (WorkflowDefinitions(wsm)(res), WorkflowStatuses(wss)(res))).single().apply()
+        select.from(WorkflowDefinitions as wd)
+          .innerJoin(WorkflowStatuses as ws)
+          .on(wd.statusId, ws.id)
+          .where(sqls.eq(wd.id, id))
+      }.map(res => (WorkflowDefinitions(wd)(res), WorkflowStatuses(ws)(res))).single().apply()
     }).map{ case (scheme: WorkflowDefinitions, status: WorkflowStatuses) =>
       WorkflowFactory.buildDefinitionEntity(scheme, status)
     }
   }
 
-  def searchTransitions(workflowId: Int): List[WorkflowTransitionEntity] =
-    WorkflowTransitions.findAllBy(sqls.eq(wts.workflowId, workflowId))
+  def searchTransitions(workflowId: Int): List[WorkflowTransitionEntity] = {
+    (DB localTx { implicit session =>
+      withSQL {
+        select.from(WorkflowTransitions as wt)
+          .innerJoin(WorkflowDefinitions as wd)
+          .on(wt.fromStepId, wd.schemeStepId)
+          .innerJoin(WorkflowDefinitions as wd_to)
+          .on(wt.toStepId, wd_to.schemeStepId)
+      }.map(res => (WorkflowTransitions(wt)(res), WorkflowDefinitions(wd)(res), WorkflowDefinitions(wd_to)(res))).list.apply
+    }).map{ case (transition: WorkflowTransitions, fromStep: WorkflowDefinitions, toStep: WorkflowDefinitions) =>
+      WorkflowFactory.buildTransitionEntity(
+        transition, fromStep, toStep
+      )
+    }
+
+  }
 
 }

@@ -2,6 +2,7 @@ package io.wonder.soft.example.application.workflow.controller
 
 import javax.inject._
 
+import io.wonder.soft.example.application.helper.JsResultHelper
 import io.wonder.soft.example.application.workflow.service.WorkflowService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import play.api.Logger
@@ -11,7 +12,9 @@ import play.api.mvc._
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class WorkflowController @Inject()(service: WorkflowService, cc: ControllerComponents) extends AbstractController(cc) {
+class WorkflowController @Inject()
+  (service: WorkflowService, cc: ControllerComponents)
+  extends AbstractController(cc) with JsResultHelper {
 
   def listStatus = Action {
     Ok(Json.toJson(service.listStatus))
@@ -79,11 +82,6 @@ class WorkflowController @Inject()(service: WorkflowService, cc: ControllerCompo
   }
 
 
-  implicit def transJsResultToEither[T](jsResult: JsResult[T]): Either[JsError, T] = jsResult match {
-    case JsSuccess(t, _) => Right(t)
-    case JsError(errors) => Left(JsError(errors))
-  }
-
   //todo use cats
   //import cats.implicits._
   def createDefinition = Action { implicit request =>
@@ -103,31 +101,7 @@ class WorkflowController @Inject()(service: WorkflowService, cc: ControllerCompo
     }
   }
 
-  /*
-  def createDefinition = Action { implicit request =>
-    request.body.asJson match {
-      case Some(json) =>
-        Json.fromJson[WorkflowDefinitionEntity](json) match {
-          case JsSuccess(schemeEntity, _) =>
-            service.createDefinition(schemeEntity) match {
-              case Right(_) => Created(Json.toJson(schemeEntity))
-              case Left(e) =>
-                Logger.info(e.toString())
-                InternalServerError(JsObject.empty)
-            }
-
-          case JsError(e) =>
-            Logger.info(e.toString())
-            InternalServerError(JsObject.empty)
-        }
-
-      case None =>
-        InternalServerError(JsObject.empty)
-    }
-  }
-  */
-
-  def listTransition(workflowId: String) = Action { implicit request =>
+  def listTransition = Action { implicit request =>
     request.getQueryString("workflow-id") match {
       case Some(workflowId) =>
         Ok(Json.toJson(service.listTransition(workflowId.toInt)))

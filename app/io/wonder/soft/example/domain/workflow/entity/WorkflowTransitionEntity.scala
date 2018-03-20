@@ -9,10 +9,10 @@ import play.api.libs.json._
 final case class WorkflowTransitionEntity(
                    workflowId: Int,
                    name: String,
-                   fromStepId: Int,
-                   toStepId: Int,
+                   fromStep: WorkflowStepEntity,
+                   toStep: WorkflowStepEntity,
                    conditionSuiteId: Option[Int], //TODO implement and use entity
-                   isDefined: Boolean = false
+                   isDefined: Option[Boolean] = Some(false)
                  ) extends Entity
 
 
@@ -20,29 +20,29 @@ object WorkflowTransitionEntity {
   implicit def workflowTransitionReads: Reads[WorkflowTransitionEntity] = (
     (JsPath \ "workflow_id").read[Int] and
     (JsPath \ "name").read[String] and
-    (JsPath \ "from_step_id").read[Int] and
-    (JsPath \ "to_step_id").read[Int] and
+    (JsPath \ "from_step").read[WorkflowStepEntity] and
+    (JsPath \ "to_step").read[WorkflowStepEntity] and
     (JsPath \ "condition_suite_id").readNullable[Int] and
-    (JsPath \ "is_defined").read[Boolean]
+    (JsPath \ "is_defined").readNullable[Boolean]
   )(WorkflowTransitionEntity.apply _)
 
   implicit def workflowTransitionWrites: Writes[WorkflowTransitionEntity] = (
     (JsPath \ "workflow_id").write[Int] and
     (JsPath \ "name").write[String] and
-    (JsPath \ "from_step_id").write[Int] and
-    (JsPath \ "to_step_id").write[Int] and
+    (JsPath \ "from_step").write[WorkflowStepEntity] and
+    (JsPath \ "to_step").write[WorkflowStepEntity] and
     (JsPath \ "condition_suite_id").writeNullable[Int] and
-    (JsPath \ "is_defined").write[Boolean]
+    (JsPath \ "is_defined").writeNullable[Boolean]
   )(unlift(WorkflowTransitionEntity.unapply))
 
   implicit def convertFromModel(model: WorkflowTransitions): WorkflowTransitionEntity = {
     WorkflowTransitionEntity(
       model.workflowId,
       model.name,
-      model.fromStepId,
-      model.toStepId,
+      WorkflowStepEntity(),
+      WorkflowStepEntity(),
       model.conditionSuiteId,
-      model.isDefined
+      Some(model.isDefined)
     )
   }
 
