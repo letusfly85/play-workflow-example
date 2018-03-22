@@ -62,7 +62,10 @@ export default {
       }
     },
     createRecord: function () {
-      let maxStepId = Math.max(...this.workflows.map((workflow) => workflow.step_id))
+      var maxStepId = 0
+      if (this.workflows.length > 0) {
+        maxStepId = Math.max(...this.workflows.map((workflow) => workflow.step_id))
+      }
       let param = {
         workflow_id: 1,
         name: 'example',

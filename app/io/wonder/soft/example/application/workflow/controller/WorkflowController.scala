@@ -5,6 +5,7 @@ import javax.inject._
 import io.wonder.soft.example.application.helper.JsResultHelper
 import io.wonder.soft.example.application.workflow.service.WorkflowService
 import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
+import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
@@ -83,9 +84,13 @@ class WorkflowController @Inject()
     } match {
       case Success(either) => either match {
         case Right(definitionEntity) => Created(Json.toJson(definitionEntity))
-        case Left(e) => InternalServerError(JsObject.empty)
+        case Left(e) =>
+          Logger.info(e.toString)
+          InternalServerError(JsObject.empty)
       }
-      case Failure(_) => InternalServerError(JsObject.empty)
+      case Failure(e) =>
+        Logger.info(e.getMessage)
+        InternalServerError(JsObject.empty)
     }
   }
 
