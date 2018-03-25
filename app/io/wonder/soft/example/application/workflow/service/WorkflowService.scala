@@ -10,6 +10,7 @@ import io.wonder.soft.example.domain.workflow.repository.{WorkflowDefinitionRepo
 
 class WorkflowService @Inject()
   (workflowStatusRepository: WorkflowStatusRepository,
+   workflowTransitionRepository: WorkflowTransitionRepository,
    workflowDefinitionRepository: WorkflowDefinitionRepository)
   extends ApplicationService {
 
@@ -47,7 +48,6 @@ class WorkflowService @Inject()
     }
   }
 
-  //TODO implement
   def listTransition(workflowId: Int): List[WorkflowTransitionEntity] =
     WorkflowQueryProcessor.searchTransitions(workflowId)
 
@@ -55,8 +55,7 @@ class WorkflowService @Inject()
   def findTransition(workflowId: Int, fromStepId: Int, toStepId: Int): Either[Exception, WorkflowTransitionEntity] =
     Left(new RuntimeException(""))
 
-  //TODO implement
   def createTransition(transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity] =
-    WorkflowTransitionRepository.create(transitionEntity)
+    workflowTransitionRepository.create(transitionEntity)
 
 }

@@ -7,7 +7,7 @@ import scalikejdbc._
 
 import scala.util.{Failure, Success, Try}
 
-object WorkflowTransitionRepository extends Repository[WorkflowTransitionEntity] {
+class WorkflowTransitionRepository extends Repository[WorkflowTransitionEntity] {
 
   val wtc = WorkflowTransitions.column
 
