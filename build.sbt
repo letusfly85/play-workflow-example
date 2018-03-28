@@ -2,7 +2,7 @@ organization := "io.wonder-soft"
 
 name := "workflow-example"
 
-val _version = "1.0.3"
+val _version = "1.0.4"
 
 version := s"${_version}-SNAPSHOT"
 
