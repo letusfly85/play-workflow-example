@@ -31,8 +31,8 @@ class WorkflowDefinitionRepository extends Repository[WorkflowDefinitionEntity] 
             wsc.workflowId -> entity.workflowId,
             wsc.name -> entity.name,
             wsc.statusId -> entity.status.get.id,
-            wsc.schemeStepId -> entity.schemeStepId,
-            wsc.schemeStepLabel -> entity.schemeStepLabel,
+            wsc.stepId -> entity.stepId,
+            wsc.stepLabel -> entity.stepLabel,
             wsc.isFirstStep -> entity.isFirstStep,
             wsc.isLastStep -> entity.isLastStep
           )

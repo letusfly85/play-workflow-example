@@ -49,9 +49,9 @@ object WorkflowQueryProcessor {
       withSQL {
         select.from(WorkflowTransitions as wt)
           .innerJoin(WorkflowDefinitions as wd)
-          .on(wt.fromStepId, wd.schemeStepId)
+          .on(wt.fromStepId, wd.stepId)
           .innerJoin(WorkflowDefinitions as wd_to)
-          .on(wt.toStepId, wd_to.schemeStepId)
+          .on(wt.toStepId, wd_to.stepId)
       }.map(res => (WorkflowTransitions(wt)(res), WorkflowDefinitions(wd)(res), WorkflowDefinitions(wd_to)(res))).list.apply
     }).map{ case (transition: WorkflowTransitions, fromStep: WorkflowDefinitions, toStep: WorkflowDefinitions) =>
       WorkflowFactory.buildTransitionEntity(

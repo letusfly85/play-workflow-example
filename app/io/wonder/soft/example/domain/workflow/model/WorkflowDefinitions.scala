@@ -1,15 +1,15 @@
 package io.wonder.soft.example.domain.workflow.model
 
-import org.joda.time.DateTime
 import scalikejdbc._
+import org.joda.time.{DateTime}
 
 case class WorkflowDefinitions(
   id: Int,
   workflowId: Int,
   name: String,
   statusId: Int,
-  schemeStepId: Int,
-  schemeStepLabel: String,
+  stepId: Int,
+  stepLabel: String,
   isFirstStep: Boolean,
   isLastStep: Boolean,
   createdAt: Option[DateTime] = None,
@@ -26,7 +26,7 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
 
   override val tableName = "workflow_definitions"
 
-  override val columns = Seq("id", "workflow_id", "name", "status_id", "scheme_step_id", "scheme_step_label", "is_first_step", "is_last_step", "created_at", "updated_at")
+  override val columns = Seq("id", "workflow_id", "name", "status_id", "step_id", "step_label", "is_first_step", "is_last_step", "created_at", "updated_at")
 
   def apply(wd: SyntaxProvider[WorkflowDefinitions])(rs: WrappedResultSet): WorkflowDefinitions = apply(wd.resultName)(rs)
   def apply(wd: ResultName[WorkflowDefinitions])(rs: WrappedResultSet): WorkflowDefinitions = new WorkflowDefinitions(
@@ -34,8 +34,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
     workflowId = rs.get(wd.workflowId),
     name = rs.get(wd.name),
     statusId = rs.get(wd.statusId),
-    schemeStepId = rs.get(wd.schemeStepId),
-    schemeStepLabel = rs.get(wd.schemeStepLabel),
+    stepId = rs.get(wd.stepId),
+    stepLabel = rs.get(wd.stepLabel),
     isFirstStep = rs.get(wd.isFirstStep),
     isLastStep = rs.get(wd.isLastStep),
     createdAt = rs.get(wd.createdAt),
@@ -82,8 +82,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
     workflowId: Int,
     name: String,
     statusId: Int,
-    schemeStepId: Int,
-    schemeStepLabel: String,
+    stepId: Int,
+    stepLabel: String,
     isFirstStep: Boolean,
     isLastStep: Boolean,
     createdAt: Option[DateTime] = None,
@@ -93,8 +93,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
         column.workflowId -> workflowId,
         column.name -> name,
         column.statusId -> statusId,
-        column.schemeStepId -> schemeStepId,
-        column.schemeStepLabel -> schemeStepLabel,
+        column.stepId -> stepId,
+        column.stepLabel -> stepLabel,
         column.isFirstStep -> isFirstStep,
         column.isLastStep -> isLastStep,
         column.createdAt -> createdAt,
@@ -107,8 +107,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
       workflowId = workflowId,
       name = name,
       statusId = statusId,
-      schemeStepId = schemeStepId,
-      schemeStepLabel = schemeStepLabel,
+      stepId = stepId,
+      stepLabel = stepLabel,
       isFirstStep = isFirstStep,
       isLastStep = isLastStep,
       createdAt = createdAt,
@@ -121,8 +121,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
         'workflowId -> entity.workflowId,
         'name -> entity.name,
         'statusId -> entity.statusId,
-        'schemeStepId -> entity.schemeStepId,
-        'schemeStepLabel -> entity.schemeStepLabel,
+        'stepId -> entity.stepId,
+        'stepLabel -> entity.stepLabel,
         'isFirstStep -> entity.isFirstStep,
         'isLastStep -> entity.isLastStep,
         'createdAt -> entity.createdAt,
@@ -131,8 +131,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
       workflow_id,
       name,
       status_id,
-      scheme_step_id,
-      scheme_step_label,
+      step_id,
+      step_label,
       is_first_step,
       is_last_step,
       created_at,
@@ -141,8 +141,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
       {workflowId},
       {name},
       {statusId},
-      {schemeStepId},
-      {schemeStepLabel},
+      {stepId},
+      {stepLabel},
       {isFirstStep},
       {isLastStep},
       {createdAt},
@@ -157,8 +157,8 @@ object WorkflowDefinitions extends SQLSyntaxSupport[WorkflowDefinitions] {
         column.workflowId -> entity.workflowId,
         column.name -> entity.name,
         column.statusId -> entity.statusId,
-        column.schemeStepId -> entity.schemeStepId,
-        column.schemeStepLabel -> entity.schemeStepLabel,
+        column.stepId -> entity.stepId,
+        column.stepLabel -> entity.stepLabel,
         column.isFirstStep -> entity.isFirstStep,
         column.isLastStep -> entity.isLastStep,
         column.createdAt -> entity.createdAt,

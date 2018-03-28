@@ -7,13 +7,13 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 
 final case class WorkflowDefinitionEntity(
-                   workflowId: Int,
-                   name: String,
-                   status: Option[WorkflowStatusEntity],
-                   schemeStepId: Int,
-                   schemeStepLabel: String,
-                   isFirstStep: Boolean = false,
-                   isLastStep: Boolean = false
+                                           workflowId: Int,
+                                           name: String,
+                                           status: Option[WorkflowStatusEntity],
+                                           stepId: Int,
+                                           stepLabel: String,
+                                           isFirstStep: Boolean = false,
+                                           isLastStep: Boolean = false
                  ) extends Entity
 
 
@@ -43,8 +43,8 @@ object WorkflowDefinitionEntity {
       model.workflowId,
       model.name,
       None,
-      model.schemeStepId,
-      model.schemeStepLabel,
+      model.stepId,
+      model.stepLabel,
       model.isFirstStep,
       model.isLastStep
     )
