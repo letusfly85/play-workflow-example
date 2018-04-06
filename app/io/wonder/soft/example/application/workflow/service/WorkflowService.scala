@@ -11,11 +11,12 @@ import io.wonder.soft.example.domain.workflow.repository.{WorkflowDefinitionRepo
 class WorkflowService @Inject()
   (workflowStatusRepository: WorkflowStatusRepository,
    workflowTransitionRepository: WorkflowTransitionRepository,
+   queryProcessor: WorkflowQueryProcessor,
    workflowDefinitionRepository: WorkflowDefinitionRepository)
   extends ApplicationService {
 
   def listStatus: List[WorkflowStatusEntity] = {
-    WorkflowQueryProcessor.searchStatuses
+    queryProcessor.searchStatuses
   }
 
   def createStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] =
@@ -25,11 +26,11 @@ class WorkflowService @Inject()
     workflowStatusRepository.update(workflowStatusEntity)
 
   def listDefinition(workflowId: Int): List[WorkflowDefinitionEntity] = {
-    WorkflowQueryProcessor.searchDefinitions(workflowId)
+    queryProcessor.searchDefinitions(workflowId)
   }
 
   def findDefinition(id: Int): Either[Exception, WorkflowDefinitionEntity] = {
-    WorkflowQueryProcessor.searchDefinitionsByDefinitionId(id) match {
+    queryProcessor.searchDefinitionsByDefinitionId(id) match {
       case Some(entity) => Right(entity)
       case None => Left(new RuntimeException("not found scheme id"))
     }
@@ -49,7 +50,7 @@ class WorkflowService @Inject()
   }
 
   def listTransition(workflowId: Int): List[WorkflowTransitionEntity] =
-    WorkflowQueryProcessor.searchTransitions(workflowId)
+    queryProcessor.searchTransitions(workflowId)
 
   //TODO implement
   def findTransition(workflowId: Int, fromStepId: Int, toStepId: Int): Either[Exception, WorkflowTransitionEntity] =

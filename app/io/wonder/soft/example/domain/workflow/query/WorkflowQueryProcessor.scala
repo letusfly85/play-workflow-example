@@ -5,7 +5,7 @@ import io.wonder.soft.example.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.example.domain.workflow.model.{WorkflowDefinitions, WorkflowStatuses, WorkflowTransitions}
 import scalikejdbc._
 
-object WorkflowQueryProcessor {
+class WorkflowQueryProcessor {
   import WorkflowStatusEntity._
 
   // syntax
