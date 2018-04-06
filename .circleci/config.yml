@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: /app
+
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          - v1-dependencies-
+
+      - run: cat /dev/null | sbt test:compile
+
+      - save_cache:
+          paths:
+            - "~/.m2"
+            - "~/.ivy2"
+            - "~/.sbt"
+            - "~/.cache/coursier"
+            - "lib_managed"
+            - "target"
+            - "project/target"
+          key: v1-dependencies--{{ checksum "build.sbt" }}
+
+      - run: sbt test
