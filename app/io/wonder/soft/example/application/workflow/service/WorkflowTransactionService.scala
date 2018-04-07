@@ -43,4 +43,16 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
+  def recordTransaction(entity: WorkflowTransactionEntity)
+    : Either[Exception, WorkflowTransactionEntity] = {
+    //todo check is last step
+
+    //todo get from transition id
+
+    //todo copy instance
+
+    //flush to database
+    transactionRepository.create(entity)
+  }
+
 }
