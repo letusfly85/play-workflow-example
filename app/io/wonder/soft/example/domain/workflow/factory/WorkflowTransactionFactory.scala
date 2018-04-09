@@ -1,9 +1,7 @@
 package io.wonder.soft.example.domain.workflow.factory
 
-import io.wonder.soft.example.domain.workflow.entity.{
-  WorkflowDefinitionEntity,
-  WorkflowTransactionEntity
-}
+import entity.WorkflowCurrentStateEntity
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity}
 
 object WorkflowTransactionFactory {
 
@@ -21,7 +19,22 @@ object WorkflowTransactionFactory {
       isInit = false,
       isCompleted = false
     )
+  }
+
+  def buildCurrentState(userId: String,
+            transactionId: String,
+            define: WorkflowDefinitionEntity): WorkflowCurrentStateEntity = {
+    WorkflowCurrentStateEntity(
+      id = 0,
+      workflowId = define.workflowId,
+      transactionId = transactionId,
+      userId = Some(userId),
+      currentStepId = define.stepId,
+      schemeId = 0,
+      serviceId = 0
+    )
 
   }
+
 
 }

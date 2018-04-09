@@ -3,25 +3,29 @@ package io.wonder.soft.example.application.workflow.service
 import io.wonder.soft.example.application.ApplicationService
 import io.wonder.soft.example.domain.workflow.entity.WorkflowTransactionEntity
 import io.wonder.soft.example.domain.workflow.factory.WorkflowTransactionFactory
-import io.wonder.soft.example.domain.workflow.query.WorkflowQueryProcessor
+import io.wonder.soft.example.domain.workflow.query.{
+  WorkflowQueryProcessor,
+  WorkflowTransactionQueryProcessor
+}
 import io.wonder.soft.example.domain.workflow.repository.{
+  WorkflowCurrentStateRepository,
   WorkflowDefinitionRepository,
   WorkflowTransactionRepository
 }
 import javax.inject.Inject
 
 class WorkflowTransactionService @Inject()(
-    definitionRepository: WorkflowDefinitionRepository,
     defineQuery: WorkflowQueryProcessor,
+    definitionRepository: WorkflowDefinitionRepository,
+    transactionQueryProcessor: WorkflowTransactionQueryProcessor,
     transactionRepository: WorkflowTransactionRepository,
-    transactionService: WorkflowTransactionService)
+    transactionService: WorkflowTransactionService,
+    currentStateRepository: WorkflowCurrentStateRepository)
     extends ApplicationService {
 
   def initialize(
       userId: String,
       workflowId: Int): Either[Exception, WorkflowTransactionEntity] = {
-    //todo check exists transaction
-
     //find workflow definition
     val defines = defineQuery.searchDefinitions(workflowId)
     val maybeInitialDefine = defines.filter(d => d.isFirstStep).headOption
@@ -30,10 +34,15 @@ class WorkflowTransactionService @Inject()(
         //generate transaction id
         val transactionId = java.util.UUID.randomUUID().toString
 
+        val currentState = WorkflowTransactionFactory.buildCurrentState(
+          userId,
+          transactionId,
+          define)
+        currentStateRepository.create(currentState)
+
         val transaction =
           WorkflowTransactionFactory.build(userId, transactionId, define)
         val initialTransaction = transaction.copy(isInit = true)
-
         transactionRepository.create(initialTransaction)
 
       case None =>
@@ -46,8 +55,20 @@ class WorkflowTransactionService @Inject()(
   def recordTransaction(entity: WorkflowTransactionEntity)
     : Either[Exception, WorkflowTransactionEntity] = {
     //todo check is last step
+    val defines = defineQuery.searchDefinitions(entity.workflowId)
+    val isLastStep = defines
+      .filter(d => d.stepId == entity.stepId)
+      .headOption
+      .map(p => p.isLastStep)
 
     //todo get from transition id
+    transactionQueryProcessor.findCurrentStateByTransactionId(entity.transactionId) match {
+      case Some(transaction) =>
+        //todo
+
+      case None =>
+        //todo
+    }
 
     //todo copy instance
 
