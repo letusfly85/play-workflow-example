@@ -8,6 +8,8 @@ import io.wonder.soft.example.domain.workflow.query.{WorkflowQueryProcessor, Wor
 import io.wonder.soft.example.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
 import javax.inject.Inject
 
+import scala.util.{Failure, Success, Try}
+
 class WorkflowTransactionService @Inject()(
     defineQuery: WorkflowQueryProcessor,
     definitionRepository: WorkflowDefinitionRepository,
@@ -46,30 +48,40 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  def proceedState(stateEntity: WorkflowCurrentStateEntity, transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
-    // todo build transaction entity from state and transition
+  def closeTransaction(currentStateEntity: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+    ???
+  }
 
-    // todo record transaction
+  def proceedState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+    // build transaction entity from state and transition
+    val transaction = WorkflowTransactionFactory.buildTransaction(currentState, transition)
 
-    // todo return new entity
-    Right(stateEntity)
+    val nextState = for {
+      // record transaction
+      _ <- recordTransaction(transaction).right
+
+      // get next state
+      nextState <- generateNextState(currentState, transition).right
+    } yield (nextState)
+
+    nextState
   }
 
   def recordTransaction(entity: WorkflowTransactionEntity)
     : Either[Exception, WorkflowTransactionEntity] = {
-    //todo get from transition id
-    transactionQueryProcessor.findCurrentStateByTransactionId(entity.transactionId) match {
-      case Some(currentStateEntity) =>
-        //todo
-
-      case None =>
-        //todo
-    }
-
-    //todo copy instance
-
     //flush to database
     transactionRepository.create(entity)
+  }
+
+  def generateNextState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+    Try {
+      //todo validate whether state have next step or not
+
+      WorkflowTransactionFactory.buildNextState(currentState, transition)
+    } match {
+      case Success(result) => Right(result)
+      case Failure(exception) => Left(new Exception(exception))
+    }
   }
 
   def isLastStep(workflowId: Int, stepId: Int): Either[Exception, Boolean] = {

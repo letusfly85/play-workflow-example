@@ -1,7 +1,7 @@
 package io.wonder.soft.example.domain.workflow.factory
 
 import entity.WorkflowCurrentStateEntity
-import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity}
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowTransitionEntity}
 
 object WorkflowTransactionFactory {
 
@@ -21,6 +21,19 @@ object WorkflowTransactionFactory {
     )
   }
 
+  def buildTransaction(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): WorkflowTransactionEntity = {
+    WorkflowTransactionEntity(
+      id = 0,
+      workflowId = currentState.workflowId,
+      transactionId = currentState.transactionId,
+      userId = currentState.userId,
+      stepId = currentState.currentStepId,
+      fromTransitionId = Some(transition.fromStep.schemeStepId),
+      isInit = transition.fromStep.isFirstStep,
+      isCompleted = transition.fromStep.isLastStep
+    )
+  }
+
   def buildCurrentState(userId: String,
             transactionId: String,
             define: WorkflowDefinitionEntity): WorkflowCurrentStateEntity = {
@@ -33,8 +46,18 @@ object WorkflowTransactionFactory {
       schemeId = 0,
       serviceId = 0
     )
-
   }
 
+  def buildNextState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): WorkflowCurrentStateEntity = {
+    WorkflowCurrentStateEntity(
+      id = 0,
+      workflowId = currentState.workflowId,
+      transactionId = currentState.transactionId,
+      userId = currentState.userId,
+      currentStepId = transition.toStep.schemeStepId,
+      schemeId = 0,
+      serviceId = 0
+    )
+  }
 
 }
