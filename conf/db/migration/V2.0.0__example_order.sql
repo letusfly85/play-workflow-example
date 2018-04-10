@@ -1,6 +1,6 @@
 CREATE TABLE orders (
   id                    INT AUTO_INCREMENT,
-  transaction_id        VARCHAR(300) NOT NULL,
+  transaction_id        VARCHAR(300),
   status_id             VARCHAR(300) NOT NULL,
   status_name           VARCHAR(300), -- replicate
   customer_name         VARCHAR(300),

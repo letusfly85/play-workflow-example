@@ -1,11 +1,11 @@
 package io.wonder.soft.example.domain.example.order.model
 
-import org.joda.time.DateTime
 import scalikejdbc._
+import org.joda.time.{DateTime}
 
 case class Orders(
   id: Int,
-  transactionId: String,
+  transactionId: Option[String] = None,
   statusId: String,
   statusName: Option[String] = None,
   customerName: Option[String] = None,
@@ -77,7 +77,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
   }
 
   def create(
-    transactionId: String,
+    transactionId: Option[String] = None,
     statusId: String,
     statusName: Option[String] = None,
     customerName: Option[String] = None,
