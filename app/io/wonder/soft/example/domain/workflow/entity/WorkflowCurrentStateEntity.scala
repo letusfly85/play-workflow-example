@@ -12,6 +12,8 @@ final case class WorkflowCurrentStateEntity(
     transactionId: String,
     userId: Option[String],
     currentStepId: Int,
+    isInit: Boolean = false,
+    isFinished: Boolean = false,
     schemeId: Int,
     serviceId: Int,
 ) extends Entity
@@ -24,6 +26,8 @@ object WorkflowCurrentStateEntity {
         (JsPath \ "transaction_id").read[String] and
         (JsPath \ "user_id").readNullable[String] and
         (JsPath \ "current_step_id").read[Int] and
+        (JsPath \ "is_init").read[Boolean] and
+        (JsPath \ "is_finished").read[Boolean] and
         (JsPath \ "scheme_id").read[Int] and
         (JsPath \ "service_id").read[Int]
     )(WorkflowCurrentStateEntity.apply _)
@@ -35,6 +39,8 @@ object WorkflowCurrentStateEntity {
         (JsPath \ "transaction_id").write[String] and
         (JsPath \ "user_id").writeNullable[String] and
         (JsPath \ "current_step_id").write[Int] and
+        (JsPath \ "is_init").write[Boolean] and
+        (JsPath \ "is_finished").write[Boolean] and
         (JsPath \ "scheme_id").write[Int] and
         (JsPath \ "service_id").write[Int]
     )(unlift(WorkflowCurrentStateEntity.unapply))
@@ -47,6 +53,8 @@ object WorkflowCurrentStateEntity {
       model.transactionId,
       None,
       model.currentStepId,
+      false,
+      false,
       model.schemeId,
       model.serviceId,
     )

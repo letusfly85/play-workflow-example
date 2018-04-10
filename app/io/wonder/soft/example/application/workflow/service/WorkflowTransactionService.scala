@@ -48,23 +48,27 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  def closeTransaction(currentStateEntity: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
-    ???
+  def closeTransaction(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+    Try {
+      WorkflowTransactionFactory.buildFinishedState(currentState, transition)
+    } match {
+      case Success(result) => Right(result)
+      case Failure(exception) => Left(new Exception(exception))
+    }
   }
 
   def proceedState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     // build transaction entity from state and transition
     val transaction = WorkflowTransactionFactory.buildTransaction(currentState, transition)
+    recordTransaction(transaction)
 
-    val nextState = for {
-      // record transaction
-      _ <- recordTransaction(transaction).right
+    transition.toStep.isLastStep match {
+      case true =>
+        closeTransaction(currentState, transition)
 
-      // get next state
-      nextState <- generateNextState(currentState, transition).right
-    } yield (nextState)
-
-    nextState
+      case false =>
+        generateNextState(currentState, transition)
+    }
   }
 
   def recordTransaction(entity: WorkflowTransactionEntity)
@@ -84,7 +88,7 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  def isLastStep(workflowId: Int, stepId: Int): Either[Exception, Boolean] = {
+  def isLast(workflowId: Int, stepId: Int): Either[Exception, Boolean] = {
     val defines = defineQuery.searchDefinitions(workflowId)
     val errorMessage = "there is no last step."
     defines
@@ -94,5 +98,9 @@ class WorkflowTransactionService @Inject()(
       .toRight(new RuntimeException(
         s"{workflow_id: ${workflowId}, step_id: ${stepId}, message: ${errorMessage}")
       )
+  }
+
+  def isFinished(workflowId: Int, transactionId: String): Boolean = {
+    transactionQueryProcessor.findFinishedTransaction(transactionId)
   }
 }

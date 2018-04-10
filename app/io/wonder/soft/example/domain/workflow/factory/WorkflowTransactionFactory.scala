@@ -29,8 +29,8 @@ object WorkflowTransactionFactory {
       userId = currentState.userId,
       stepId = currentState.currentStepId,
       fromTransitionId = Some(transition.fromStep.schemeStepId),
-      isInit = transition.fromStep.isFirstStep,
-      isCompleted = transition.fromStep.isLastStep
+      isInit = false,
+      isCompleted = transition.toStep.isLastStep
     )
   }
 
@@ -60,4 +60,16 @@ object WorkflowTransactionFactory {
     )
   }
 
+  def buildFinishedState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): WorkflowCurrentStateEntity = {
+    WorkflowCurrentStateEntity(
+      id = 0,
+      workflowId = currentState.workflowId,
+      transactionId = currentState.transactionId,
+      userId = currentState.userId,
+      currentStepId = transition.toStep.schemeStepId,
+      isFinished = true,
+      schemeId = 0,
+      serviceId = 0
+    )
+  }
 }
