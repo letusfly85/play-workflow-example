@@ -2,10 +2,20 @@ package io.wonder.soft.example.application.workflow.service
 
 import entity.WorkflowCurrentStateEntity
 import io.wonder.soft.example.application.ApplicationService
-import io.wonder.soft.example.domain.workflow.entity.{WorkflowTransactionEntity, WorkflowTransitionEntity}
+import io.wonder.soft.example.domain.workflow.entity.{
+  WorkflowTransactionEntity,
+  WorkflowTransitionEntity
+}
 import io.wonder.soft.example.domain.workflow.factory.WorkflowTransactionFactory
-import io.wonder.soft.example.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
-import io.wonder.soft.example.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
+import io.wonder.soft.example.domain.workflow.query.{
+  WorkflowQueryProcessor,
+  WorkflowTransactionQueryProcessor
+}
+import io.wonder.soft.example.domain.workflow.repository.{
+  WorkflowCurrentStateRepository,
+  WorkflowDefinitionRepository,
+  WorkflowTransactionRepository
+}
 import javax.inject.Inject
 
 import scala.util.{Failure, Success, Try}
@@ -13,9 +23,8 @@ import scala.util.{Failure, Success, Try}
 class WorkflowTransactionService @Inject()(
     defineQuery: WorkflowQueryProcessor,
     definitionRepository: WorkflowDefinitionRepository,
-    transactionQueryProcessor: WorkflowTransactionQueryProcessor,
+    transactionQuery: WorkflowTransactionQueryProcessor,
     transactionRepository: WorkflowTransactionRepository,
-    transactionService: WorkflowTransactionService,
     currentStateRepository: WorkflowCurrentStateRepository)
     extends ApplicationService {
 
@@ -37,7 +46,9 @@ class WorkflowTransactionService @Inject()(
         currentStateRepository.create(currentState)
 
         val transaction =
-          WorkflowTransactionFactory.buildTransaction(userId, transactionId, define)
+          WorkflowTransactionFactory.buildTransaction(userId,
+                                                      transactionId,
+                                                      define)
         val initialTransaction = transaction.copy(isInit = true)
         transactionRepository.create(initialTransaction)
 
@@ -48,18 +59,23 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  def closeTransaction(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+  def closeTransaction(currentState: WorkflowCurrentStateEntity,
+                       transition: WorkflowTransitionEntity)
+    : Either[Exception, WorkflowCurrentStateEntity] = {
     Try {
       WorkflowTransactionFactory.buildFinishedState(currentState, transition)
     } match {
-      case Success(result) => Right(result)
+      case Success(result)    => Right(result)
       case Failure(exception) => Left(new Exception(exception))
     }
   }
 
-  def proceedState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+  def proceedState(currentState: WorkflowCurrentStateEntity,
+                   transition: WorkflowTransitionEntity)
+    : Either[Exception, WorkflowCurrentStateEntity] = {
     // build transaction entity from state and transition
-    val transaction = WorkflowTransactionFactory.buildTransaction(currentState, transition)
+    val transaction =
+      WorkflowTransactionFactory.buildTransaction(currentState, transition)
     recordTransaction(transaction)
 
     transition.toStep.isLastStep match {
@@ -77,13 +93,15 @@ class WorkflowTransactionService @Inject()(
     transactionRepository.create(entity)
   }
 
-  def generateNextState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+  def generateNextState(currentState: WorkflowCurrentStateEntity,
+                        transition: WorkflowTransitionEntity)
+    : Either[Exception, WorkflowCurrentStateEntity] = {
     Try {
       //todo validate whether state have next step or not
 
       WorkflowTransactionFactory.buildNextState(currentState, transition)
     } match {
-      case Success(result) => Right(result)
+      case Success(result)    => Right(result)
       case Failure(exception) => Left(new Exception(exception))
     }
   }
@@ -96,11 +114,13 @@ class WorkflowTransactionService @Inject()(
       .headOption
       .map(p => p.isLastStep)
       .toRight(new RuntimeException(
-        s"{workflow_id: ${workflowId}, step_id: ${stepId}, message: ${errorMessage}")
-      )
+        s"{workflow_id: ${workflowId}, step_id: ${stepId}, message: ${errorMessage}"))
   }
 
   def isFinished(workflowId: Int, transactionId: String): Boolean = {
-    transactionQueryProcessor.findFinishedTransaction(transactionId).map(t => t.isCompleted).getOrElse(false)
+    transactionQuery
+      .findFinishedTransaction(transactionId)
+      .map(t => t.isCompleted)
+      .getOrElse(false)
   }
 }
