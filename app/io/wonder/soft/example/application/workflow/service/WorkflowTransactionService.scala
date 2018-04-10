@@ -101,6 +101,6 @@ class WorkflowTransactionService @Inject()(
   }
 
   def isFinished(workflowId: Int, transactionId: String): Boolean = {
-    transactionQueryProcessor.findFinishedTransaction(transactionId)
+    transactionQueryProcessor.findFinishedTransaction(transactionId).map(t => t.isCompleted).getOrElse(false)
   }
 }
