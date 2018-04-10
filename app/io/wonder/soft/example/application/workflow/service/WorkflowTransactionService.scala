@@ -1,17 +1,11 @@
 package io.wonder.soft.example.application.workflow.service
 
+import entity.WorkflowCurrentStateEntity
 import io.wonder.soft.example.application.ApplicationService
-import io.wonder.soft.example.domain.workflow.entity.WorkflowTransactionEntity
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowTransactionEntity, WorkflowTransitionEntity}
 import io.wonder.soft.example.domain.workflow.factory.WorkflowTransactionFactory
-import io.wonder.soft.example.domain.workflow.query.{
-  WorkflowQueryProcessor,
-  WorkflowTransactionQueryProcessor
-}
-import io.wonder.soft.example.domain.workflow.repository.{
-  WorkflowCurrentStateRepository,
-  WorkflowDefinitionRepository,
-  WorkflowTransactionRepository
-}
+import io.wonder.soft.example.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
+import io.wonder.soft.example.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
 import javax.inject.Inject
 
 class WorkflowTransactionService @Inject()(
@@ -41,7 +35,7 @@ class WorkflowTransactionService @Inject()(
         currentStateRepository.create(currentState)
 
         val transaction =
-          WorkflowTransactionFactory.build(userId, transactionId, define)
+          WorkflowTransactionFactory.buildTransaction(userId, transactionId, define)
         val initialTransaction = transaction.copy(isInit = true)
         transactionRepository.create(initialTransaction)
 
@@ -52,18 +46,20 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
+  def proceedState(stateEntity: WorkflowCurrentStateEntity, transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+    // todo build transaction entity from state and transition
+
+    // todo record transaction
+
+    // todo return new entity
+    Right(stateEntity)
+  }
+
   def recordTransaction(entity: WorkflowTransactionEntity)
     : Either[Exception, WorkflowTransactionEntity] = {
-    //todo check is last step
-    val defines = defineQuery.searchDefinitions(entity.workflowId)
-    val isLastStep = defines
-      .filter(d => d.stepId == entity.stepId)
-      .headOption
-      .map(p => p.isLastStep)
-
     //todo get from transition id
     transactionQueryProcessor.findCurrentStateByTransactionId(entity.transactionId) match {
-      case Some(transaction) =>
+      case Some(currentStateEntity) =>
         //todo
 
       case None =>
@@ -76,4 +72,15 @@ class WorkflowTransactionService @Inject()(
     transactionRepository.create(entity)
   }
 
+  def isLastStep(workflowId: Int, stepId: Int): Either[Exception, Boolean] = {
+    val defines = defineQuery.searchDefinitions(workflowId)
+    val errorMessage = "there is no last step."
+    defines
+      .filter(d => d.stepId == stepId)
+      .headOption
+      .map(p => p.isLastStep)
+      .toRight(new RuntimeException(
+        s"{workflow_id: ${workflowId}, step_id: ${stepId}, message: ${errorMessage}")
+      )
+  }
 }

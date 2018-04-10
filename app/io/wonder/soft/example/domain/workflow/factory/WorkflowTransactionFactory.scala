@@ -5,9 +5,9 @@ import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, 
 
 object WorkflowTransactionFactory {
 
-  def build(userId: String,
-            transactionId: String,
-            define: WorkflowDefinitionEntity): WorkflowTransactionEntity = {
+  def buildTransaction(userId: String,
+                       transactionId: String,
+                       define: WorkflowDefinitionEntity): WorkflowTransactionEntity = {
 
     WorkflowTransactionEntity(
       id = 0,
