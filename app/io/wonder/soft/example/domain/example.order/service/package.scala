@@ -4,12 +4,12 @@ trait OrderAction
 
 package object orderActions {
 
-  case object AssignMember extends OrderAction
+  case object AssignMemberAction extends OrderAction
 
-  case object SetShipmentDay extends OrderAction
+  case object SetShipmentDayAction extends OrderAction
 
-  case object FixPayment extends OrderAction
+  case object FixPaymentAction extends OrderAction
 
-  case object ShipItem extends OrderAction
+  case object ShipItemAction extends OrderAction
 
 }
