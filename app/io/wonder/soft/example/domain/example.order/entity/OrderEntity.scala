@@ -1,4 +1,4 @@
-package entity
+package io.wonder.soft.example.domain.example.order.entity
 
 import io.wonder.soft.example.domain.Entity
 import io.wonder.soft.example.domain.example.order.model.Orders
