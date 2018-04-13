@@ -28,7 +28,7 @@ object WorkflowTransactionFactory {
       transactionId = currentState.transactionId,
       userId = currentState.userId,
       stepId = currentState.currentStepId,
-      fromTransitionId = Some(transition.fromStep.schemeStepId),
+      fromTransitionId = Some(transition.fromStep.stepId),
       isInit = false,
       isCompleted = transition.toStep.isLastStep
     )
@@ -54,7 +54,7 @@ object WorkflowTransactionFactory {
       workflowId = currentState.workflowId,
       transactionId = currentState.transactionId,
       userId = currentState.userId,
-      currentStepId = transition.toStep.schemeStepId,
+      currentStepId = transition.toStep.stepId,
       schemeId = 0,
       serviceId = 0
     )
@@ -66,7 +66,7 @@ object WorkflowTransactionFactory {
       workflowId = currentState.workflowId,
       transactionId = currentState.transactionId,
       userId = currentState.userId,
-      currentStepId = transition.toStep.schemeStepId,
+      currentStepId = transition.toStep.stepId,
       isFinished = true,
       schemeId = 0,
       serviceId = 0

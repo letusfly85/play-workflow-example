@@ -17,11 +17,11 @@ object WorkflowFactory {
       transitionEntity.workflowId,
       transitionEntity.name,
       WorkflowStepEntity(
-        schemeStepId = fromStep.stepId, schemeStepLabel = fromStep.stepLabel,
+        stepId = fromStep.stepId, stepLabel = fromStep.stepLabel,
         isFirstStep = fromStep.isFirstStep, isLastStep = fromStep.isLastStep
       ),
       WorkflowStepEntity(
-        schemeStepId = toStep.stepId, schemeStepLabel = toStep.stepLabel,
+        stepId = toStep.stepId, stepLabel = toStep.stepLabel,
         isFirstStep = toStep.isFirstStep, isLastStep = toStep.isLastStep
       ),
       transitionEntity.conditionSuiteId,
