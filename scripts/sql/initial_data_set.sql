@@ -37,32 +37,26 @@ insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
 insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
   values (1, '購入する', 4, 5);
 
--- --- --- --- ---
+-- --- --- --- --- --- --- ---
 
-insert into workflow_definitions (id, workflow_id, name, status_id, step_id, step_label)
-values (6, 2, 'example.order', 1, 1, '未着手');
 
-insert into workflow_definitions (id, workflow_id, name, status_id, step_id, step_label)
-values (7, 2, 'example.order', 2, 2, '担当者設定済');
+insert into workflow_definitions (workflow_id, name, status_id, step_id, step_label)
+values (2, 'example.order', 1, 1, '未着手');
 
-insert into workflow_definitions (id, workflow_id, name, status_id, step_id, step_label)
-values (8, 2, 'example.order', 2, 3, '配送日設定済');
+insert into workflow_definitions (workflow_id, name, status_id, step_id, step_label)
+values (2, 'example.order', 2, 2, '準備中');
 
-insert into workflow_definitions (id, workflow_id, name, status_id, step_id, step_label)
-values (9, 2, 'example.order', 2, 4, '入金方法確認済');
+insert into workflow_definitions (workflow_id, name, status_id, step_id, step_label)
+values (2, 'example.order', 3, 5, '配送準備完了');
 
-insert into workflow_definitions (id, workflow_id, name, status_id, step_id, step_label)
-values (10, 2, 'example.order', 3, 5, '配送完了');
-
+-- --- --- --- --- --- --- ---
 
 insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
-values (2, '担当者設定をする', 1, 2);
+values (2, '進行中にする', 1, 2);
 
 insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
-values (2, '配送日設定をする', 2, 3);
+values (2, '配送準備を完了する', 2, 3);
 
 insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
-values (2, '入金方法を確認・設定する', 3, 4);
+values (2, '見直しをする', 3, 2);
 
-insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
-values (2, '配送する', 4, 5);
