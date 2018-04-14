@@ -3,13 +3,16 @@ package io.wonder.soft.example.application.example.order.service
 import io.wonder.soft.example.application.ApplicationService
 import io.wonder.soft.example.domain.example.order.entity.OrderEntity
 import io.wonder.soft.example.domain.example.order.orderActions.{AssignMemberAction, FixPaymentAction, SetShipmentDayAction, ShipItemAction}
+import io.wonder.soft.example.domain.example.order.query.OrderQueryProcessor
 import io.wonder.soft.example.domain.example.order.service.OrderTransitionService
 import javax.inject.Inject
 
-class OrderService @Inject() (transitionService: OrderTransitionService) extends ApplicationService {
-  import OrderEntity._
+class OrderService @Inject()
+  (transitionService: OrderTransitionService,
+   orderQuery: OrderQueryProcessor
+  ) extends ApplicationService {
 
-  def listOrder: List[OrderEntity] = ???
+  def listOrder: List[OrderEntity] = orderQuery.listOrder
 
   //todo hook workflow
   def assignMember: Either[Exception, OrderEntity] = {

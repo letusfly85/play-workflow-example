@@ -4,6 +4,13 @@
 # ~~~~
 
 # Map static resources from the /public folder to the /assets URL path
+
+################################################################################
+###
+### Workflow Service REST PATH ######
+###
+################################################################################
+
 GET     /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
 
 GET     /api/workflow/statuses          io.wonder.soft.example.application.workflow.controller.WorkflowController.listStatus
@@ -27,3 +34,12 @@ GET     /api/workflow/tasks             io.wonder.soft.example.application.workf
 POST    /api/workflow/tasks             io.wonder.soft.example.application.workflow.controller.TaskController.createTask
 
 GET     /api/workflow-user-transitions  io.wonder.soft.example.application.workflow.controller.WorkflowTransactionController.listTransition
+
+################################################################################
+###
+### Example Application REST PATH ######
+###
+################################################################################
+
+POST    /api/example/orders             io.wonder.soft.example.application.example.order.controller.OrderController.listOrder
+

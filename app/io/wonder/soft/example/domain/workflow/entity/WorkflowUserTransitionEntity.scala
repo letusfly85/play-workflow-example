@@ -8,7 +8,6 @@ import play.api.libs.json._
 /**
   * this is implemented by user, not implemented by some auto processing
   * @param isActive
-  * @param transactionEntity
   * @param transitionEntity
   */
 final case class WorkflowUserTransitionEntity(
