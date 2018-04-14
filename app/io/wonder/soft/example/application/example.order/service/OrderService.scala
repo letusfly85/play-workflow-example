@@ -14,6 +14,10 @@ class OrderService @Inject()
 
   def listOrder: List[OrderEntity] = orderQuery.listOrder
 
+  def openOrder(orderEntity: OrderEntity): Either[Exception, OrderEntity] = {
+    transitionService.initializeTransaction(orderEntity)
+  }
+
   //todo hook workflow
   def assignMember: Either[Exception, OrderEntity] = {
     transitionService.executeTransition(AssignMemberAction)

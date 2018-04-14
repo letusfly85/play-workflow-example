@@ -1,7 +1,7 @@
 <template>
   <div id="transition-button">
     <b-card class="t-btn-list">
-      <div v-for="transition in transitions" v-bind:key="transition.id">
+      <div v-for="(transition, index) in trans" v-bind:key="index" v-if="trans.length>0">
         <div v-if="transition.is_active">
           <b-btn class="t-btn" variant="outline-success">{{ transition.transition.name }}</b-btn>
         </div>
@@ -15,34 +15,37 @@
 
 <script>
 import ApiClient from '../utils/ApiClient'
-import AppConst from '../utils/AppConst'
 
 export default {
   name: 'TransitionButton',
+  props: ['ts'],
   data () {
     return {
-      transitions: []
+      trans: []
     }
   },
   methods: {
-    getTransitions: function (workflowId, transactionId) {
-      var targetPath = '/api/workflow-user-transitions?workflow-id=' + workflowId + '&transaction-id=' + transactionId
+    childMethod: function (pTrans) {
+      console.log(pTrans)
+      console.log(pTrans.order_id)
+      console.log(pTrans.workflow_id)
+      console.log(pTrans.transaction_id)
+      this.findTransitions(pTrans.workflow_id, pTrans.transaction_id)
+      console.log(this.trans)
+    },
+    findTransitions: function (workflowId, transactionId) {
+      let self = this
+      var wId = workflowId.toString()
+      let targetPath = '/api/workflow-user-transitions?workflow-id=' + wId + '&transaction-id=' + transactionId
+      console.log(targetPath)
 
-      const self = this
       ApiClient.search(targetPath, (response) => {
-        console.log(response)
-        self.transitions = response.data
+        self.trans = response.data
+        console.log(response.data)
       }, (error) => {
         console.log(error)
       })
-    },
-    sayHello: function () {
-      console.log('hello')
     }
-  },
-  created: function () {
-    // todo get transaction id from a parent component
-    this.getTransitions(AppConst.data().workflowId, '11')
   }
 }
 </script>

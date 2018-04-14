@@ -66,4 +66,8 @@ class WorkflowQueryProcessor {
 
   }
 
+  def findDefine(workflowId: Int, stepId: Int): Option[WorkflowDefinitionEntity] = {
+    WorkflowDefinitions.findBy(sqls.eq(wd.workflowId, workflowId).and.eq(wd.stepId, stepId)).map(d => d)
+  }
+
 }

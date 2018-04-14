@@ -43,3 +43,5 @@ GET     /api/workflow-user-transitions  io.wonder.soft.example.application.workf
 
 GET    /api/example/orders              io.wonder.soft.example.application.example.order.controller.OrderController.listOrder
 
+PUT    /api/example/orders/:id          io.wonder.soft.example.application.example.order.controller.OrderController.findOrder(id: String)
+

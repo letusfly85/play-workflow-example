@@ -46,12 +46,12 @@ object OrderEntity {
     OrderEntity(
       model.id,
       model.orderId,
-      None,
+      model.transactionId,
       model.statusId,
-      None,
-      None,
-      None,
-      model.serviceId,
+      model.statusName,
+      model.customerName,
+      model.assignedMemberName,
+      model.serviceId
     )
   }
 

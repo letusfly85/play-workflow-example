@@ -2,7 +2,7 @@ package io.wonder.soft.example.application.workflow.service
 
 import entity.WorkflowCurrentStateEntity
 import io.wonder.soft.example.application.ApplicationService
-import io.wonder.soft.example.domain.workflow.entity.{WorkflowTransactionEntity, WorkflowTransitionEntity, WorkflowUserTransitionEntity}
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowTransitionEntity, WorkflowUserTransitionEntity}
 import io.wonder.soft.example.domain.workflow.factory.WorkflowTransactionFactory
 import io.wonder.soft.example.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
 import io.wonder.soft.example.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
@@ -47,6 +47,10 @@ class WorkflowTransactionService @Inject()(
           new RuntimeException(
             s"there is no initial step for workflowId: ${workflowId}"))
     }
+  }
+
+  def showDefine(workflowId: Int, stepId: Int): Option[WorkflowDefinitionEntity] = {
+    defineQuery.findDefine(workflowId, stepId)
   }
 
   def closeTransaction(currentState: WorkflowCurrentStateEntity,
