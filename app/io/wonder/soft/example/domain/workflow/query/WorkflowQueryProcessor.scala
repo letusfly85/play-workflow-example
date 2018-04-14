@@ -52,6 +52,11 @@ class WorkflowQueryProcessor {
           .on(wt.fromStepId, wd.stepId)
           .innerJoin(WorkflowDefinitions as wd_to)
           .on(wt.toStepId, wd_to.stepId)
+          .where(
+            sqls.eq(wt.workflowId, workflowId)
+              .and.eq(wd.workflowId, workflowId)
+              .and.eq(wd_to.workflowId, workflowId)
+          )
       }.map(res => (WorkflowTransitions(wt)(res), WorkflowDefinitions(wd)(res), WorkflowDefinitions(wd_to)(res))).list.apply
     }).map{ case (transition: WorkflowTransitions, fromStep: WorkflowDefinitions, toStep: WorkflowDefinitions) =>
       WorkflowFactory.buildTransitionEntity(
