@@ -5,6 +5,7 @@ import org.joda.time.{DateTime}
 
 case class Orders(
   id: Int,
+  orderId: String,
   transactionId: Option[String] = None,
   statusId: String,
   statusName: Option[String] = None,
@@ -25,11 +26,12 @@ object Orders extends SQLSyntaxSupport[Orders] {
 
   override val tableName = "orders"
 
-  override val columns = Seq("id", "transaction_id", "status_id", "status_name", "customer_name", "assigned_member_name", "service_id", "created_at", "updated_at")
+  override val columns = Seq("id", "order_id", "transaction_id", "status_id", "status_name", "customer_name", "assigned_member_name", "service_id", "created_at", "updated_at")
 
   def apply(o: SyntaxProvider[Orders])(rs: WrappedResultSet): Orders = apply(o.resultName)(rs)
   def apply(o: ResultName[Orders])(rs: WrappedResultSet): Orders = new Orders(
     id = rs.get(o.id),
+    orderId = rs.get(o.orderId),
     transactionId = rs.get(o.transactionId),
     statusId = rs.get(o.statusId),
     statusName = rs.get(o.statusName),
@@ -77,6 +79,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
   }
 
   def create(
+    orderId: String,
     transactionId: Option[String] = None,
     statusId: String,
     statusName: Option[String] = None,
@@ -87,6 +90,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
     updatedAt: Option[DateTime] = None)(implicit session: DBSession = autoSession): Orders = {
     val generatedKey = withSQL {
       insert.into(Orders).namedValues(
+        column.orderId -> orderId,
         column.transactionId -> transactionId,
         column.statusId -> statusId,
         column.statusName -> statusName,
@@ -100,6 +104,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
 
     Orders(
       id = generatedKey.toInt,
+      orderId = orderId,
       transactionId = transactionId,
       statusId = statusId,
       statusName = statusName,
@@ -113,6 +118,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
   def batchInsert(entities: Seq[Orders])(implicit session: DBSession = autoSession): List[Int] = {
     val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
+        'orderId -> entity.orderId,
         'transactionId -> entity.transactionId,
         'statusId -> entity.statusId,
         'statusName -> entity.statusName,
@@ -122,6 +128,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
         'createdAt -> entity.createdAt,
         'updatedAt -> entity.updatedAt))
     SQL("""insert into orders(
+      order_id,
       transaction_id,
       status_id,
       status_name,
@@ -131,6 +138,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
       created_at,
       updated_at
     ) values (
+      {orderId},
       {transactionId},
       {statusId},
       {statusName},
@@ -146,6 +154,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
     withSQL {
       update(Orders).set(
         column.id -> entity.id,
+        column.orderId -> entity.orderId,
         column.transactionId -> entity.transactionId,
         column.statusId -> entity.statusId,
         column.statusName -> entity.statusName,

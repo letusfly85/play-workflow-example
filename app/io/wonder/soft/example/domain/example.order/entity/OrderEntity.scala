@@ -8,6 +8,7 @@ import play.api.libs.json._
 
 final case class OrderEntity(
     id: Int,
+    orderId: String,
     transactionId: Option[String],
     statusId: String,
     statusName: Option[String],
@@ -20,6 +21,7 @@ object OrderEntity {
   implicit def ordersReads: Reads[OrderEntity] =
     (
       (JsPath \ "id").read[Int] and
+        (JsPath \ "order_id").read[String] and
         (JsPath \ "transaction_id").readNullable[String] and
         (JsPath \ "status_id").read[String] and
         (JsPath \ "status_name").readNullable[String] and
@@ -31,6 +33,7 @@ object OrderEntity {
   implicit def ordersWrites: Writes[OrderEntity] =
     (
       (JsPath \ "id").write[Int] and
+        (JsPath \ "order_id").write[String] and
         (JsPath \ "transaction_id").writeNullable[String] and
         (JsPath \ "status_id").write[String] and
         (JsPath \ "status_name").writeNullable[String] and
@@ -42,6 +45,7 @@ object OrderEntity {
   implicit def convertFromModel(model: Orders): OrderEntity = {
     OrderEntity(
       model.id,
+      model.orderId,
       None,
       model.statusId,
       None,
