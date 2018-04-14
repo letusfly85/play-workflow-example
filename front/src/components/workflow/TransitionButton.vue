@@ -35,6 +35,9 @@ export default {
       }, (error) => {
         console.log(error)
       })
+    },
+    sayHello: function () {
+      console.log('hello')
     }
   },
   created: function () {
@@ -46,10 +49,11 @@ export default {
 
 <style scoped>
   .t-btn-list {
-    margin-left: 60%;
-    margin-top: 5px;
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-left: 20%;
+    height: 8rem;
     border: transparent 1px solid;
-    height: 5rem;
   }
   .t-btn {
     float: left;
