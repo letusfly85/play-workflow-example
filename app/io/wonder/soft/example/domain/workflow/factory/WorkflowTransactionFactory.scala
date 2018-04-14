@@ -1,7 +1,7 @@
 package io.wonder.soft.example.domain.workflow.factory
 
 import entity.WorkflowCurrentStateEntity
-import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowTransitionEntity}
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowTransitionEntity, WorkflowUserTransitionEntity}
 
 object WorkflowTransactionFactory {
 
@@ -71,5 +71,26 @@ object WorkflowTransactionFactory {
       schemeId = 0,
       serviceId = 0
     )
+  }
+
+  def buildUserTransitions(
+      maybeCurrentState: Option[WorkflowCurrentStateEntity],
+      workflowTransitions: List[WorkflowTransitionEntity]
+    ): List[WorkflowUserTransitionEntity] = {
+
+
+    workflowTransitions.map { transition =>
+      val isActive =
+        maybeCurrentState match {
+          case Some(currentState) if currentState.currentStepId == transition.fromStep.stepId =>
+            true
+          case _ => false
+        }
+
+      WorkflowUserTransitionEntity(
+        isActive = isActive,
+        transitionEntity = transition
+      )
+    }
   }
 }

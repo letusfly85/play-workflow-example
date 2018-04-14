@@ -1,6 +1,7 @@
 <template>
   <div>
     <app-header></app-header>
+    <t-btn>sample</t-btn>
     <b-card class="card-workflow-list">
       <div v-for="transition in transitions" v-bind:key="transition.id">
         <div style="margin-bottom: 3px; height: 5rem;">
@@ -25,7 +26,6 @@
         <b-button type="submit" class="btn-success">Save Transition</b-button>
       </div>
     </b-form>
-    <transition-button>sample</transition-button>
     <app-footer></app-footer>
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
       step_id_list: []
     }
   },
-  components: { TransitionButton, AppHeader, AppFooter, AppConst },
+  components: { 't-btn': TransitionButton, AppHeader, AppFooter, AppConst },
   methods: {
     toggleChange: function (toggle) {
       if (toggle === true) {

@@ -25,3 +25,5 @@ POST    /api/workflow/transitions       io.wonder.soft.example.application.workf
 GET     /api/workflow/tasks             io.wonder.soft.example.application.workflow.controller.TaskController.listTask
 
 POST    /api/workflow/tasks             io.wonder.soft.example.application.workflow.controller.TaskController.createTask
+
+GET     /api/workflow-user-transitions  io.wonder.soft.example.application.workflow.controller.WorkflowTransactionController.listTransition

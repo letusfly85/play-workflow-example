@@ -1,10 +1,12 @@
 <template>
   <div id="transition-button">
-    <!-- <b-card class="card-workflow-list"> -->
-    <b-card>
+    <b-card class="t-btn-list">
       <div v-for="transition in transitions" v-bind:key="transition.id">
-        <div style="margin-bottom: 3px; height: 5rem;">
-          <b-card style="width: 55%; height: 100%;">{{ transition.name }}</b-card>
+        <div v-if="transition.is_active">
+          <b-btn class="t-btn" variant="outline-success">{{ transition.transition.name }}</b-btn>
+        </div>
+        <div v-if="!transition.is_active">
+          <b-btn class="t-btn" variant="secondary" disable>{{ transition.transition.name }}</b-btn>
         </div>
       </div>
     </b-card>
@@ -23,8 +25,8 @@ export default {
     }
   },
   methods: {
-    getTransitions: function (workflowId) {
-      var targetPath = '/api/workflow/transitions?workflow-id=' + workflowId
+    getTransitions: function (workflowId, transactionId) {
+      var targetPath = '/api/workflow-user-transitions?workflow-id=' + workflowId + '&transaction-id=' + transactionId
 
       const self = this
       ApiClient.search(targetPath, (response) => {
@@ -36,23 +38,23 @@ export default {
     }
   },
   created: function () {
-    this.getTransitions(AppConst.data().workflowId)
+    // todo get transaction id from a parent component
+    this.getTransitions(AppConst.data().workflowId, '11')
   }
 }
 </script>
 
 <style scoped>
-  .card-workflow-list {
-    width: 80%;
+  .t-btn-list {
+    margin-left: 60%;
     margin-top: 5px;
-    margin-left: 10%;
     border: transparent 1px solid;
+    height: 5rem;
   }
-
-  #transition-btn {
-    width: 80%;
-    margin-top: 5px;
-    margin-left: 10%;
-    border: transparent 1px solid;
+  .t-btn {
+    float: left;
+    margin-bottom: 3px;
+    margin-left: 5px;
+    height: 2.5rem;
   }
 </style>

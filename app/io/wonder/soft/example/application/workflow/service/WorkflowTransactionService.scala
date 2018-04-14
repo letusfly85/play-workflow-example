@@ -2,20 +2,10 @@ package io.wonder.soft.example.application.workflow.service
 
 import entity.WorkflowCurrentStateEntity
 import io.wonder.soft.example.application.ApplicationService
-import io.wonder.soft.example.domain.workflow.entity.{
-  WorkflowTransactionEntity,
-  WorkflowTransitionEntity
-}
+import io.wonder.soft.example.domain.workflow.entity.{WorkflowTransactionEntity, WorkflowTransitionEntity, WorkflowUserTransitionEntity}
 import io.wonder.soft.example.domain.workflow.factory.WorkflowTransactionFactory
-import io.wonder.soft.example.domain.workflow.query.{
-  WorkflowQueryProcessor,
-  WorkflowTransactionQueryProcessor
-}
-import io.wonder.soft.example.domain.workflow.repository.{
-  WorkflowCurrentStateRepository,
-  WorkflowDefinitionRepository,
-  WorkflowTransactionRepository
-}
+import io.wonder.soft.example.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
+import io.wonder.soft.example.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
 import javax.inject.Inject
 
 import scala.util.{Failure, Success, Try}
@@ -123,4 +113,13 @@ class WorkflowTransactionService @Inject()(
       .map(t => t.isCompleted)
       .getOrElse(false)
   }
+
+  def listTransition(workflowId: Int, transitionId: String): List[WorkflowUserTransitionEntity] = {
+    val workflowTransitions = defineQuery.searchTransitions(workflowId)
+    val currentState = transactionQuery.findCurrentStateByTransactionId(transitionId)
+
+    val userTransitions = WorkflowTransactionFactory.buildUserTransitions(currentState, workflowTransitions)
+    userTransitions
+  }
+
 }
