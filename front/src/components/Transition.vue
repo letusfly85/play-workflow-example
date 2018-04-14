@@ -25,6 +25,7 @@
         <b-button type="submit" class="btn-success">Save Transition</b-button>
       </div>
     </b-form>
+    <transition-button>sample</transition-button>
     <app-footer></app-footer>
   </div>
 </template>
@@ -34,6 +35,7 @@ import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
 import AppConst from './utils/AppConst'
+import TransitionButton from './workflow/TransitionButton'
 
 export default {
   name: 'Transition',
@@ -50,7 +52,7 @@ export default {
       step_id_list: []
     }
   },
-  components: { AppHeader, AppFooter, AppConst },
+  components: { TransitionButton, AppHeader, AppFooter, AppConst },
   methods: {
     toggleChange: function (toggle) {
       if (toggle === true) {
