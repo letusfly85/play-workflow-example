@@ -34,6 +34,7 @@
 import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
+import AppConst from './utils/AppConst'
 
 export default {
   name: 'Workflow',
@@ -67,7 +68,7 @@ export default {
         maxStepId = Math.max(...this.workflows.map((workflow) => workflow.step_id))
       }
       let param = {
-        workflow_id: 1,
+        workflow_id: AppConst.data().workflowId,
         name: 'example',
         step_id: (maxStepId + 1),
         step_label: this.form.step_label,
@@ -90,7 +91,7 @@ export default {
   created: function () {
     const self = this
 
-    var targetPath = '/api/workflow/definitions?workflow-id=1'
+    var targetPath = '/api/workflow/definitions?workflow-id=' + AppConst.data().workflowId
     ApiClient.search(targetPath, (response) => {
       console.log(response)
       self.workflows = response.data

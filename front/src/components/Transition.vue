@@ -33,6 +33,7 @@
 import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
+import AppConst from './utils/AppConst'
 
 export default {
   name: 'Transition',
@@ -49,7 +50,7 @@ export default {
       step_id_list: []
     }
   },
-  components: { AppHeader, AppFooter },
+  components: { AppHeader, AppFooter, AppConst },
   methods: {
     toggleChange: function (toggle) {
       if (toggle === true) {
@@ -60,7 +61,7 @@ export default {
     },
     createTransition: function () {
       let param = {
-        workflow_id: 1,
+        workflow_id: AppConst.data().workflowId,
         name: this.form.transition_name,
         from_step: this.form.from_step,
         to_step: this.form.to_step
@@ -78,7 +79,7 @@ export default {
     }
   },
   created: function () {
-    var targetPath = '/api/workflow/transitions?workflow-id=1'
+    var targetPath = '/api/workflow/transitions?workflow-id=' + AppConst.data().workflowId
 
     const self = this
     ApiClient.search(targetPath, (response) => {
@@ -88,7 +89,7 @@ export default {
       console.log(error)
     })
 
-    targetPath = '/api/workflow/definitions?workflow-id=1'
+    targetPath = '/api/workflow/definitions?workflow-id=' + AppConst.data().workflowId
     ApiClient.search(targetPath, (response) => {
       console.log(response)
       self.workflows = response.data
