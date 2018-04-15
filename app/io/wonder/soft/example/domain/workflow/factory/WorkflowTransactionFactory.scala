@@ -50,7 +50,7 @@ object WorkflowTransactionFactory {
 
   def buildNextState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): WorkflowCurrentStateEntity = {
     WorkflowCurrentStateEntity(
-      id = 0,
+      id = currentState.id,
       workflowId = currentState.workflowId,
       transactionId = currentState.transactionId,
       userId = currentState.userId,
@@ -62,7 +62,7 @@ object WorkflowTransactionFactory {
 
   def buildFinishedState(currentState: WorkflowCurrentStateEntity, transition: WorkflowTransitionEntity): WorkflowCurrentStateEntity = {
     WorkflowCurrentStateEntity(
-      id = 0,
+      id = currentState.id,
       workflowId = currentState.workflowId,
       transactionId = currentState.transactionId,
       userId = currentState.userId,

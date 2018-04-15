@@ -1,7 +1,7 @@
 package io.wonder.soft.example.application.example.order.service
 
 import io.wonder.soft.example.application.ApplicationService
-import io.wonder.soft.example.domain.example.order.entity.OrderEntity
+import io.wonder.soft.example.domain.example.order.entity.{OrderEntity, OrderTransitionEntity}
 import io.wonder.soft.example.domain.example.order.orderActions.{AssignMemberAction, FixPaymentAction, SetShipmentDayAction, ShipItemAction}
 import io.wonder.soft.example.domain.example.order.query.OrderQueryProcessor
 import io.wonder.soft.example.domain.example.order.service.OrderTransitionService
@@ -16,6 +16,10 @@ class OrderService @Inject()
 
   def openOrder(orderEntity: OrderEntity): Either[Exception, OrderEntity] = {
     transitionService.initializeTransaction(orderEntity)
+  }
+
+  def proceedState(orderTransition: OrderTransitionEntity): Either[Exception, OrderEntity] = {
+    transitionService.proceedState(orderTransition.order, orderTransition.transition)
   }
 
   //todo hook workflow

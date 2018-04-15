@@ -61,7 +61,11 @@ class OrderTransitionService @Inject()
     orderEntity.transactionId match {
       case Some(tId) =>
         transactionService.proceedState(tId, transition) match {
-          case Right(_) =>
+          case Right(nextState) =>
+            val nextDefine = transactionService.showDefine(workflowId, nextState.currentStepId)
+            val newOrder = orderEntity.copy(statusId = nextDefine.get.stepId.toString, statusName = Some(nextDefine.get.stepLabel))
+            orderRepository.update(newOrder)
+
             Right(orderEntity)
 
           case Left(exception) =>

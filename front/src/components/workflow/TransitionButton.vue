@@ -3,7 +3,7 @@
     <b-card class="t-btn-list">
       <div v-for="(transition, index) in trans" v-bind:key="index" v-if="trans.length>0">
         <div v-if="transition.is_active">
-          <b-btn class="t-btn" variant="outline-success">{{ transition.transition.name }}</b-btn>
+          <b-btn class="t-btn" variant="outline-success" @click="hideModal(transition.transition, index)">{{ transition.transition.name }}</b-btn>
         </div>
         <div v-if="!transition.is_active">
           <b-btn class="t-btn" variant="secondary" disable>{{ transition.transition.name }}</b-btn>
@@ -18,20 +18,16 @@ import ApiClient from '../utils/ApiClient'
 
 export default {
   name: 'TransitionButton',
-  props: ['ts'],
   data () {
     return {
-      trans: []
+      trans: [],
+      order: null
     }
   },
   methods: {
-    childMethod: function (pTrans) {
-      console.log(pTrans)
-      console.log(pTrans.order_id)
-      console.log(pTrans.workflow_id)
-      console.log(pTrans.transaction_id)
-      this.findTransitions(pTrans.workflow_id, pTrans.transaction_id)
-      console.log(this.trans)
+    childMethod: function (parentOrder) {
+      this.order = parentOrder
+      this.findTransitions(parentOrder.workflow_id, this.order.transaction_id)
     },
     findTransitions: function (workflowId, transactionId) {
       let self = this
@@ -42,6 +38,20 @@ export default {
       ApiClient.search(targetPath, (response) => {
         self.trans = response.data
         console.log(response.data)
+      }, (error) => {
+        console.log(error)
+      })
+    },
+    hideModal: function (transition, index) {
+      console.log(index)
+      let targetPath = '/api/workflow-user-transitions'
+      let params = {
+        order: this.order,
+        transition: transition
+      }
+      ApiClient.create(targetPath, params, (response) => {
+        console.log(response.data)
+        this.$parent.hide()
       }, (error) => {
         console.log(error)
       })

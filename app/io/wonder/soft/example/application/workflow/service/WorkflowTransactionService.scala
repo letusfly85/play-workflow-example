@@ -7,6 +7,7 @@ import io.wonder.soft.example.domain.workflow.factory.WorkflowTransactionFactory
 import io.wonder.soft.example.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
 import io.wonder.soft.example.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
 import javax.inject.Inject
+import play.api.Logger
 
 import scala.util.{Failure, Success, Try}
 
@@ -72,16 +73,21 @@ class WorkflowTransactionService @Inject()(
 
     maybeCurrentState match {
       case Some(currentState) =>
+        Logger.info(currentState.toString)
         val transaction =
           WorkflowTransactionFactory.buildTransaction(currentState, transition)
         recordTransaction(transaction)
-        transition.toStep.isLastStep match {
+        val result = transition.toStep.isLastStep match {
           case true =>
             closeTransaction(currentState, transition)
 
           case false =>
             generateNextState(currentState, transition)
         }
+        result.map{cs =>
+          Logger.info(cs.toString)
+          currentStateRepository.update(cs)}
+        result
 
       case None =>
         Left(new RuntimeException(s"not found current state for ${transactionId}"))
