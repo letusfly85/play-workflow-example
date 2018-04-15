@@ -1,7 +1,6 @@
 <template>
   <div>
     <app-header></app-header>
-    <t-btn>sample</t-btn>
     <b-card class="card-workflow-list">
       <div v-for="transition in transitions" v-bind:key="transition.id">
         <div style="margin-bottom: 3px; height: 5rem;">
@@ -35,7 +34,6 @@ import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
 import AppConst from './utils/AppConst'
-import TransitionButton from './workflow/TransitionButton'
 
 export default {
   name: 'Transition',
@@ -52,7 +50,7 @@ export default {
       step_id_list: []
     }
   },
-  components: { 't-btn': TransitionButton, AppHeader, AppFooter, AppConst },
+  components: { AppHeader, AppFooter, AppConst },
   methods: {
     toggleChange: function (toggle) {
       if (toggle === true) {

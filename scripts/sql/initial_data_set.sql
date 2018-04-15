@@ -46,8 +46,11 @@ values (2, 'example.order', 1, 1, '未着手', 1);
 insert into workflow_definitions (workflow_id, name, status_id, step_id, step_label)
 values (2, 'example.order', 2, 3, '準備中');
 
+insert into workflow_definitions (workflow_id, name, status_id, step_id, step_label)
+values (2, 'example.order', 2, 5, '配送準備完了');
+
 insert into workflow_definitions (workflow_id, name, status_id, step_id, step_label, is_last_step)
-values (2, 'example.order', 3, 5, '配送準備完了', 1);
+values (2, 'example.order', 3, 7, '配送完了', 1);
 
 -- --- --- --- --- --- --- ---
 
@@ -56,6 +59,9 @@ values (2, '進行中にする', 1, 3);
 
 insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
 values (2, '配送準備を完了する', 3, 5);
+
+insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
+values (2, '配送する', 5, 7);
 
 insert into workflow_transitions (workflow_id, name, from_step_id, to_step_id)
 values (2, '見直しをする', 5, 3);
