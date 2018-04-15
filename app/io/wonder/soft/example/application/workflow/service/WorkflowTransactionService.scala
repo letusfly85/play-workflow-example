@@ -64,20 +64,27 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  def proceedState(currentState: WorkflowCurrentStateEntity,
+  def proceedState(transactionId: String,
                    transition: WorkflowTransitionEntity)
     : Either[Exception, WorkflowCurrentStateEntity] = {
     // build transaction entity from state and transition
-    val transaction =
-      WorkflowTransactionFactory.buildTransaction(currentState, transition)
-    recordTransaction(transaction)
+    val maybeCurrentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
 
-    transition.toStep.isLastStep match {
-      case true =>
-        closeTransaction(currentState, transition)
+    maybeCurrentState match {
+      case Some(currentState) =>
+        val transaction =
+          WorkflowTransactionFactory.buildTransaction(currentState, transition)
+        recordTransaction(transaction)
+        transition.toStep.isLastStep match {
+          case true =>
+            closeTransaction(currentState, transition)
 
-      case false =>
-        generateNextState(currentState, transition)
+          case false =>
+            generateNextState(currentState, transition)
+        }
+
+      case None =>
+        Left(new RuntimeException(s"not found current state for ${transactionId}"))
     }
   }
 
@@ -118,9 +125,9 @@ class WorkflowTransactionService @Inject()(
       .getOrElse(false)
   }
 
-  def listTransition(workflowId: Int, transitionId: String): List[WorkflowUserTransitionEntity] = {
+  def listTransition(workflowId: Int, transactionId: String): List[WorkflowUserTransitionEntity] = {
     val workflowTransitions = defineQuery.searchTransitions(workflowId)
-    val currentState = transactionQuery.findCurrentStateByTransactionId(transitionId)
+    val currentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
 
     val userTransitions = WorkflowTransactionFactory.buildUserTransitions(currentState, workflowTransitions)
     userTransitions

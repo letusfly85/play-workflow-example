@@ -5,6 +5,7 @@ import io.wonder.soft.example.domain.example.order.OrderAction
 import io.wonder.soft.example.domain.example.order.entity.OrderEntity
 import io.wonder.soft.example.domain.example.order.orderActions.{AssignMemberAction, FixPaymentAction, SetShipmentDayAction, ShipItemAction}
 import io.wonder.soft.example.domain.example.order.repository.OrderRepository
+import io.wonder.soft.example.domain.workflow.entity.WorkflowTransitionEntity
 import javax.inject.Inject
 import play.api.Logger
 
@@ -53,6 +54,21 @@ class OrderTransitionService @Inject()
           case Left(exception) =>
             Left(new Exception(exception))
         }
+    }
+  }
+
+  def proceedState(orderEntity: OrderEntity, transition: WorkflowTransitionEntity, userId: String = "1", workflowId: Int = 2): Either[Exception, OrderEntity] = {
+    orderEntity.transactionId match {
+      case Some(tId) =>
+        transactionService.proceedState(tId, transition) match {
+          case Right(_) =>
+            Right(orderEntity)
+
+          case Left(exception) =>
+            Left(new Exception(exception))
+        }
+
+      case None => Left(new Exception(s"no transaction Id for ${userId}"))
     }
   }
 
