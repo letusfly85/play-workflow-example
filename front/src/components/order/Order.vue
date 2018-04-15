@@ -2,7 +2,7 @@
   <div>
     <order-header></order-header>
     <div class="order-list">
-      <b-table :items="orders">
+      <b-table :items="orders" :fields="fields">
         <template slot="id" slot-scope="row">
           <b-btn variant="info" size="sm" @click="showOrderOf(row.item, row.index)"> {{ row.item.id }} </b-btn>
           <b-modal :ref="'orderRef'+row.item.id" title="編集する" size="lg">
@@ -27,7 +27,15 @@ export default {
   components: { OrderHeader, 't-btn': TransitionButton },
   data () {
     return {
-      orders: []
+      orders: [],
+      fields: [
+        {key: 'id', sortable: true},
+        {key: 'order_id', sortable: true},
+        // {key: 'transaction_id', sortable: true},
+        {key: 'status_name', sortable: true},
+        {key: 'customer_name', sortable: true},
+        {key: 'assigned_member_name', sortable: true}
+      ]
     }
   },
   methods: {
