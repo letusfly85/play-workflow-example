@@ -1,8 +1,8 @@
-organization := "io.wonder-soft"
+organization := "io.wonder.soft"
 
-name := "workflow-example"
+name := "workflow.example"
 
-val _version = "2.0.2"
+val _version = "2.0.3"
 
 version := s"${_version}-SNAPSHOT"
 
@@ -102,8 +102,6 @@ flywayUrl := conf.getString("db.default.url")
 flywayUser := conf.getString("db.default.username")
 
 flywayPassword := conf.getString("db.default.password")
-
-//flywayBaselineOnMigrate := true
 
 flywayLocations := Seq("filesystem:conf/db/migration")
 

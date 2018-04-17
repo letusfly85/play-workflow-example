@@ -10,7 +10,7 @@ final case class OrderEntity(
     id: Int,
     orderId: String,
     transactionId: Option[String],
-    statusId: String,
+    statusId: Option[String],
     statusName: Option[String],
     customerName: Option[String],
     assignedMemberName: Option[String],
@@ -23,7 +23,7 @@ object OrderEntity {
       (JsPath \ "id").read[Int] and
         (JsPath \ "order_id").read[String] and
         (JsPath \ "transaction_id").readNullable[String] and
-        (JsPath \ "status_id").read[String] and
+        (JsPath \ "status_id").readNullable[String] and
         (JsPath \ "status_name").readNullable[String] and
         (JsPath \ "customer_name").readNullable[String] and
         (JsPath \ "assigned_member_name").readNullable[String] and
@@ -35,7 +35,7 @@ object OrderEntity {
       (JsPath \ "id").write[Int] and
         (JsPath \ "order_id").write[String] and
         (JsPath \ "transaction_id").writeNullable[String] and
-        (JsPath \ "status_id").write[String] and
+        (JsPath \ "status_id").writeNullable[String] and
         (JsPath \ "status_name").writeNullable[String] and
         (JsPath \ "customer_name").writeNullable[String] and
         (JsPath \ "assigned_member_name").writeNullable[String] and

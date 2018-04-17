@@ -7,7 +7,7 @@ case class Orders(
   id: Int,
   orderId: String,
   transactionId: Option[String] = None,
-  statusId: String,
+  statusId: Option[String] = None,
   statusName: Option[String] = None,
   customerName: Option[String] = None,
   assignedMemberName: Option[String] = None,
@@ -81,7 +81,7 @@ object Orders extends SQLSyntaxSupport[Orders] {
   def create(
     orderId: String,
     transactionId: Option[String] = None,
-    statusId: String,
+    statusId: Option[String] = None,
     statusName: Option[String] = None,
     customerName: Option[String] = None,
     assignedMemberName: Option[String] = None,
