@@ -3,7 +3,7 @@
     <b-card class="t-btn-list">
       <div v-for="(transition, index) in trans" v-bind:key="index" v-if="trans.length>0">
         <div v-if="transition.is_active">
-          <b-btn class="t-btn" variant="outline-success" @click="hideModal(transition.transition, index)">{{ transition.transition.name }}</b-btn>
+          <b-btn class="t-btn" variant="outline-success" @click="changeStatus(transition.transition, index)">{{ transition.transition.name }}</b-btn>
         </div>
         <div v-if="!transition.is_active">
           <b-btn class="t-btn" variant="secondary" disable>{{ transition.transition.name }}</b-btn>
@@ -21,18 +21,22 @@ export default {
   data () {
     return {
       trans: [],
-      order: null
+      order: null,
+      workflowId: null,
+      transactionId: null
     }
   },
   methods: {
     childMethod: function (parentOrder) {
       this.order = parentOrder
-      this.findTransitions(parentOrder.workflow_id, this.order.transaction_id)
+      this.workflowId = parentOrder.workflow_id
+      this.transactionId = parentOrder.transaction_id
+      this.findTransitions()
     },
-    findTransitions: function (workflowId, transactionId) {
+    findTransitions: function () {
       let self = this
-      var wId = workflowId.toString()
-      let targetPath = '/api/workflow-user-transitions?workflow-id=' + wId + '&transaction-id=' + transactionId
+      console.log(this.workflowId)
+      let targetPath = '/api/workflow-user-transitions?workflow-id=' + this.workflowId + '&transaction-id=' + this.transactionId
       console.log(targetPath)
 
       ApiClient.search(targetPath, (response) => {
@@ -42,7 +46,7 @@ export default {
         console.log(error)
       })
     },
-    hideModal: function (transition, index) {
+    changeStatus: function (transition, index) {
       console.log(index)
       let targetPath = '/api/workflow-user-transitions'
       let params = {
@@ -51,7 +55,8 @@ export default {
       }
       ApiClient.create(targetPath, params, (response) => {
         console.log(response.data)
-        this.$parent.hide()
+        this.$emit('reloadParent')
+        this.findTransitions()
       }, (error) => {
         console.log(error)
       })

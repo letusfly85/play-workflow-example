@@ -7,7 +7,7 @@
           <b-btn variant="info" size="sm" @click="showOrderOf(row.item, row.index)"> {{ row.item.id }} </b-btn>
           <b-modal :ref="'orderRef'+row.item.id" title="編集する" size="lg">
             <div class="modal-content">
-              <t-btn :ref="'tbRef'+row.item.id"></t-btn>
+              <t-btn :ref="'tbRef'+row.item.id" v-on:reloadParent="searchOrders"></t-btn>
             </div>
           </b-modal>
         </template>
@@ -31,7 +31,6 @@ export default {
       fields: [
         {key: 'id', sortable: true},
         {key: 'order_id', sortable: true},
-        // {key: 'transaction_id', sortable: true},
         {key: 'status_name', sortable: true},
         {key: 'customer_name', sortable: true},
         {key: 'assigned_member_name', sortable: true}
@@ -56,22 +55,25 @@ export default {
 
       let modal = this.$refs['orderRef' + order.id]
       modal.show()
+    },
+    searchOrders: function () {
+      let self = this
+
+      let targetPath = '/api/example/orders'
+      ApiClient.search(targetPath, (response) => {
+        console.log(response)
+        self.orders = response.data.map(function (data) {
+          data.workflow_id = AppConst.data().workflowId
+          return data
+        })
+        console.log(self.orders)
+      }, (error) => {
+        console.log(error)
+      })
     }
   },
   created: function () {
-    let self = this
-
-    let targetPath = '/api/example/orders'
-    ApiClient.search(targetPath, (response) => {
-      console.log(response)
-      self.orders = response.data.map(function (data) {
-        data.workflow_id = AppConst.data().workflowId
-        return data
-      })
-      console.log(self.orders)
-    }, (error) => {
-      console.log(error)
-    })
+    this.searchOrders()
   }
 }
 </script>
