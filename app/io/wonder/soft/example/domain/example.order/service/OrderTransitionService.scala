@@ -66,9 +66,8 @@ class OrderTransitionService @Inject()
             val newOrder = orderEntity.copy(
               statusId = Some(nextDefine.get.stepId.toString),
               statusName = Some(nextDefine.get.stepLabel))
-            orderRepository.update(newOrder)
 
-            Right(orderEntity)
+            orderRepository.update(newOrder)
 
           case Left(exception) =>
             Left(new Exception(exception))
