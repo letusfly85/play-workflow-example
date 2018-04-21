@@ -13,4 +13,7 @@ class OrderQueryProcessor {
 
   def listOrder: List[OrderEntity] = Orders.findAll().map(o => o)
 
+  def findByTransactionId(transactionId: String): Option[OrderEntity] =
+    Orders.findBy(sqls.eq(o.transactionId, transactionId)).map(o => o)
+
 }

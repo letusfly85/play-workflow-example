@@ -21,16 +21,14 @@ export default {
   data () {
     return {
       trans: [],
-      order: null,
       workflowId: null,
       transactionId: null
     }
   },
   methods: {
-    childMethod: function (parentOrder) {
-      this.order = parentOrder
-      this.workflowId = parentOrder.workflow_id
-      this.transactionId = parentOrder.transaction_id
+    childMethod: function (workflowId, transactionId) {
+      this.workflowId = workflowId
+      this.transactionId = transactionId
       this.findTransitions()
     },
     findTransitions: function () {
@@ -48,9 +46,9 @@ export default {
     },
     changeStatus: function (transition, index) {
       console.log(index)
-      let targetPath = '/api/workflow-user-transitions'
+      let targetPath = '/api/workflow-order-transactions'
       let params = {
-        order: this.order,
+        transaction_id: this.transactionId,
         transition: transition
       }
       ApiClient.create(targetPath, params, (response) => {

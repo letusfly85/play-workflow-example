@@ -61,4 +61,30 @@ class OrderController @Inject()
     }
   }
 
+  /**
+    *
+    * @return
+    */
+  @deprecated("this should not be used", "2.0.4")
+  def proceedStateWithOrder = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        orderEntity <- Json.fromJson[OrderTransitionEntity](json).right
+        entity <- service.proceedState(orderEntity).right
+      } yield entity
+
+    } match {
+      case Success(either) => either match {
+        case Right(statusEntity) => Created(Json.toJson(statusEntity))
+        case Left(exception) =>
+          Logger.info(exception.toString)
+          InternalServerError(JsObject.empty)
+      }
+      case Failure(exception) =>
+        exception.printStackTrace()
+        InternalServerError(JsObject.empty)
+    }
+  }
+
 }

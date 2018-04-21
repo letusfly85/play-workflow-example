@@ -51,7 +51,8 @@ export default {
       }, (error) => {
         console.log(error)
       })
-      this.$refs['tbRef' + order.id].childMethod(this.orders[index])
+      let transactionId = this.orders[index].transaction_id
+      this.$refs['tbRef' + order.id].childMethod(AppConst.data().workflowId, transactionId)
 
       let modal = this.$refs['orderRef' + order.id]
       modal.show()

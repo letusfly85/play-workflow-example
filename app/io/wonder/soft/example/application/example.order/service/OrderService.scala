@@ -19,7 +19,7 @@ class OrderService @Inject()
   }
 
   def proceedState(orderTransition: OrderTransitionEntity): Either[Exception, OrderEntity] = {
-    transitionService.proceedState(orderTransition.order, orderTransition.transition)
+    transitionService.proceedState(orderTransition.transactionId, orderTransition.transition)
   }
 
   //todo hook workflow
