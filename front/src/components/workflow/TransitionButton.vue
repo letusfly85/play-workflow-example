@@ -46,6 +46,7 @@ export default {
     },
     changeStatus: function (transition, index) {
       console.log(index)
+      // todo think about separation
       let targetPath = '/api/workflow-order-transactions'
       let params = {
         transaction_id: this.transactionId,
