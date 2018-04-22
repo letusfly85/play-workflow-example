@@ -84,14 +84,27 @@ class WorkflowTransactionService @Inject()(
           case false =>
             generateNextState(currentState, transition)
         }
-        result.map{cs =>
-          Logger.info(cs.toString)
-          currentStateRepository.update(cs)}
+        result.map{ currentStateEntity =>
+          Logger.info(currentStateEntity.toString)
+          currentStateRepository.update(currentStateEntity)
+          updateUserRepository(currentStateEntity)
+        }
         result
 
       case None =>
         Left(new RuntimeException(s"not found current state for ${transactionId}"))
     }
+  }
+
+  /**
+    * update user workflow transaction results
+    *
+    * @param currentStateEntity
+    * @return
+    */
+  def updateUserRepository(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+    // todo
+    ???
   }
 
   def recordTransaction(entity: WorkflowTransactionEntity)
