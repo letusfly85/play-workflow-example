@@ -37,7 +37,7 @@ POST    /api/workflow/transitions       io.wonder.soft.example.application.workf
 
 GET     /api/workflow-user-transitions    io.wonder.soft.example.application.workflow.controller.WorkflowTransactionController.listTransition
 
-POST    /api/workflow-order-transactions  io.wonder.soft.example.application.example.order.controller.OrderController.proceedState
+POST    /api/workflow-order-transactions  io.wonder.soft.example.application.workflow.controller.WorkflowTransactionController.proceedState
 
 GET     /api/example/orders               io.wonder.soft.example.application.example.order.controller.OrderController.listOrder
 

@@ -6,12 +6,14 @@ import io.wonder.soft.example.domain.workflow.entity.{WorkflowDefinitionEntity, 
 import io.wonder.soft.example.domain.workflow.factory.WorkflowTransactionFactory
 import io.wonder.soft.example.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
 import io.wonder.soft.example.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
+import io.wonder.soft.example.domain.workflow.service.UserTransaction
 import javax.inject.Inject
 import play.api.Logger
 
 import scala.util.{Failure, Success, Try}
 
 class WorkflowTransactionService @Inject()(
+    userTransaction: UserTransaction,
     defineQuery: WorkflowQueryProcessor,
     definitionRepository: WorkflowDefinitionRepository,
     transactionQuery: WorkflowTransactionQueryProcessor,
@@ -103,8 +105,7 @@ class WorkflowTransactionService @Inject()(
     * @return
     */
   def updateUserRepository(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
-    // todo
-    ???
+    userTransaction.updateUserRepository(currentStateEntity)
   }
 
   def recordTransaction(entity: WorkflowTransactionEntity)
