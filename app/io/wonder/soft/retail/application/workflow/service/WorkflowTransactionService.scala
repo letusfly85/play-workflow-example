@@ -1,11 +1,9 @@
 package io.wonder.soft.retail.application.workflow.service
 
-import io.wonder.soft.retail.application.ApplicationService
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowTransitionEntity, WorkflowUserTransitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowUserTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowTransactionFactory
 import io.wonder.soft.retail.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowDefinitionRepository, WorkflowTransactionRepository}
-import io.wonder.soft.retail.domain.workflow.service.UserTransaction
+import io.wonder.soft.retail.domain.workflow.repository.WorkflowDefinitionRepository
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowTransactionRepository}
@@ -108,7 +106,8 @@ class WorkflowTransactionService @Inject()(
     * @return
     */
   def updateUserRepository(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
-    userTransaction.updateUserRepository(currentStateEntity)
+    val define = showDefine(currentStateEntity.workflowId, currentStateEntity.currentStepId).get
+    userTransaction.updateUserRepository(define, currentStateEntity)
   }
 
   def recordTransaction(entity: WorkflowTransactionEntity)

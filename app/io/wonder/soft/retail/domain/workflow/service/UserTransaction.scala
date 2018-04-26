@@ -1,23 +1,20 @@
 package io.wonder.soft.retail.domain.workflow.service
 
-import io.wonder.soft.retail.application.workflow.service.WorkflowTransactionService
 import io.wonder.soft.retail.domain.example.order.entity.OrderEntity
 import io.wonder.soft.retail.domain.example.order.query.OrderQueryProcessor
 import io.wonder.soft.retail.domain.example.order.repository.OrderRepository
-import io.wonder.soft.retail.domain.example.order.repository.OrderRepository
-import io.wonder.soft.retail.domain.workflow.entity.WorkflowCurrentStateEntity
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowDefinitionEntity}
 import javax.inject.Inject
 
 class UserTransaction @Inject()
-  (transactionService: WorkflowTransactionService,
-   orderRepository: OrderRepository,
+  (orderRepository: OrderRepository,
    orderQueryProcessor: OrderQueryProcessor)
 {
 
-  def updateUserRepository(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+  def updateUserRepository(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     currentStateEntity.serviceId match {
       case 0 =>
-        updateOrderRepository(currentStateEntity) match {
+        updateOrderRepository(define, currentStateEntity) match {
           case Right(_) => Right(currentStateEntity)
           case Left(exception) => Left(new Exception(exception))
         }
@@ -27,10 +24,9 @@ class UserTransaction @Inject()
     }
   }
 
-  private def updateOrderRepository(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, OrderEntity] = {
+  private def updateOrderRepository(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, OrderEntity] = {
     orderQueryProcessor.findByTransactionId(currentStateEntity.transactionId) match {
       case Some(orderEntity) =>
-        val define = transactionService.showDefine(currentStateEntity.workflowId, currentStateEntity.currentStepId).get
         val nextOrderEntity =
           orderEntity.copy(
             statusId = Some(currentStateEntity.currentStepId.toString), statusName = Some(define.stepLabel)
