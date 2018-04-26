@@ -1,4 +1,4 @@
-delete from orders;
+delete from craft_lines;
 
 -- --- --- ---
 
