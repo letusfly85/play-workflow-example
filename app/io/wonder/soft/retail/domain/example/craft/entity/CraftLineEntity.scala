@@ -1,6 +1,6 @@
-package io.wonder.soft.example.domain.example.craft.entity
+package io.wonder.soft.retail.domain.example.craft.entity
 
-import io.wonder.soft.example.domain.example.craft.model.CraftLines
+import io.wonder.soft.retail.domain.example.craft.model.CraftLines
 import io.wonder.soft.retail.domain.Entity
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._

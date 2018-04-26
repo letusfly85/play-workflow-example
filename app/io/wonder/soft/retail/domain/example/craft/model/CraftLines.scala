@@ -1,4 +1,4 @@
-package io.wonder.soft.example.domain.example.craft.model
+package io.wonder.soft.retail.domain.example.craft.model
 
 import scalikejdbc._
 import org.joda.time.{DateTime}
