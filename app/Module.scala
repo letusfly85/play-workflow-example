@@ -1,9 +1,8 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
 
-import io.wonder.soft.example.application.workflow.service.WorkflowService
-import io.wonder.soft.example.domain.workflow.entity.WorkflowDefinitionEntity
-import io.wonder.soft.example.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository}
+import io.wonder.soft.retail.application.workflow.service.WorkflowService
+import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
