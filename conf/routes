@@ -45,4 +45,4 @@ PUT     /api/example/orders/:id           io.wonder.soft.retail.application.exam
 
 GET     /api/example/craft-lines          io.wonder.soft.retail.application.example.craft.controller.CraftLineController.listCraftLine
 
-PUT     /api/example/craft-lines/:id      io.wonder.soft.retail.application.example.craft.controller.CraftLineController.findCraftLine(id: String)
+GET     /api/example/craft-lines/:id      io.wonder.soft.retail.application.example.craft.controller.CraftLineController.findCraftLine(id: String)

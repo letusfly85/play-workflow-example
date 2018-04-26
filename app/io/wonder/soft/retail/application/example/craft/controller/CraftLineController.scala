@@ -22,9 +22,7 @@ class CraftLineController @Inject()
   def findCraftLine(craftLineId: String) = Action { implicit request =>
     Try {
       for {
-        json <- request.body.asJson.toRight(new Exception("")).right
-        craftLineEntity <- Json.fromJson[CraftLineEntity](json).right
-        entity <- service.openCraftLine(craftLineEntity).right
+        entity <- service.openCraftLine(craftLineId).right
       } yield entity
 
     } match {

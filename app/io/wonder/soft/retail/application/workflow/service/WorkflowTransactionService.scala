@@ -33,10 +33,13 @@ class WorkflowTransactionService @Inject()(
         //generate transaction id
         val transactionId = java.util.UUID.randomUUID().toString
 
+        val serviceId =
+        if (workflowId == 3) 3
+        else 0
         val currentState = WorkflowTransactionFactory.buildCurrentState(
           userId,
           transactionId,
-          define)
+          define, serviceId)
         currentStateRepository.create(currentState)
 
         val transaction =
@@ -150,6 +153,9 @@ class WorkflowTransactionService @Inject()(
   def listTransition(workflowId: Int, transactionId: String): List[WorkflowUserTransitionEntity] = {
     val workflowTransitions = defineQuery.searchTransitions(workflowId)
     val currentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
+    Logger.info(transactionId)
+    Logger.info(currentState.toString)
+    Logger.info(workflowTransitions.toString)
 
     val userTransitions = WorkflowTransactionFactory.buildUserTransitions(currentState, workflowTransitions)
     userTransitions

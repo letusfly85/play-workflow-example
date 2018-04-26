@@ -36,7 +36,8 @@ object WorkflowTransactionFactory {
 
   def buildCurrentState(userId: String,
             transactionId: String,
-            define: WorkflowDefinitionEntity): WorkflowCurrentStateEntity = {
+            define: WorkflowDefinitionEntity,
+            serviceId: Int = 0): WorkflowCurrentStateEntity = {
     WorkflowCurrentStateEntity(
       id = 0,
       workflowId = define.workflowId,
@@ -44,7 +45,7 @@ object WorkflowTransactionFactory {
       userId = Some(userId),
       currentStepId = define.stepId,
       schemeId = 0,
-      serviceId = 0
+      serviceId = serviceId
     )
   }
 
@@ -56,7 +57,7 @@ object WorkflowTransactionFactory {
       userId = currentState.userId,
       currentStepId = transition.toStep.stepId,
       schemeId = 0,
-      serviceId = 0
+      serviceId = currentState.serviceId
     )
   }
 

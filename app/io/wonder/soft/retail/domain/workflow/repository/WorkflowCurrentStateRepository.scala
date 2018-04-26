@@ -1,8 +1,6 @@
 package io.wonder.soft.retail.domain.workflow.repository
 
 import io.wonder.soft.retail.domain.Repository
-import io.wonder.soft.retail.domain.workflow.model.WorkflowCurrentStates
-import io.wonder.soft.retail.domain.Repository
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowCurrentStateEntity
 import io.wonder.soft.retail.domain.workflow.model.WorkflowCurrentStates
 import scalikejdbc._
@@ -27,6 +25,7 @@ class WorkflowCurrentStateRepository
               wcsc.workflowId -> entity.workflowId,
               wcsc.transactionId -> entity.transactionId,
               wcsc.currentStepId -> entity.currentStepId,
+              wcsc.serviceId -> entity.serviceId,
               wcsc.userId -> entity.userId
             )
         }.update().apply()

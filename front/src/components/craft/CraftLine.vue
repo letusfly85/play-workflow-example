@@ -4,7 +4,7 @@
     <div class="order-list">
       <b-table :items="craftLines" :fields="fields">
         <template slot="status_name" slot-scope="row">
-          <b-btn variant="outline-success" size="sm" :href="'#/craft-lines/'+row.item.id">{{ row.item.status_name }}</b-btn>
+          <b-btn variant="outline-success" size="sm" :href="'#/craft-products/'+row.item.id">{{ row.item.status_name }}</b-btn>
         </template>
       </b-table>
     </div>
@@ -31,25 +31,6 @@ export default {
     }
   },
   methods: {
-    showOrderOf: function (order, index) {
-      let self = this
-
-      let targetPath = '/api/example/craft-lines' + '/' + order.order_id
-      let params = order
-      console.log(targetPath)
-      ApiClient.update(targetPath, params, (response) => {
-        console.log(response)
-        self.orders[index] = response.data
-        self.orders[index].workflow_id = AppConst.data().workflowId
-      }, (error) => {
-        console.log(error)
-      })
-      let transactionId = this.orders[index].transaction_id
-      this.$refs['tbRef' + order.id].childMethod(AppConst.data().workflowId, transactionId)
-
-      let modal = this.$refs['craftRef' + order.id]
-      modal.show()
-    },
     searchCraftLines: function () {
       let self = this
 

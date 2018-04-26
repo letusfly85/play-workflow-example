@@ -1,7 +1,5 @@
 package io.wonder.soft.retail.domain.workflow.query
 
-import io.wonder.soft.retail.domain.workflow.entity.WorkflowTransactionEntity
-import io.wonder.soft.retail.domain.workflow.model.{WorkflowCurrentStates, WorkflowTransactions}
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowTransactionEntity}
 import io.wonder.soft.retail.domain.workflow.model.{WorkflowCurrentStates, WorkflowTransactions}
 import scalikejdbc._

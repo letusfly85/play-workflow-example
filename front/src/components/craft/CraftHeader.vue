@@ -6,7 +6,7 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="#/craft-lines">Orders</b-nav-item>
+          <b-nav-item href="#/craft-lines">Crafts</b-nav-item>
           <b-nav-item href="#/workflows">Workflows</b-nav-item>
         </b-navbar-nav>
 
