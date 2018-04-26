@@ -1,0 +1,42 @@
+package io.wonder.soft.retail.application.example.craft.controller
+
+import io.wonder.soft.retail.application.example.craft.service.CraftLineService
+import io.wonder.soft.retail.application.helper.JsResultHelper
+import io.wonder.soft.retail.domain.example.craft.entity.CraftLineEntity
+import javax.inject._
+import play.api.Logger
+import play.api.libs.json._
+import play.api.mvc._
+
+import scala.util.{Failure, Success, Try}
+
+@Singleton
+class CraftLineController @Inject()
+(service: CraftLineService, cc: ControllerComponents)
+  extends AbstractController(cc) with JsResultHelper {
+
+  def listCraftLine = Action {
+    Ok(Json.toJson(service.listCraftLine))
+  }
+
+  def findCraftLine(craftLineId: String) = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        craftLineEntity <- Json.fromJson[CraftLineEntity](json).right
+        entity <- service.openCraftLine(craftLineEntity).right
+      } yield entity
+
+    } match {
+      case Success(either) => either match {
+        case Right(statusEntity) => Created(Json.toJson(statusEntity))
+        case Left(exception) =>
+          Logger.info(exception.toString)
+          InternalServerError(JsObject.empty)
+      }
+      case Failure(exception) =>
+        exception.printStackTrace()
+        InternalServerError(JsObject.empty)
+    }
+  }
+}

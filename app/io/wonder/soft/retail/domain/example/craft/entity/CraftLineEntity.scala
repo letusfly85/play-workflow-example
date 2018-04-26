@@ -42,12 +42,12 @@ object CraftLineEntity {
   implicit def convertFromModel(model: CraftLines): CraftLineEntity = {
     CraftLineEntity(
       model.id,
-      None,
+      model.transactionId,
       model.statusId,
-      None,
-      None,
-      None,
-      model.serviceId,
+      model.statusName,
+      model.productName,
+      model.assignedMemberName,
+      model.serviceId
     )
   }
 
