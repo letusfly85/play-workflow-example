@@ -34,7 +34,7 @@ export default {
         assigned_member_name: ''
       },
       transactionId: null,
-      orderExampleWorkflowId: 3,
+      craftExampleWorkflowId: 3,
       trans: []
     }
   },
@@ -54,7 +54,7 @@ export default {
     },
     findTransitions: function () {
       console.log(this.craftProduct)
-      let targetPath = '/api/workflow-user-transitions?workflow-id=' + this.workflowId + '&transaction-id=' + this.transactionId
+      let targetPath = '/api/workflow-user-transitions?workflow-id=' + this.craftExampleWorkflowId + '&transaction-id=' + this.transactionId
       console.log(targetPath)
 
       let self = this
