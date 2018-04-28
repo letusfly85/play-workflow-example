@@ -76,6 +76,7 @@ export default {
         console.log(response.data)
         this.$emit('reloadParent')
         this.findTransitions()
+        this.searchCraftProducts(this.$route.params.craftLineId)
       }, (error) => {
         console.log(error)
       })
