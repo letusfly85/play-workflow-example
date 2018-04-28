@@ -1,7 +1,9 @@
 package io.wonder.soft.retail.domain.workflow.model
 
-import org.joda.time.DateTime
 import scalikejdbc._
+import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class WorkflowStatuses(
   id: Int,
@@ -17,8 +19,6 @@ case class WorkflowStatuses(
 
 
 object WorkflowStatuses extends SQLSyntaxSupport[WorkflowStatuses] {
-
-  override val schemaName = None // Some("simple_workflow")
 
   override val tableName = "workflow_statuses"
 

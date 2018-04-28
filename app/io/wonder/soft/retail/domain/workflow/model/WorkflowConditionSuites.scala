@@ -1,7 +1,9 @@
 package io.wonder.soft.retail.domain.workflow.model
 
-import org.joda.time.DateTime
 import scalikejdbc._
+import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class WorkflowConditionSuites(
   id: Int,

@@ -14,11 +14,11 @@ resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
 
 resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.6"
 
 libraryDependencies ++= {
   val silhouetteVersion = "5.0.3"
-  val scalikeJDBCV = "3.0.2"
+  val scalikeJDBCV = "3.2.3"
   Seq(
     jdbc,
     ehcache,
@@ -47,6 +47,7 @@ libraryDependencies ++= {
     //ScalikeJDBC dependencies
     "org.scalikejdbc" %% "scalikejdbc"                     % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-config"              % scalikeJDBCV,
+    "org.scalikejdbc" %% "scalikejdbc-joda-time"           % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-play-initializer"    % "2.6.0-scalikejdbc-3.0",
     "org.scalikejdbc" %% "scalikejdbc-test" % scalikeJDBCV % Test,
     "mysql" % "mysql-connector-java" % "5.1.33",

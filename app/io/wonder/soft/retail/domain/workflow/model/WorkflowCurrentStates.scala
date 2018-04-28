@@ -2,6 +2,8 @@ package io.wonder.soft.retail.domain.workflow.model
 
 import scalikejdbc._
 import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class WorkflowCurrentStates(
   id: Int,

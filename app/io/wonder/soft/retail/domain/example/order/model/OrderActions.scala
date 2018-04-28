@@ -2,6 +2,8 @@ package io.wonder.soft.retail.domain.example.order.model
 
 import scalikejdbc._
 import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class OrderActions(
   id: Int,
