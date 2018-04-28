@@ -34,6 +34,7 @@ import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
 import AppConst from './utils/AppConst'
+import * as d3 from 'd3v4'
 
 export default {
   name: 'Transition',
@@ -47,7 +48,17 @@ export default {
         to_step: null,
         transition_name: null
       },
-      step_id_list: []
+      step_id_list: [],
+      transition_nodes: {
+        nodes: [
+          { id: 'sample1', group: 1 },
+          { id: 'sample2', group: 2 }
+        ],
+        'links': [
+          { source: 'edge1', target: 'sample1', value: 2 },
+          { source: 'edge2', target: 'sample2', value: 3 }
+        ]
+      }
     }
   },
   components: { AppHeader, AppFooter, AppConst },
@@ -123,5 +134,20 @@ export default {
     width: 70%;
     margin-left: 15%;
     border: transparent 1px solid;
+  }
+
+  .links line {
+    stroke: #999;
+    stroke-opacity: 0.6;
+  }
+
+  .nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+
+  text {
+    font-family: sans-serif;
+    font-size: 10px;
   }
 </style>
