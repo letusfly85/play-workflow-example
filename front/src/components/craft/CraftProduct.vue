@@ -23,6 +23,7 @@
 <script>
 import ApiClient from '../utils/ApiClient'
 import CraftHeader from './CraftHeader'
+import AppConst from '../utils/AppConst'
 
 export default {
   name: 'CraftProduct',
@@ -34,7 +35,6 @@ export default {
         assigned_member_name: ''
       },
       transactionId: null,
-      craftExampleWorkflowId: 3,
       trans: []
     }
   },
@@ -54,7 +54,7 @@ export default {
     },
     findTransitions: function () {
       console.log(this.craftProduct)
-      let targetPath = '/api/workflow-user-transitions?workflow-id=' + this.craftExampleWorkflowId + '&transaction-id=' + this.transactionId
+      let targetPath = '/api/workflow-user-transitions?workflow-id=' + AppConst.data().craftExampleWorkflowId + '&transaction-id=' + this.transactionId
       console.log(targetPath)
 
       let self = this
