@@ -7,11 +7,7 @@ import io.wonder.soft.retail.domain.workflow.entity.WorkflowTransitionEntity
 import io.wonder.soft.retail.domain.example.order.repository.OrderRepository
 import io.wonder.soft.retail.domain.example.order.service.orderActions._
 import javax.inject.Inject
-import play.api.Logger
 
-/**
-  * TODO implement
-  */
 class OrderTransitionService @Inject()
    (transactionService: WorkflowTransactionService,
     orderQuery: OrderQueryProcessor,
@@ -19,6 +15,9 @@ class OrderTransitionService @Inject()
    )
   {
 
+  /**
+    * TODO implement
+    */
   def executeTransition(orderAction: OrderAction) = {
 
     orderAction match {
@@ -28,34 +27,6 @@ class OrderTransitionService @Inject()
       case ShipItemAction =>
     }
 
-  }
-
-  def initializeTransaction(orderEntity: OrderEntity, userId: String = "1", workflowId: Int = 2): Either[Exception, OrderEntity] = {
-    orderEntity.transactionId match {
-      case Some(tId) if tId != "" =>
-        Logger.info(s"transaction_id: ${tId} is already assigned")
-        Right(orderEntity)
-
-      case _ =>
-        transactionService.initialize(userId, workflowId) match {
-          case Right(transactionEntity) =>
-            // todo change use `get`
-            val define = transactionService.showDefine(transactionEntity.workflowId, transactionEntity.stepId).get
-
-            val newOrderEntity =
-              orderEntity.copy(
-                transactionId = Some(transactionEntity.transactionId),
-                statusId = Some(transactionEntity.stepId.toString),
-                statusName = Some(define.stepLabel)
-              )
-            orderRepository.update(newOrderEntity)
-
-            Right(newOrderEntity)
-
-          case Left(exception) =>
-            Left(new Exception(exception))
-        }
-    }
   }
 
   def proceedState(transactionId: String, transition: WorkflowTransitionEntity, userId: String = "1", workflowId: Int = 2): Either[Exception, OrderEntity] = {
