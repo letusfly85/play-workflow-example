@@ -14,15 +14,17 @@ class CraftLineService @Inject()
    craftLineQuery: CraftLineQueryProcessor
   ) extends ApplicationService {
 
+  val craftExampleWorkflowId = 3
+
   def listCraftLine: List[CraftLineEntity] = craftLineQuery.listCraftLine
 
   def openCraftLine(craftLineId: String): Either[Exception, CraftLineEntity] = {
     craftLinesRepository.find(craftLineId.toInt) match {
       case Some(craftLine) if craftLine.transactionId.getOrElse("") == "" =>
         Logger.info(s"find not yet initialized craft entity ${craftLine.toString}")
-        transactionService.initialize(userId = "1", workflowId = 3) match {
+        transactionService.initialize(userId = "1", workflowId = craftExampleWorkflowId) match {
           case Right(transaction) =>
-            val define = transactionService.showDefine(workflowId = 3, transaction.stepId).get
+            val define = transactionService.showDefine(workflowId = craftExampleWorkflowId, transaction.stepId).get
             val newCraftLine = craftLine.copy(
               transactionId = Some(transaction.transactionId),
               statusId = define.stepId.toString,

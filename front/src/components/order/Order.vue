@@ -47,12 +47,12 @@ export default {
       ApiClient.update(targetPath, params, (response) => {
         console.log(response)
         self.orders[index] = response.data
-        self.orders[index].workflow_id = AppConst.data().workflowId
+        self.orders[index].workflow_id = AppConst.data().orderExampleWorkflowId
       }, (error) => {
         console.log(error)
       })
       let transactionId = this.orders[index].transaction_id
-      this.$refs['tbRef' + order.id].childMethod(AppConst.data().workflowId, transactionId)
+      this.$refs['tbRef' + order.id].childMethod(AppConst.data().orderExampleWorkflowId, transactionId)
 
       let modal = this.$refs['orderRef' + order.id]
       modal.show()
@@ -64,7 +64,7 @@ export default {
       ApiClient.search(targetPath, (response) => {
         console.log(response)
         self.orders = response.data.map(function (data) {
-          data.workflow_id = AppConst.data().workflowId
+          data.workflow_id = AppConst.data().orderExampleWorkflowId
           return data
         })
         console.log(self.orders)

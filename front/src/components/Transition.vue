@@ -61,7 +61,7 @@ export default {
     },
     createTransition: function () {
       let param = {
-        workflow_id: AppConst.data().workflowId,
+        workflow_id: AppConst.data().orderExampleWorkflowId,
         name: this.form.transition_name,
         from_step: this.form.from_step,
         to_step: this.form.to_step
@@ -79,7 +79,7 @@ export default {
     }
   },
   created: function () {
-    var targetPath = '/api/workflow/transitions?workflow-id=' + AppConst.data().workflowId
+    var targetPath = '/api/workflow/transitions?workflow-id=' + AppConst.data().orderExampleWorkflowId
 
     const self = this
     ApiClient.search(targetPath, (response) => {
@@ -89,7 +89,7 @@ export default {
       console.log(error)
     })
 
-    targetPath = '/api/workflow/definitions?workflow-id=' + AppConst.data().workflowId
+    targetPath = '/api/workflow/definitions?workflow-id=' + AppConst.data().orderExampleWorkflowId
     ApiClient.search(targetPath, (response) => {
       console.log(response)
       self.workflows = response.data

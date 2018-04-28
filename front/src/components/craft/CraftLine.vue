@@ -38,7 +38,7 @@ export default {
       ApiClient.search(targetPath, (response) => {
         console.log(response)
         self.craftLines = response.data.map(function (data) {
-          data.workflow_id = AppConst.data().workflowId
+          data.workflow_id = AppConst.data().orderExampleWorkflowId
           data.status_name = data.status_name ? data.status_name : '対応開始する'
           return data
         })

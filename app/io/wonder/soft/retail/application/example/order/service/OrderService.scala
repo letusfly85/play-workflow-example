@@ -17,7 +17,7 @@ class OrderService @Inject()
    orderQuery: OrderQueryProcessor
   ) extends ApplicationService {
 
-  val orderExampleWorkflowId = 1
+  val orderExampleWorkflowId = 2
 
   def listOrder: List[OrderEntity] = orderQuery.listOrder
 

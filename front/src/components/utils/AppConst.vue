@@ -1,6 +1,7 @@
 <script>
 var data = {
-  workflowId: 2
+  orderExampleWorkflowId: 2,
+  craftExampleWorkflowId: 3
 }
 export default {
   name: 'AppConst.vue',

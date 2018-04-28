@@ -34,7 +34,7 @@ export default {
         assigned_member_name: ''
       },
       transactionId: null,
-      workflowId: 3,
+      orderExampleWorkflowId: 3,
       trans: []
     }
   },
