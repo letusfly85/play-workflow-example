@@ -1,6 +1,8 @@
 <template>
   <div>
     <app-header></app-header>
+    <svg id="graph"  :width="svgArea.width" :height="svgArea.height" style="border: 1px">
+    </svg>
     <b-card class="card-workflow-list">
       <div v-for="transition in transitions" v-bind:key="transition.id">
         <div style="margin-bottom: 3px; height: 5rem;">
@@ -40,6 +42,10 @@ export default {
   name: 'Transition',
   data () {
     return {
+      svgArea: {
+        width: 960,
+        height: 200
+      },
       transitions: [],
       workflows: [],
       addToggle: false,
@@ -51,12 +57,11 @@ export default {
       step_id_list: [],
       transition_nodes: {
         nodes: [
-          { id: 'sample1', group: 1 },
-          { id: 'sample2', group: 2 }
+          { id: 'sample1', group: 1, fx: 255, fy: 100 },
+          { id: 'sample2', group: 3, fx: 455, fy: 100 }
         ],
-        'links': [
-          { source: 'edge1', target: 'sample1', value: 2 },
-          { source: 'edge2', target: 'sample2', value: 3 }
+        links: [
+          { source: 'sample1', target: 'sample2', value: 256 }
         ]
       }
     }
@@ -64,11 +69,8 @@ export default {
   components: { AppHeader, AppFooter, AppConst },
   methods: {
     toggleChange: function (toggle) {
-      if (toggle === true) {
-        this.addToggle = false
-      } else {
-        this.addToggle = true
-      }
+      if (toggle) this.addToggle = false
+      else this.addToggle = true
     },
     createTransition: function () {
       let param = {
@@ -87,10 +89,36 @@ export default {
       }, (error) => {
         console.log(error)
       })
+    },
+    ticked: function (d, link, node) {
+      link
+        .attr('x1', function (d) { return d.source.x })
+        .attr('y1', function (d) { return d.source.y })
+        .attr('x2', function (d) { return d.target.x })
+        .attr('y2', function (d) { return d.target.y })
+
+      node
+        .attr('transform', function (d) {
+          return 'translate(' + d.x + ',' + d.y + ')'
+        })
+    },
+    dragstarted: function (d, simulation) {
+      if (!d3.event.active) simulation.alphaTarget(0.3).restart()
+      d.fx = d.x
+      d.fy = d.y
+    },
+    dragged: function (d, simulation) {
+      d.fx = d3.event.x
+      d.fy = d3.event.y
+    },
+    dragended: function (d, simulation) {
+      if (!d3.event.active) simulation.alphaTarget(0)
+      d.fx = d3.event.x
+      d.fy = d3.event.y
     }
   },
   created: function () {
-    var targetPath = '/api/workflow/transitions?workflow-id=' + AppConst.data().orderExampleWorkflowId
+    let targetPath = '/api/workflow/transitions?workflow-id=' + AppConst.data().orderExampleWorkflowId
 
     const self = this
     ApiClient.search(targetPath, (response) => {
@@ -118,6 +146,58 @@ export default {
     }, (error) => {
       console.log(error)
     })
+  },
+  mounted: function () {
+    const svg = d3.selectAll('#graph')
+    let color = d3.scaleOrdinal(d3.schemeCategory20)
+    let simulation = d3.forceSimulation()
+      .force('link', d3.forceLink().id(function (d) {
+        return d.id
+      }))
+      .force('charge', d3.forceManyBody())
+      .force('center', d3.forceCenter(this.svgArea.width / 2, this.svgArea.height / 2))
+
+    let graphData = this.transition_nodes
+    let link = svg.append('g')
+      .attr('class', 'links')
+      .selectAll('line')
+      .data(graphData.links)
+      .enter().append('line')
+      .attr('stroke', 'lightblue')
+      .attr('stroke-width', 3)
+      .attr('opacity', 0.3)
+
+    let node = svg.append('g')
+      .attr('class', 'nodes')
+      .selectAll('g')
+      .data(graphData.nodes)
+      .enter().append('g')
+
+    let self = this
+    node.append('circle')
+      .attr('r', 25)
+      .attr('fill', function (d) { return color(d.group) })
+      .call(d3.drag()
+        .on('start', function (d) { return self.dragstarted(d, simulation) })
+        .on('drag', function (d) { return self.dragged(d, simulation) })
+        .on('end', function (d) { return self.dragended(d, simulation) })
+      )
+
+    node.append('text')
+      .text(function (d) {
+        return d.id
+      })
+      .attr('x', 12)
+      .attr('y', 0)
+    node.append('title')
+      .text(function (d) { return d.id })
+
+    simulation
+      .nodes(graphData.nodes)
+      .on('tick', function (d) { return self.ticked(d, link, node) })
+
+    simulation.force('link')
+      .links(graphData.links)
   }
 }
 </script>
@@ -134,20 +214,5 @@ export default {
     width: 70%;
     margin-left: 15%;
     border: transparent 1px solid;
-  }
-
-  .links line {
-    stroke: #999;
-    stroke-opacity: 0.6;
-  }
-
-  .nodes circle {
-    stroke: #fff;
-    stroke-width: 1.5px;
-  }
-
-  text {
-    font-family: sans-serif;
-    font-size: 10px;
   }
 </style>
