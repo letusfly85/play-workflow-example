@@ -44,7 +44,7 @@ object ActionTransactionEntity {
       model.workflowId,
       model.transactionId,
       model.stepId,
-      model.isReverted,
+      model.isReverted
     )
   }
 

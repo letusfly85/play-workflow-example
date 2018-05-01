@@ -46,7 +46,7 @@ object WorkflowActionConditionEntity {
       model.transitionId,
       model.actionId,
       model.serviceId,
-      None,
+      model.name
     )
   }
 

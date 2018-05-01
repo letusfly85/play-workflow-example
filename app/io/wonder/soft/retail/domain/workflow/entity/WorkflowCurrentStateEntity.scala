@@ -58,7 +58,7 @@ object WorkflowCurrentStateEntity {
       false,
       false,
       model.schemeId,
-      model.serviceId,
+      model.serviceId
     )
   }
 
