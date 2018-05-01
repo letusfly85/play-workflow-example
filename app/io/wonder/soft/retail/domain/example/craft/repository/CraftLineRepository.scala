@@ -6,7 +6,7 @@ import io.wonder.soft.retail.domain.example.craft.model.CraftLines
 
 import scala.util.{Failure, Success, Try}
 
-class CraftLinesRepository extends Repository[CraftLineEntity] {
+class CraftLineRepository extends Repository[CraftLineEntity] {
   val clc = CraftLines.column
 
   import CraftLineEntity._

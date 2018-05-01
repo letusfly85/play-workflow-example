@@ -7,7 +7,7 @@ import io.wonder.soft.retail.domain.example.craft.model.CraftLineActions
 import scala.util.{Failure, Success, Try}
 import scalikejdbc._
 
-class CraftLineActionsActionRepository extends Repository[CraftLineActionEntity] {
+class CraftLineActionRepository extends Repository[CraftLineActionEntity] {
   val clac = CraftLineActions.column
 
   import CraftLineActionEntity._

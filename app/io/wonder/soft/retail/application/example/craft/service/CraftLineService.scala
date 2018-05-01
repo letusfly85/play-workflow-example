@@ -4,13 +4,13 @@ import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.application.workflow.service.WorkflowTransactionService
 import io.wonder.soft.retail.domain.example.craft.entity.CraftLineEntity
 import io.wonder.soft.retail.domain.example.craft.query.CraftLineQueryProcessor
-import io.wonder.soft.retail.domain.example.craft.repository.CraftLinesRepository
+import io.wonder.soft.retail.domain.example.craft.repository.CraftLineRepository
 import javax.inject.Inject
 import play.api.Logger
 
 class CraftLineService @Inject()
   (transactionService: WorkflowTransactionService,
-   craftLinesRepository: CraftLinesRepository,
+   craftLinesRepository: CraftLineRepository,
    craftLineQuery: CraftLineQueryProcessor
   ) extends ApplicationService {
 

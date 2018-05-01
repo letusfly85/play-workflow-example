@@ -2,7 +2,7 @@ package io.wonder.soft.retail.domain.workflow.service
 
 import io.wonder.soft.retail.domain.example.craft.entity.CraftLineEntity
 import io.wonder.soft.retail.domain.example.craft.query.CraftLineQueryProcessor
-import io.wonder.soft.retail.domain.example.craft.repository.CraftLinesRepository
+import io.wonder.soft.retail.domain.example.craft.repository.CraftLineRepository
 import io.wonder.soft.retail.domain.example.order.entity.OrderEntity
 import io.wonder.soft.retail.domain.example.order.query.OrderQueryProcessor
 import io.wonder.soft.retail.domain.example.order.repository.OrderRepository
@@ -13,7 +13,7 @@ import play.api.Logger
 class UserTransaction @Inject()
   (orderRepository: OrderRepository,
    orderQueryProcessor: OrderQueryProcessor,
-   craftLinesRepository: CraftLinesRepository,
+   craftLinesRepository: CraftLineRepository,
    craftLineQueryProcessor: CraftLineQueryProcessor
   )
 {
