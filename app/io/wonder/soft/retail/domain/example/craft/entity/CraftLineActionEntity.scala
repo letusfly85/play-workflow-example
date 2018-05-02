@@ -35,8 +35,8 @@ object CraftLineActionEntity {
     CraftLineActionEntity(
       model.id,
       model.name,
-      None,
-      model.serviceId,
+      model.description,
+      model.serviceId
     )
   }
 
