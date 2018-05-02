@@ -6,6 +6,7 @@
     <b-collapse is-nav id="nav_collapse">
 
       <b-navbar-nav>
+        <b-nav-item href="#/summaries">Summary</b-nav-item>
         <b-nav-item href="#/workflows">Workflows</b-nav-item>
         <b-nav-item href="#/transitions">Transitions</b-nav-item>
         <b-nav-item href="#/statuses">Status List</b-nav-item>

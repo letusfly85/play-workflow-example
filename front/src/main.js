@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import App from './App'
 import router from './router'
 
@@ -10,13 +11,22 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    workflow: null
+    workflowId: null
   },
   mutations: {
-    updateWorkflowId: function (state, summary) {
-      state.workflow = summary
+    updateWorkflowId: function (state, workflowId) {
+      state.workflowId = workflowId
     }
-  }
+  },
+  getters: {},
+  actions: {},
+  plugins: [
+    createPersistedState({
+      key: 'workflowId',
+      paths: ['workflowId'],
+      storage: window.sessionStorage
+    })
+  ]
 })
 
 /* eslint-disable no-new */

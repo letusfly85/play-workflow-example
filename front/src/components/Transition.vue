@@ -35,7 +35,6 @@
 import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
-import AppConst from './utils/AppConst'
 import * as d3 from 'd3v4'
 
 export default {
@@ -66,7 +65,7 @@ export default {
       }
     }
   },
-  components: { AppHeader, AppFooter, AppConst },
+  components: { AppHeader, AppFooter },
   methods: {
     toggleChange: function (toggle) {
       if (toggle) this.addToggle = false
@@ -74,7 +73,7 @@ export default {
     },
     createTransition: function () {
       let param = {
-        workflow_id: AppConst.data().orderExampleWorkflowId,
+        workflow_id: this.$store.state.workflowId,
         name: this.form.transition_name,
         from_step: this.form.from_step,
         to_step: this.form.to_step
@@ -118,7 +117,7 @@ export default {
     }
   },
   created: function () {
-    let targetPath = '/api/workflow/transitions?workflow-id=' + AppConst.data().orderExampleWorkflowId
+    let targetPath = '/api/workflow/transitions?workflow-id=' + this.$store.state.workflowId
 
     const self = this
     ApiClient.search(targetPath, (response) => {
@@ -128,7 +127,7 @@ export default {
       console.log(error)
     })
 
-    targetPath = '/api/workflow/definitions?workflow-id=' + AppConst.data().orderExampleWorkflowId
+    targetPath = '/api/workflow/definitions?workflow-id=' + this.$store.state.workflowId
     ApiClient.search(targetPath, (response) => {
       console.log(response)
       self.workflows = response.data

@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     setAsDefault: function (summary) {
-      this.$store.commit('updateWorkflowId', summary)
+      this.$store.commit('updateWorkflowId', summary.workflow_id)
 
       this.searchSummaries()
     },
@@ -38,7 +38,7 @@ export default {
       let targetPath = '/api/workflow/summaries'
       ApiClient.search(targetPath, (response) => {
         self.summaries = response.data.map(function (data) {
-          if (self.$store.state.workflow !== null && self.$store.state.workflow.id === data.id) {
+          if (self.$store.state.workflowId !== null && self.$store.state.workflowId === data.workflow_id) {
             data.isDefault = true
           } else {
             data.isDefault = false

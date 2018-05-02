@@ -21,7 +21,6 @@ export default {
   data () {
     return {
       trans: [],
-      orderExampleWorkflowId: null,
       transactionId: null
     }
   },
