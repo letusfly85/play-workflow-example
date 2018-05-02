@@ -11,7 +11,7 @@ import play.api.Logger
 class CraftLineService @Inject()
   (transactionService: WorkflowTransactionService,
    craftLinesRepository: CraftLineRepository,
-   craftLineQuery: CraftLineQueryProcessor
+   craftLineQuery: CraftLineQueryProcessor,
   ) extends ApplicationService {
 
   val craftExampleWorkflowId = 3
@@ -44,5 +44,4 @@ class CraftLineService @Inject()
         Left(new RuntimeException(""))
     }
   }
-
 }

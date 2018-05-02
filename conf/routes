@@ -11,27 +11,35 @@
 ###
 ################################################################################
 
-GET     /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /api/workflow/statuses          io.wonder.soft.retail.application.workflow.controller.WorkflowController.listStatus
+GET     /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.listStatus
 
-POST    /api/workflow/statuses          io.wonder.soft.retail.application.workflow.controller.WorkflowController.createStatus
+POST    /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.createStatus
 
-PUT     /api/workflow/statuses          io.wonder.soft.retail.application.workflow.controller.WorkflowController.updateStatus
+PUT     /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.updateStatus
 
-GET     /api/workflow/definitions/:id   io.wonder.soft.retail.application.workflow.controller.WorkflowController.findDefinition(id: String)
+GET     /api/workflow/definitions/:id     io.wonder.soft.retail.application.workflow.controller.WorkflowController.findDefinition(id: String)
 
-GET     /api/workflow/definitions       io.wonder.soft.retail.application.workflow.controller.WorkflowController.listDefinition
+GET     /api/workflow/definitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.listDefinition
 
-POST    /api/workflow/definitions       io.wonder.soft.retail.application.workflow.controller.WorkflowController.createDefinition
+POST    /api/workflow/definitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.createDefinition
 
-GET     /api/workflow/transitions       io.wonder.soft.retail.application.workflow.controller.WorkflowController.listTransition
+GET     /api/workflow/transitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.listTransition
 
-POST    /api/workflow/transitions       io.wonder.soft.retail.application.workflow.controller.WorkflowController.createTransition
+POST    /api/workflow/transitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.createTransition
 
 GET     /api/workflow-user-transitions    io.wonder.soft.retail.application.workflow.controller.WorkflowTransactionController.listTransition
 
 POST    /api/workflow-user-transactions   io.wonder.soft.retail.application.workflow.controller.WorkflowTransactionController.proceedState
+
+################################################################################
+###
+### Example Application Action REST PATH ######
+###
+################################################################################
+
+GET     /api/workflow/craft-actions       io.wonder.soft.retail.application.workflow.controller.WorkflowController.listCraftLineActions
 
 ################################################################################
 ###

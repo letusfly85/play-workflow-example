@@ -10,10 +10,13 @@ final case class CraftLineActionEntity(
     id: Int,
     name: String,
     description: Option[String],
-    serviceId: Int,
+    serviceId: Int = 1,
 ) extends Entity
 
 object CraftLineActionEntity {
+
+  final val craftLineServiceId = 1
+
   implicit def craftLineActionsReads: Reads[CraftLineActionEntity] =
     (
       (JsPath \ "id").read[Int] and
@@ -36,7 +39,7 @@ object CraftLineActionEntity {
       model.id,
       model.name,
       model.description,
-      model.serviceId
+      craftLineServiceId
     )
   }
 

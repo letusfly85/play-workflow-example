@@ -9,4 +9,10 @@ class CraftLineActionQueryProcessor {
 
   val cla = CraftLineActions.syntax("cla")
 
+  def searchByServiceId: List[CraftLineActionEntity] = {
+    CraftLineActions.findAllBy(
+      sqls.eq(cla.serviceId, CraftLineActionEntity.craftLineServiceId)
+    ).map(cla => cla)
+  }
+
 }
