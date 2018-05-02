@@ -153,9 +153,6 @@ class WorkflowTransactionService @Inject()(
   def listTransition(workflowId: Int, transactionId: String): List[WorkflowUserTransitionEntity] = {
     val workflowTransitions = defineQuery.searchTransitions(workflowId)
     val currentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
-    Logger.info(transactionId)
-    Logger.info(currentState.toString)
-    Logger.info(workflowTransitions.toString)
 
     val userTransitions = WorkflowTransactionFactory.buildUserTransitions(currentState, workflowTransitions)
     userTransitions

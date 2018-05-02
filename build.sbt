@@ -2,11 +2,11 @@ organization := "io.wonder.soft"
 
 name := "retail.workflow"
 
-val _version = "3.0.1"
+val _version = "3.0.2"
 
 version := s"${_version}-SNAPSHOT"
 
-lazy val `simple_workflow` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `simple_workflow` = (project in file(".")).enablePlugins(PlayScala, ScalikejdbcPlugin)
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
@@ -83,11 +83,6 @@ scalacOptions ++= Seq(
   // https://github.com/typelevel/cats
   "-Ypartial-unification"
 )
-
-//********************************************************
-// ScalikeJDBC settings
-//********************************************************
-scalikejdbcSettings
 
 //********************************************************
 // FlyWay settings
