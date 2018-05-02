@@ -1,3 +1,8 @@
+delete from workflow_definition_summaries;
+
+insert into workflow_definition_summaries (workflow_id, name, service_id) values (2, '注文管理', 0);
+insert into workflow_definition_summaries (workflow_id, name, service_id) values (3, '工房管理', 1);
+
 delete from workflow_statuses;
 
 insert into workflow_statuses (id, name) values (1, '未着手');
