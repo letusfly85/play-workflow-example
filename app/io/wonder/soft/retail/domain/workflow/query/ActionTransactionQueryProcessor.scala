@@ -8,7 +8,7 @@ class ActionTransactionQueryProcessor {
 
   val atc = ActionTransactions.column
 
-  def findAllByTransactionId(transactionId: String, actionId: String): List[ActionTransactionEntity] =
+  def findAllByTransactionId(transactionId: String, actionId: Int): List[ActionTransactionEntity] =
     ActionTransactions
       .findAllBy(
         sqls.eq(atc.transactionId, transactionId)

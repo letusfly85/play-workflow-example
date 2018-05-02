@@ -1,8 +1,6 @@
 package io.wonder.soft.retail.domain.example.craft.action
 
-import io.wonder.soft.retail.domain.workflow.service.WorkflowBaseAction
-
-class AssembleAction(_actionId: Int, _workflowId: Int, _transactionId: String, _stepId: Int) extends WorkflowBaseAction {
+class AssembleAction(_actionId: Int, _workflowId: Int, _transactionId: String, _stepId: Int) {
 
   val actionId = _actionId
 
