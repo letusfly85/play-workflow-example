@@ -1,7 +1,6 @@
 package io.wonder.soft.retail.application.workflow.service
 
 import javax.inject.Inject
-import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQueryProcessor

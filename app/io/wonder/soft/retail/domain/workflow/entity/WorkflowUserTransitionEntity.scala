@@ -1,7 +1,6 @@
 package io.wonder.soft.retail.domain.workflow.entity
 
 import io.wonder.soft.retail.domain.Entity
-import io.wonder.soft.retail.domain.Entity
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._

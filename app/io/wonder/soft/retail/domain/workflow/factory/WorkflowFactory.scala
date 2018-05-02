@@ -1,6 +1,6 @@
 package io.wonder.soft.retail.domain.workflow.factory
 
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowStepEntity, WorkflowTransitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity._
 
 object WorkflowFactory {
 
@@ -14,6 +14,7 @@ object WorkflowFactory {
     toStep: WorkflowDefinitionEntity): WorkflowTransitionEntity = {
 
     WorkflowTransitionEntity(
+      transitionEntity.id,
       transitionEntity.workflowId,
       transitionEntity.name,
       WorkflowStepEntity(
@@ -26,6 +27,17 @@ object WorkflowFactory {
       ),
       transitionEntity.conditionSuiteId,
       transitionEntity.isDefined
+    )
+  }
+
+  def buildConditionEntity(actionTransition: WorkflowActionTransitionEntity): WorkflowActionConditionEntity = {
+    WorkflowActionConditionEntity(
+      0,
+      name = None,
+      workflowId = actionTransition.transitionEntity.workflowId,
+      actionId = actionTransition.actionId,
+      transitionId = actionTransition.transitionEntity.id,
+      serviceId = actionTransition.serviceId
     )
   }
 

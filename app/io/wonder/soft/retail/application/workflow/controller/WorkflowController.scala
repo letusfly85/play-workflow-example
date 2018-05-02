@@ -2,7 +2,6 @@ package io.wonder.soft.retail.application.workflow.controller
 
 import io.wonder.soft.retail.application.example.craft.service.CraftLineActionService
 import javax.inject._
-import io.wonder.soft.retail.application.helper.JsResultHelper
 import io.wonder.soft.retail.application.workflow.service.WorkflowService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.application.helper.JsResultHelper
@@ -130,5 +129,9 @@ class WorkflowController @Inject()
 
   // TODO
   def listOrderActions = ???
+
+  def createActionCondition = ???
+
+  def deleteActionCondition = ???
 
 }

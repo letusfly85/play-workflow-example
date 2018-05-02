@@ -1,6 +1,5 @@
 package io.wonder.soft.retail.domain.workflow.entity
 
-import io.wonder.soft.retail.domain.Entity
 import io.wonder.soft.retail.domain.workflow.model.WorkflowTransitions
 import io.wonder.soft.retail.domain.Entity
 import play.api.libs.functional.syntax._
@@ -8,6 +7,7 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 
 final case class WorkflowTransitionEntity(
+                   id: Int = 0,
                    workflowId: Int,
                    name: String,
                    fromStep: WorkflowStepEntity,
@@ -19,6 +19,7 @@ final case class WorkflowTransitionEntity(
 
 object WorkflowTransitionEntity {
   implicit def workflowTransitionReads: Reads[WorkflowTransitionEntity] = (
+    (JsPath \ "id").read[Int] and
     (JsPath \ "workflow_id").read[Int] and
     (JsPath \ "name").read[String] and
     (JsPath \ "from_step").read[WorkflowStepEntity] and
@@ -28,6 +29,7 @@ object WorkflowTransitionEntity {
   )(WorkflowTransitionEntity.apply _)
 
   implicit def workflowTransitionWrites: Writes[WorkflowTransitionEntity] = (
+    (JsPath \ "id").write[Int] and
     (JsPath \ "workflow_id").write[Int] and
     (JsPath \ "name").write[String] and
     (JsPath \ "from_step").write[WorkflowStepEntity] and
@@ -38,6 +40,7 @@ object WorkflowTransitionEntity {
 
   implicit def convertFromModel(model: WorkflowTransitions): WorkflowTransitionEntity = {
     WorkflowTransitionEntity(
+      model.id,
       model.workflowId,
       model.name,
       WorkflowStepEntity(),
