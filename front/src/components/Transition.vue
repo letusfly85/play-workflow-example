@@ -6,10 +6,16 @@
     <b-card class="card-workflow-list">
       <div v-for="transition in transitions" v-bind:key="transition.id">
         <div style="margin-bottom: 3px; height: 5rem;">
-          <b-card style="float: left; width: 14%; font-size: 12px; height: 100%; margin-right: 2px;">{{ transition.from_step.step_label }}</b-card>
+          <b-card style="float: left; width:  14%;  font-size:   12px; height: 100%; margin-right: 2px;">{{ transition.from_step.step_label }}</b-card>
           <b-card style="float: left; height: 100%; margin-right: 2px; border: transparent 1px solid;"> ---> </b-card>
-          <b-card style="float: left; width: 14%; font-size: 12px; height: 100%; margin-right: 10px;">{{ transition.to_step.step_label }}</b-card>
-          <b-card style="width: 55%; height: 100%;">{{ transition.name }}</b-card>
+          <b-card style="float: left; width:  14%;  font-size:   12px; height: 100%; margin-right: 10px;">{{ transition.to_step.step_label }}</b-card>
+          <b-card style="float: left; width:  40%;  height: 100%;">{{ transition.name }}</b-card>
+          <b-btn variant="outline-info" size="sm" style="margin-top: 2rem; border-radius: 25px;" @click="addCondition(transition)"> Conditionを編集する </b-btn>
+          <b-modal :ref="'transitionRef'+transition.id" title="Conditionを追加する" size="lg">
+            <div class="modal-content">
+              <b-btn>example</b-btn>
+            </div>
+          </b-modal>
         </div>
       </div>
     </b-card>
@@ -67,6 +73,11 @@ export default {
   },
   components: { AppHeader, AppFooter },
   methods: {
+    addCondition: function (tran) {
+      console.log(this.$refs)
+      let modal = this.$refs['transitionRef' + tran.id][0]
+      modal.show()
+    },
     toggleChange: function (toggle) {
       if (toggle) this.addToggle = false
       else this.addToggle = true
