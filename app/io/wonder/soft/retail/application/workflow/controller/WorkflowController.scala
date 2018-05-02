@@ -56,6 +56,10 @@ class WorkflowController @Inject()
     }
   }
 
+  def listSummary = Action {
+    Ok(Json.toJson(service.listSummary))
+  }
+
   def findDefinition(id: String) = Action {
     service.findDefinition(id.toInt) match {
       case Right(schemeEntity) => Ok(Json.toJson(schemeEntity))

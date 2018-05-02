@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.domain.workflow.query
 
 import io.wonder.soft.retail.domain.workflow.entity._
-import io.wonder.soft.retail.domain.workflow.model.{WorkflowDefinitions, WorkflowStatuses, WorkflowTransitions}
+import io.wonder.soft.retail.domain.workflow.model.{WorkflowDefinitionSummaries, WorkflowDefinitions, WorkflowStatuses, WorkflowTransitions}
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import scalikejdbc._
@@ -18,6 +18,10 @@ class WorkflowQueryProcessor {
 
   def searchStatuses(): List[WorkflowStatusEntity] = {
     WorkflowStatuses.findAll()
+  }
+
+  def searchSummaries: List[WorkflowDefinitionSummaryEntity] = {
+    WorkflowDefinitionSummaries.findAll().map(s => s)
   }
 
   def searchDefinitions(workflowId: Int): List[WorkflowDefinitionEntity] = {

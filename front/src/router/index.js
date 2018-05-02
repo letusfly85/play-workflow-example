@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Workflow from '@/components/Workflow'
+import WorkflowSummary from '@/components/WorkflowSummary'
 import Transition from '@/components/Transition'
 import Status from '@/components/Status'
 import Order from '@/components/order/Order'
@@ -16,9 +17,9 @@ Vue.use(BootstrapVue)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Workflow',
-      component: Workflow
+      path: '/summaries',
+      name: 'WorkflowSummary',
+      component: WorkflowSummary
     },
     {
       path: '/workflows',
