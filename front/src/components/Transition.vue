@@ -4,16 +4,23 @@
     <svg id="graph"  :width="svgArea.width" :height="svgArea.height" style="border: 1px">
     </svg>
     <b-card class="card-workflow-list">
-      <div v-for="transition in transitions" v-bind:key="transition.id">
+      <div v-for="(transition, index) in transitions" v-bind:key="transition.id">
         <div style="margin-bottom: 3px; height: 5rem;">
           <b-card style="float: left; width:  14%;  font-size:   12px; height: 100%; margin-right: 2px;">{{ transition.from_step.step_label }}</b-card>
           <b-card style="float: left; height: 100%; margin-right: 2px; border: transparent 1px solid;"> ---> </b-card>
           <b-card style="float: left; width:  14%;  font-size:   12px; height: 100%; margin-right: 10px;">{{ transition.to_step.step_label }}</b-card>
           <b-card style="float: left; width:  40%;  height: 100%;">{{ transition.name }}</b-card>
-          <b-btn variant="outline-info" size="sm" style="margin-top: 2rem; border-radius: 25px;" @click="addCondition(transition)"> Conditionを編集する </b-btn>
+          <b-btn variant="outline-info" size="sm" style="margin-top: 2rem; border-radius: 25px;" @click="addCondition(transition, index)" > Conditionを編集する </b-btn>
           <b-modal :ref="'transitionRef'+transition.id" title="Conditionを追加する" size="lg">
             <div class="modal-content">
-              <b-btn>example</b-btn>
+              <div v-for="condition in transition.conditions" v-bind:key="condition.name">
+                {{ index.toString() + '_' + condition.action_id.toString() }}
+                <b-form-checkbox :id="index.toString() + '_' + condition.action_id.toString()"
+                                 v-model="condition.checked" value=true unchecked-value=false>
+                  {{ condition.name }}
+                </b-form-checkbox>
+              </div>
+              <b-btn @click="saveCondition(transition, index)">コンディションを保存する</b-btn>
             </div>
           </b-modal>
         </div>
@@ -41,6 +48,7 @@
 import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
+// import AppConst from './utils/AppConst'
 import * as d3 from 'd3v4'
 
 export default {
@@ -73,10 +81,31 @@ export default {
   },
   components: { AppHeader, AppFooter },
   methods: {
-    addCondition: function (tran) {
-      console.log(this.$refs)
+    searchConditions: function (tran, index) {
+      let self = this
+      let targetPath = '/api/workflow/craft-conditions/' + this.$store.state.workflowId + '/' + tran.id
+      ApiClient.search(targetPath, (response) => {
+        console.log(response)
+        self.transitions[index].conditions = response.data.map(function (record) {
+          record.checked = false
+          return record
+        })
+      }, (error) => {
+        console.log(error)
+      })
+    },
+    addCondition: function (tran, index) {
       let modal = this.$refs['transitionRef' + tran.id][0]
+      /*
+      if (this.$store.state.workflowId === AppConst.data().craftExampleWorkflowId) {
+        modal.$emit('reloadModal', this.transitions[index].conditions)
+      }
+      */
       modal.show()
+    },
+    saveCondition: function (tran, index) {
+      // todo implement post action condition record
+      console.log(tran)
     },
     toggleChange: function (toggle) {
       if (toggle) this.addToggle = false
@@ -133,7 +162,14 @@ export default {
     const self = this
     ApiClient.search(targetPath, (response) => {
       console.log(response)
-      self.transitions = response.data
+      self.transitions = response.data.map(function (data) {
+        data.conditions = []
+        return data
+      })
+      self.transitions.forEach(function (data, index) {
+        self.searchConditions(data, index)
+        console.log(self.transitions[index])
+      })
     }, (error) => {
       console.log(error)
     })
