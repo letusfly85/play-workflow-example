@@ -61,5 +61,4 @@ class WorkflowService @Inject()
 
   def createTransition(transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity] =
     workflowTransitionRepository.create(transitionEntity)
-
 }

@@ -13,6 +13,7 @@ final case class WorkflowActionConditionEntity(
     actionId: Int,
     serviceId: Int,
     name: Option[String],
+    isActivate: Boolean = false
 ) extends Entity
 
 object WorkflowActionConditionEntity {
@@ -24,7 +25,8 @@ object WorkflowActionConditionEntity {
         (JsPath \ "transition_id").read[Int] and
         (JsPath \ "action_id").read[Int] and
         (JsPath \ "service_id").read[Int] and
-        (JsPath \ "name").readNullable[String]
+        (JsPath \ "name").readNullable[String] and
+        (JsPath \ "is_activate").read[Boolean]
     )(WorkflowActionConditionEntity.apply _)
 
   implicit def workflowActionConditionsWrites
@@ -35,7 +37,8 @@ object WorkflowActionConditionEntity {
         (JsPath \ "transition_id").write[Int] and
         (JsPath \ "action_id").write[Int] and
         (JsPath \ "service_id").write[Int] and
-        (JsPath \ "name").writeNullable[String]
+        (JsPath \ "name").writeNullable[String] and
+        (JsPath \ "is_activate").write[Boolean]
     )(unlift(WorkflowActionConditionEntity.unapply))
 
   implicit def convertFromModel(

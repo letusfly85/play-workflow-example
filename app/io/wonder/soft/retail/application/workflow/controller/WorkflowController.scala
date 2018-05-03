@@ -2,7 +2,7 @@ package io.wonder.soft.retail.application.workflow.controller
 
 import io.wonder.soft.retail.application.example.craft.service.CraftLineActionService
 import javax.inject._
-import io.wonder.soft.retail.application.workflow.service.WorkflowService
+import io.wonder.soft.retail.application.workflow.service.{WorkflowConditionService, WorkflowService}
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.application.helper.JsResultHelper
 import play.api.Logger
@@ -14,6 +14,7 @@ import scala.util.{Failure, Success, Try}
 @Singleton
 class WorkflowController @Inject()
   (service: WorkflowService,
+   conditionService: WorkflowConditionService,
    craftLineActionService: CraftLineActionService,
    cc: ControllerComponents)
   extends AbstractController(cc) with JsResultHelper {
@@ -129,6 +130,11 @@ class WorkflowController @Inject()
 
   def listCraftLineActions = Action { implicit request =>
     Ok(Json.toJson(craftLineActionService.listActions))
+  }
+
+  def listCraftLineConditions(workflowId: String, transitionId: String) = Action { implicit request =>
+    val result = conditionService.searchCraftLineActions(workflowId.toInt, transitionId.toInt)
+    Ok(Json.toJson(result))
   }
 
   // TODO

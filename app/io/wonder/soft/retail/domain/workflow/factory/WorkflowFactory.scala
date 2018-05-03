@@ -1,5 +1,6 @@
 package io.wonder.soft.retail.domain.workflow.factory
 
+import io.wonder.soft.retail.domain.example.craft.entity.CraftLineActionEntity
 import io.wonder.soft.retail.domain.workflow.entity._
 
 object WorkflowFactory {
@@ -38,6 +39,18 @@ object WorkflowFactory {
       actionId = actionTransition.actionId,
       transitionId = actionTransition.transitionEntity.id,
       serviceId = actionTransition.serviceId
+    )
+  }
+
+  def buildConditionEntity(action: CraftLineActionEntity, maybeActionId: Option[Int], workflowId: Int, transitionId: Int): WorkflowActionConditionEntity = {
+    WorkflowActionConditionEntity(
+      0,
+      name = Some(action.name),
+      workflowId = workflowId,
+      actionId = action.id,
+      transitionId = transitionId,
+      serviceId = action.serviceId,
+      isActivate = maybeActionId.isDefined
     )
   }
 
