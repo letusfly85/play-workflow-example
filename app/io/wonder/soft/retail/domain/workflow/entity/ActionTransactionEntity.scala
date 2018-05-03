@@ -13,6 +13,7 @@ final case class ActionTransactionEntity(
     transactionId: String,
     stepId: Int,
     isReverted: Boolean,
+    isFinished: Boolean = false
 ) extends Entity
 
 object ActionTransactionEntity {
@@ -23,7 +24,8 @@ object ActionTransactionEntity {
         (JsPath \ "workflow_id").read[Int] and
         (JsPath \ "transaction_id").read[String] and
         (JsPath \ "step_id").read[Int] and
-        (JsPath \ "is_reverted").read[Boolean]
+        (JsPath \ "is_reverted").read[Boolean] and
+        (JsPath \ "is_finished").read[Boolean]
     )(ActionTransactionEntity.apply _)
 
   implicit def actionTransactionsWrites: Writes[ActionTransactionEntity] =
@@ -33,7 +35,8 @@ object ActionTransactionEntity {
         (JsPath \ "workflow_id").write[Int] and
         (JsPath \ "transaction_id").write[String] and
         (JsPath \ "step_id").write[Int] and
-        (JsPath \ "is_reverted").write[Boolean]
+        (JsPath \ "is_reverted").write[Boolean] and
+        (JsPath \ "is_finished").write[Boolean]
     )(unlift(ActionTransactionEntity.unapply))
 
   implicit def convertFromModel(

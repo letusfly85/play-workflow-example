@@ -12,19 +12,20 @@ import play.api.libs.json._
   */
 final case class WorkflowUserTransitionEntity(
     isActive: Boolean = false,
-    transitionEntity: WorkflowTransitionEntity
+    transitionEntity: WorkflowTransitionEntity,
+    actionTransactions: List[ActionTransactionEntity]
 ) extends Entity
 
 object WorkflowUserTransitionEntity {
   implicit def workflowTransitionReads: Reads[WorkflowUserTransitionEntity] =
-    (
-      (JsPath \ "is_active").read[Boolean] and
-        (JsPath \ "transition").read[WorkflowTransitionEntity]
+    ((JsPath \ "is_active").read[Boolean] and
+     (JsPath \ "transition").read[WorkflowTransitionEntity] and
+     (JsPath \ "action_transactions").read[List[ActionTransactionEntity]]
     )(WorkflowUserTransitionEntity.apply _)
 
   implicit def workflowTransitionWrites: Writes[WorkflowUserTransitionEntity] =
-    (
-      (JsPath \ "is_active").write[Boolean] and
-        (JsPath \ "transition").write[WorkflowTransitionEntity]
+    ((JsPath \ "is_active").write[Boolean] and
+     (JsPath \ "transition").write[WorkflowTransitionEntity] and
+     (JsPath \ "action_transactions").write[List[ActionTransactionEntity]]
     )(unlift(WorkflowUserTransitionEntity.unapply))
 }

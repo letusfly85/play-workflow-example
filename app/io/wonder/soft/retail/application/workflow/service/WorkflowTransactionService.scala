@@ -2,7 +2,7 @@ package io.wonder.soft.retail.application.workflow.service
 
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowUserTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowTransactionFactory
-import io.wonder.soft.retail.domain.workflow.query.{WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
+import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQueryProcessor, WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
 import io.wonder.soft.retail.domain.workflow.repository.WorkflowDefinitionRepository
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowTransitionEntity}
@@ -19,6 +19,7 @@ class WorkflowTransactionService @Inject()(
     definitionRepository: WorkflowDefinitionRepository,
     transactionQuery: WorkflowTransactionQueryProcessor,
     transactionRepository: WorkflowTransactionRepository,
+    actionProcessor: ActionTransactionQueryProcessor,
     currentStateRepository: WorkflowCurrentStateRepository)
     extends ApplicationService {
 
@@ -154,8 +155,14 @@ class WorkflowTransactionService @Inject()(
     val workflowTransitions = defineQuery.searchTransitions(workflowId)
     val currentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
 
+
     val userTransitions = WorkflowTransactionFactory.buildUserTransitions(currentState, workflowTransitions)
-    userTransitions
+    userTransitions.map {userTransition =>
+      val actionTransactions = actionProcessor.findByTransitionAndTransactionId(transactionId, userTransition.transitionEntity.id)
+
+      println(s"${userTransition.transitionEntity.id}, ${actionTransactions.length}")
+      userTransition.copy(actionTransactions = actionTransactions)
+    }
   }
 
 }

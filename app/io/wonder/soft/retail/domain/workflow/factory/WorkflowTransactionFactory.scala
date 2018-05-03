@@ -90,7 +90,8 @@ object WorkflowTransactionFactory {
 
       WorkflowUserTransitionEntity(
         isActive = isActive,
-        transitionEntity = transition
+        transitionEntity = transition,
+        List.empty[ActionTransactionEntity]
       )
     }
   }

@@ -6,29 +6,52 @@ import io.wonder.soft.retail.domain.workflow.model.{ActionTransactions, Workflow
 import scalikejdbc._
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowActionConditionEntity
 import io.wonder.soft.retail.domain.example.craft.entity.CraftLineActionEntity
-import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
+import io.wonder.soft.retail.domain.workflow.factory.{ActionTransactionFactory, WorkflowFactory}
 
 class ActionTransactionQueryProcessor {
 
   val atc = ActionTransactions.column
+  val at = ActionTransactions.syntax("at")
 
   val wac = WorkflowActionConditions.syntax("wac")
   val wt = WorkflowTransitions.syntax("wt")
   val cla = CraftLineActions.syntax("cla")
 
   val subWac = SubQuery.syntax("subwac").include(wac)
+  val subAt = SubQuery.syntax("subat").include(at)
 
   import CraftLineActionEntity._
   import ActionTransactionEntity._
   import WorkflowActionConditionEntity._
 
-  def findAllByTransactionId(transactionId: String, actionId: Int): List[ActionTransactionEntity] =
+  def findAllByActionId(transactionId: String, actionId: Int): List[ActionTransactionEntity] =
     ActionTransactions
       .findAllBy(
         sqls.eq(atc.transactionId, transactionId)
           .and.eq(atc.actionId, actionId)
           .and.ne(atc.isReverted, true))
       .map(t => t)
+
+  def findByTransitionAndTransactionId(transactionId: String, transitionId: Int): List[ActionTransactionEntity] = {
+    (DB localTx { implicit session =>
+      withSQL {
+        select.all(wac, subAt).from(WorkflowActionConditions as wac)
+          .leftJoin(
+            { select.all(at).from(ActionTransactions as at)
+              .where(sqls.eq(at.transactionId, transactionId))
+            }.as(subAt)
+          )
+          .on(wac.actionId, subAt(at).actionId)
+          .where(
+            sqls.eq(wac.transitionId, transitionId)
+          )
+      }.map { res =>
+        ( WorkflowActionConditions(wac)(res), res.intOpt(subAt(at).resultName.stepId)  )
+      }.list.apply
+    }).map{ case (condition, maybeStepId) =>
+      ActionTransactionFactory.buildByAction(condition, maybeStepId, transactionId)
+    }
+  }
 
   def findByTransitionId(actionId: Int, transitionId: Int): Option[WorkflowActionConditionEntity] = {
     WorkflowActionConditions
