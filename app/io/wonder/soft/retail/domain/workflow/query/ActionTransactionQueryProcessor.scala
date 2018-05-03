@@ -30,6 +30,14 @@ class ActionTransactionQueryProcessor {
           .and.ne(atc.isReverted, true))
       .map(t => t)
 
+  def findByTransitionId(actionId: Int, transitionId: Int): Option[WorkflowActionConditionEntity] = {
+    WorkflowActionConditions
+      .findBy(
+        sqls.eq(wac.actionId, actionId)
+          .and.eq(wac.transitionId, transitionId)
+      ).map(t => t)
+  }
+
   def searchCraftLineActions(workflowId: Int, transitionId: Int): List[WorkflowActionConditionEntity] = {
     (DB localTx { implicit session =>
       withSQL {

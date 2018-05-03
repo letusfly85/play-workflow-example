@@ -16,7 +16,7 @@
               <div v-for="condition in transition.conditions" v-bind:key="condition.name">
                 {{ index.toString() + '_' + condition.action_id.toString() }}
                 <b-form-checkbox :id="index.toString() + '_' + condition.action_id.toString()"
-                                 v-model="condition.checked" value=true unchecked-value=false>
+                                 v-model="condition.is_activate">
                   {{ condition.name }}
                 </b-form-checkbox>
               </div>
@@ -85,9 +85,7 @@ export default {
       let self = this
       let targetPath = '/api/workflow/craft-conditions/' + this.$store.state.workflowId + '/' + tran.id
       ApiClient.search(targetPath, (response) => {
-        console.log(response)
         self.transitions[index].conditions = response.data.map(function (record) {
-          record.checked = false
           return record
         })
       }, (error) => {
@@ -104,7 +102,17 @@ export default {
       modal.show()
     },
     saveCondition: function (tran, index) {
-      // todo implement post action condition record
+      let targetPath = '/api/workflow/craft-conditions/' + this.$store.state.workflowId + '/' + tran.id
+      let params = tran.conditions.map(function (data) {
+        data.is_activate = Boolean(data.is_activate)
+        return data
+      })
+      console.log(params)
+      ApiClient.create(targetPath, params, (response) => {
+        console.log(response)
+      }, (error) => {
+        console.log(error)
+      })
       console.log(tran)
     },
     toggleChange: function (toggle) {

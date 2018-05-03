@@ -56,6 +56,14 @@ class WorkflowActionConditionRepository extends Repository[WorkflowActionConditi
     }
   }
 
-  override def destroy(id: Int): Option[WorkflowActionConditionEntity] = None
+  override def destroy(id: Int): Option[WorkflowActionConditionEntity] = {
+    WorkflowActionConditions.find(id) match {
+      case Some(condition) =>
+        condition.destroy()
+        Some(condition)
+
+      case None => None
+    }
+  }
 
 }

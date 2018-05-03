@@ -3,7 +3,7 @@ package io.wonder.soft.retail.application.workflow.controller
 import io.wonder.soft.retail.application.example.craft.service.CraftLineActionService
 import javax.inject._
 import io.wonder.soft.retail.application.workflow.service.{WorkflowConditionService, WorkflowService}
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowActionConditionEntity, WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.application.helper.JsResultHelper
 import play.api.Logger
 import play.api.libs.json._
@@ -135,6 +135,23 @@ class WorkflowController @Inject()
   def listCraftLineConditions(workflowId: String, transitionId: String) = Action { implicit request =>
     val result = conditionService.searchCraftLineActions(workflowId.toInt, transitionId.toInt)
     Ok(Json.toJson(result))
+  }
+
+  def saveActionConditions(workflowId: String, transitionId: String) = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("json parameter is wrong")).right
+        conditionEntities <- Json.fromJson[List[WorkflowActionConditionEntity]](json).right
+        entity <- conditionService.saveActionConditions(conditionEntities).right
+      } yield entity
+
+    } match {
+      case Success(either) => either match {
+        case Right(transitionEntity) => Created(Json.toJson(transitionEntity))
+        case Left(e) => InternalServerError(JsObject.empty)
+      }
+      case Failure(_) => InternalServerError(JsObject.empty)
+    }
   }
 
   // TODO

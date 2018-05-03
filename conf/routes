@@ -45,6 +45,8 @@ GET     /api/workflow/craft-actions       io.wonder.soft.retail.application.work
 
 GET     /api/workflow/craft-conditions/:workflowId/:transitionId   io.wonder.soft.retail.application.workflow.controller.WorkflowController.listCraftLineConditions(workflowId: String, transitionId: String)
 
+POST    /api/workflow/craft-conditions/:workflowId/:transitionId   io.wonder.soft.retail.application.workflow.controller.WorkflowController.saveActionConditions(workflowId: String, transitionId: String)
+
 ################################################################################
 ###
 ### Example Application REST PATH ######

@@ -9,20 +9,47 @@ import javax.inject.Inject
 
 class WorkflowConditionService @Inject()
   (actionQuery: ActionTransactionQueryProcessor,
-    actionConditionRepository: WorkflowActionConditionRepository)
+   actionRepository: WorkflowActionConditionRepository)
   extends ApplicationService {
 
   def createActionCondition(actionTransitionEntity: WorkflowActionTransitionEntity): Either[Exception, WorkflowActionConditionEntity] = {
     val condition = WorkflowFactory.buildConditionEntity(actionTransitionEntity)
-    actionConditionRepository.create(condition)
+    actionRepository.create(condition)
   }
 
   def deleteActionCondition(id: Int) = {
-    actionConditionRepository.destroy(id)
+    actionRepository.destroy(id)
   }
 
   def searchCraftLineActions(workflowId: Int, transitionId: Int): List[WorkflowActionConditionEntity] = {
     actionQuery.searchCraftLineActions(workflowId, transitionId)
+  }
+
+  def saveActionConditions(actionConditions: List[WorkflowActionConditionEntity]): Either[Exception, List[WorkflowActionConditionEntity]] = {
+    val result = actionConditions.foldLeft(List.empty[WorkflowActionConditionEntity]) { case (acc, actionCondition) =>
+      actionQuery.findByTransitionId(actionCondition.actionId, actionCondition.transitionId) match {
+        case None if actionCondition.isActivate =>
+          actionRepository.create(actionCondition) match {
+            case Right(entity) => entity :: acc
+            case Left(exception) => acc
+          }
+
+        case Some(_) if actionCondition.isActivate =>
+          actionRepository.update(actionCondition) match {
+            case Right(entity) => entity :: acc
+            case Left(exception) => acc
+          }
+
+        case Some(entity) =>
+          actionRepository.destroy(entity.id)
+          acc
+
+        case _ =>
+          acc
+      }
+    }
+
+    Right(result)
   }
 
 }
