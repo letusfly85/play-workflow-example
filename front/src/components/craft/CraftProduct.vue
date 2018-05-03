@@ -78,7 +78,7 @@ export default {
         console.log(self.craftActions)
         console.log(action)
         console.log(self.craftActions[action.action_id].name)
-        return '[ ' + self.craftActions[action.action_id].name + ' ]'
+        return '[ ' + self.craftActions.filter(x => x.id === action.action_id)[0].name + ' ]'
       })
       return notFinishedNames.join(',') + ' が完了していません'
     },
