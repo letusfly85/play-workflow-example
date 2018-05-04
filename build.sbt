@@ -6,7 +6,7 @@ val _version = "3.0.2"
 
 version := s"${_version}-SNAPSHOT"
 
-lazy val `simple_workflow` = (project in file(".")).enablePlugins(PlayScala, ScalikejdbcPlugin)
+lazy val `retail-workflow` = (project in file(".")).enablePlugins(PlayScala, ScalikejdbcPlugin, FlywayPlugin)
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
@@ -19,6 +19,7 @@ scalaVersion := "2.12.6"
 libraryDependencies ++= {
   val silhouetteVersion = "5.0.3"
   val scalikeJDBCV = "3.2.3"
+  val playVersion = "2.6.13"
   Seq(
     jdbc,
     ehcache,
@@ -34,10 +35,10 @@ libraryDependencies ++= {
     "com.mohiva" %% "play-silhouette-testkit" % silhouetteVersion,
 
     //webjar dependencies
-    "org.webjars" %% "webjars-play" % "2.6.1",
-    "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery"),
-    "org.webjars" % "jquery" % "3.2.1",
-    "com.adrianhurt" %% "play-bootstrap" % "1.2-P26-B3",
+    // "org.webjars" %% "webjars-play" % "2.6.1",
+    // "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery"),
+    // "org.webjars" % "jquery" % "3.2.1",
+    // "com.adrianhurt" %% "play-bootstrap" % "1.2-P26-B3",
 
     //injection dependencies
     "net.codingwell" %% "scala-guice" % "4.1.0",
@@ -48,9 +49,9 @@ libraryDependencies ++= {
     "org.scalikejdbc" %% "scalikejdbc"                     % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-config"              % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-joda-time"           % scalikeJDBCV,
-    "org.scalikejdbc" %% "scalikejdbc-play-initializer"    % "2.6.0-scalikejdbc-3.0",
+    "org.scalikejdbc" %% "scalikejdbc-play-initializer"    % "2.6.0-scalikejdbc-3.2",
     "org.scalikejdbc" %% "scalikejdbc-test" % scalikeJDBCV % Test,
-    "mysql" % "mysql-connector-java" % "5.1.33",
+    "mysql" % "mysql-connector-java" % "5.1.46",
 
     "com.iheart" %% "ficus" % "1.4.1",
     "com.typesafe.play" %% "play-mailer" % "6.0.1",
@@ -59,7 +60,7 @@ libraryDependencies ++= {
 
     "org.typelevel" %% "cats-core" % "1.0.1",
 
-    "com.typesafe.play" %% "play-specs2" % "2.6.7" % Test,
+    "com.typesafe.play" %% "play-specs2" % playVersion % Test,
     "org.specs2" %% "specs2" % "2.5" % Test
   )
 }
