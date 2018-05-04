@@ -1,6 +1,5 @@
 package io.wonder.soft.retail.domain.workflow.repository
 
-import io.wonder.soft.retail.domain.Repository
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowDefinitionEntity
 import io.wonder.soft.retail.domain.workflow.model.WorkflowDefinitions
 import io.wonder.soft.retail.domain.Repository
