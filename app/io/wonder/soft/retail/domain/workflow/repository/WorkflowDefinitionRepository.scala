@@ -13,14 +13,7 @@ class WorkflowDefinitionRepository extends Repository[WorkflowDefinitionEntity] 
   val wsc = WorkflowDefinitions.column
 
   override def find(id: Int): Option[WorkflowDefinitionEntity] = {
-    val maybeDefinitions = WorkflowDefinitions.find(id)
-    maybeDefinitions.flatMap[WorkflowDefinitionEntity](schemes => Some(schemes))
-  }
-
-  def findStatusId(workflowId: Int): Option[Int] = {
-    WorkflowDefinitions.findBy(
-      sqls.eq(WorkflowDefinitions.column.workflowId, workflowId)).map(scheme => scheme.statusId
-    )
+    WorkflowDefinitions.find(id).map(definitions => definitions)
   }
 
   override def create(entity: WorkflowDefinitionEntity): Either[Exception, WorkflowDefinitionEntity] = {
