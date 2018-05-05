@@ -17,16 +17,19 @@ class UserTransaction @Inject()
    craftLineQueryProcessor: CraftLineQueryProcessor
   )
 {
+  val orderServiceId: Int = 0
+  val craftServiceId: Int = 3
+  val serviceMap = Map(orderServiceId -> 'order, craftServiceId -> 3)
 
   def updateUserRepository(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
-    currentStateEntity.serviceId match {
-      case 0 =>
+    serviceMap.get(currentStateEntity.serviceId) match {
+      case Some('order) =>
         updateOrderRepository(define, currentStateEntity) match {
           case Right(_) => Right(currentStateEntity)
           case Left(exception) => Left(new Exception(exception))
         }
 
-      case 3 =>
+      case Some('craft) =>
         updateCraftLineRepository(define, currentStateEntity) match {
           case Right(_) => Right(currentStateEntity)
           case Left(exception) => Left(new Exception(exception))
