@@ -19,7 +19,7 @@ class UserTransaction @Inject()
 {
   val orderServiceId: Int = 0
   val craftServiceId: Int = 3
-  val serviceMap = Map(orderServiceId -> 'order, craftServiceId -> 3)
+  val serviceMap = Map(orderServiceId -> 'order, craftServiceId -> 'craft)
 
   def updateUserRepository(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     serviceMap.get(currentStateEntity.serviceId) match {
