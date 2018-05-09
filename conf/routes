@@ -21,6 +21,8 @@ PUT     /api/workflow/statuses            io.wonder.soft.retail.application.work
 
 GET     /api/workflow/summaries           io.wonder.soft.retail.application.workflow.controller.WorkflowController.listSummary
 
+POST    /api/workflow/summaries           io.wonder.soft.retail.application.workflow.controller.WorkflowController.createSummary
+
 GET     /api/workflow/definitions/:id     io.wonder.soft.retail.application.workflow.controller.WorkflowController.findDefinition(id: String)
 
 GET     /api/workflow/definitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.listDefinition

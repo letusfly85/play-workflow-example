@@ -6,12 +6,15 @@ import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQueryProcessor
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository, WorkflowTransitionRepository}
 import io.wonder.soft.retail.application.ApplicationService
+import repository.WorkflowDefinitionSummaryRepository
 
 class WorkflowService @Inject()
-  (workflowStatusRepository: WorkflowStatusRepository,
+  (summaryRepository: WorkflowDefinitionSummaryRepository,
+   workflowDefinitionRepository: WorkflowDefinitionRepository,
+   workflowStatusRepository: WorkflowStatusRepository,
    workflowTransitionRepository: WorkflowTransitionRepository,
-   queryProcessor: WorkflowQueryProcessor,
-   workflowDefinitionRepository: WorkflowDefinitionRepository)
+   queryProcessor: WorkflowQueryProcessor
+   )
   extends ApplicationService {
 
   def listStatus: List[WorkflowStatusEntity] = {
@@ -30,6 +33,10 @@ class WorkflowService @Inject()
 
   def listSummary: List[WorkflowDefinitionSummaryEntity] = {
     queryProcessor.searchSummaries
+  }
+
+  def createSummary(entity: WorkflowDefinitionSummaryEntity): Either[Exception, WorkflowDefinitionSummaryEntity] = {
+    summaryRepository.create(entity)
   }
 
   def findDefinition(id: Int): Either[Exception, WorkflowDefinitionEntity] = {

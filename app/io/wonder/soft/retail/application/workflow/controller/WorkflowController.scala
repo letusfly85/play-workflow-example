@@ -3,7 +3,7 @@ package io.wonder.soft.retail.application.workflow.controller
 import io.wonder.soft.retail.application.example.craft.service.CraftLineActionService
 import javax.inject._
 import io.wonder.soft.retail.application.workflow.service.{WorkflowConditionService, WorkflowService}
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowActionConditionEntity, WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity._
 import io.wonder.soft.retail.application.helper.JsResultHelper
 import play.api.Logger
 import play.api.libs.json._
@@ -59,6 +59,27 @@ class WorkflowController @Inject()
 
   def listSummary = Action {
     Ok(Json.toJson(service.listSummary))
+  }
+
+  def createSummary = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        summaryEntity <- Json.fromJson[WorkflowDefinitionSummaryEntity](json).right
+        entity <- service.createSummary(summaryEntity).right
+      } yield entity
+
+    } match {
+      case Success(either) => either match {
+        case Right(summaryEntity) => Created(Json.toJson(summaryEntity))
+        case Left(e) =>
+          Logger.info(e.toString)
+          InternalServerError(JsObject.empty)
+      }
+      case Failure(e) =>
+        Logger.info(e.getMessage)
+        InternalServerError(JsObject.empty)
+    }
   }
 
   def findDefinition(id: String) = Action {
