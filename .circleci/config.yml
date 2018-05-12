@@ -5,7 +5,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
       - image: circleci/mysql:5.6.37
         environment:
-          MYSQL_DATABASE: root
+          MYSQL_DATABASE: workflow_example
           MYSQL_ROOT_PASSWORD: password
 
     working_directory: ~/app
@@ -35,4 +35,8 @@ jobs:
             - "project/target"
           key: v1-dependencies--{{ checksum "build.sbt" }}
 
-      - run: sbt flywayMigrate test
+      - run:
+          name: sbt test
+          command: |
+             cp conf/database.flyway.test.conf conf/database.flyway.conf
+             sbt flywayMigrate test
