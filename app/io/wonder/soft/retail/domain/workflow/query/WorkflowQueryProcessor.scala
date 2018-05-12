@@ -24,6 +24,10 @@ class WorkflowQueryProcessor {
     WorkflowDefinitionSummaries.findAll().map(s => s)
   }
 
+  def findMaxSummaryWorkflowId: Int = {
+    WorkflowDefinitionSummaries.findAll.maxBy(ws => ws.workflowId).workflowId
+  }
+
   def searchDefinitions(workflowId: Int): List[WorkflowDefinitionEntity] = {
     (DB localTx { implicit session =>
       withSQL {

@@ -10,7 +10,7 @@ import scala.util.{Failure, Success, Try}
 class WorkflowDefinitionSummaryRepository extends Repository[WorkflowDefinitionSummaryEntity] {
   import WorkflowDefinitionSummaryEntity._
 
-  val wds = WorkflowDefinitionSummaries.syntax("wds")
+  val wds = WorkflowDefinitionSummaries.column
 
   override def find(id: Int): Option[WorkflowDefinitionSummaryEntity] = {
     WorkflowDefinitionSummaries.find(id) match {

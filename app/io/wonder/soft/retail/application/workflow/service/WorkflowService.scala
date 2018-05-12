@@ -36,7 +36,8 @@ class WorkflowService @Inject()
   }
 
   def createSummary(entity: WorkflowDefinitionSummaryEntity): Either[Exception, WorkflowDefinitionSummaryEntity] = {
-    summaryRepository.create(entity)
+    val nextWorkflowId = queryProcessor.findMaxSummaryWorkflowId + 1
+    summaryRepository.create(entity.copy(workflowId = nextWorkflowId))
   }
 
   def findDefinition(id: Int): Either[Exception, WorkflowDefinitionEntity] = {
