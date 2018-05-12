@@ -3,6 +3,10 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:8-jdk
+      - image: circleci/mysql:5.6.37
+        environment:
+          MYSQL_DATABASE: root
+          MYSQL_ROOT_PASSWORD: password
 
     working_directory: ~/app
 
@@ -31,4 +35,4 @@ jobs:
             - "project/target"
           key: v1-dependencies--{{ checksum "build.sbt" }}
 
-      - run: sbt test
+      - run: sbt flywayMigrate test
