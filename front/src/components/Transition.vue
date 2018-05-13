@@ -48,7 +48,7 @@
 import ApiClient from './utils/ApiClient'
 import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
-// import AppConst from './utils/AppConst'
+// https://bl.ocks.org/heybignick/3faf257bbbbc7743bb72310d03b86ee8
 import * as d3 from 'd3v4'
 
 export default {
@@ -94,11 +94,6 @@ export default {
     },
     addCondition: function (tran, index) {
       let modal = this.$refs['transitionRef' + tran.id][0]
-      /*
-      if (this.$store.state.workflowId === AppConst.data().craftExampleWorkflowId) {
-        modal.$emit('reloadModal', this.transitions[index].conditions)
-      }
-      */
       modal.show()
     },
     saveCondition: function (tran, index) {
