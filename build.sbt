@@ -34,12 +34,6 @@ libraryDependencies ++= {
     "com.mohiva" %% "play-silhouette-crypto-jca" % silhouetteVersion,
     "com.mohiva" %% "play-silhouette-testkit" % silhouetteVersion,
 
-    //webjar dependencies
-    // "org.webjars" %% "webjars-play" % "2.6.1",
-    // "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery"),
-    // "org.webjars" % "jquery" % "3.2.1",
-    // "com.adrianhurt" %% "play-bootstrap" % "1.2-P26-B3",
-
     //injection dependencies
     "net.codingwell" %% "scala-guice" % "4.1.0",
     "com.iheart" %% "ficus" % "1.4.1",
