@@ -55,7 +55,12 @@ libraryDependencies ++= {
     "org.typelevel" %% "cats-core" % "1.0.1",
 
     "com.typesafe.play" %% "play-specs2" % playVersion % Test,
-    "org.specs2" %% "specs2" % "2.5" % Test
+    "org.specs2" %% "specs2" % "2.5" % Test,
+    "org.specs2" %% "specs2-mock" % "4.2.0" % Test,
+    "org.mockito" % "mockito-core" % "2.18.3" % Test,
+
+    //ScalaCheck
+    "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
   )
 }
 
