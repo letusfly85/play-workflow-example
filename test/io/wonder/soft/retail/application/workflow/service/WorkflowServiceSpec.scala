@@ -37,6 +37,24 @@ class WorkflowServiceSpec extends Specification with Mockito {
       service.listStatus.nonEmpty must equalTo(true)
     }
 
+    "createStatus" in {
+      workflowStatusRepository.create(any[StatusEntity]) answers { _ match {case status: StatusEntity => Right(status)} }
+
+      val service = new WorkflowService(
+        summaryRepository = summaryRepository,
+        workflowDefinitionRepository = workflowDefinitionRepository,
+        workflowStatusRepository = workflowStatusRepository,
+        workflowTransitionRepository = workflowTransitionRepository,
+        queryProcessor = queryProcessor
+      )
+
+      val either = service.createStatus(StatusEntity(4, "test"))
+      either.isRight must equalTo(true)
+      either must beRight.like {
+        case status =>
+          status.id must beEqualTo(4)
+      }
+    }
   }
 
 }
