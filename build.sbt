@@ -25,7 +25,10 @@ libraryDependencies ++= {
     ehcache,
     ws,
     specs2 % Test,
-    guice,
+    //guice,
+
+    //macwire
+    "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided",
 
     //silhouette dependencies
     "com.mohiva" %% "play-silhouette" % silhouetteVersion,
