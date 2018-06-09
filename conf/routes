@@ -13,15 +13,7 @@
 
 # GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.listStatus
-
-POST    /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.createStatus
-
-PUT     /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.updateStatus
-
-GET     /api/workflow/summaries           io.wonder.soft.retail.application.workflow.controller.WorkflowController.listSummary
-
-POST    /api/workflow/summaries           io.wonder.soft.retail.application.workflow.controller.WorkflowController.createSummary
+->      /api/workflow                     io.wonder.soft.retail.application.workflow.WorkflowRouter
 
 GET     /api/workflow/definitions/:id     io.wonder.soft.retail.application.workflow.controller.WorkflowController.findDefinition(id: String)
 
