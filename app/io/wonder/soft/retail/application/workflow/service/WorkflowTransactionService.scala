@@ -97,8 +97,7 @@ class WorkflowTransactionService @Inject()(
     userTransaction.updateAppTransaction(define, currentStateEntity)
   }
 
-  private def recordTransaction(entity: WorkflowTransactionEntity)
-    : Either[Exception, WorkflowTransactionEntity] = {
+  private def recordTransaction(entity: WorkflowTransactionEntity): Either[Exception, WorkflowTransactionEntity] = {
     //flush to database
     transactionRepository.create(entity)
   }
