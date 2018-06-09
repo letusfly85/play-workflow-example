@@ -4,7 +4,7 @@ import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity,
 import io.wonder.soft.retail.domain.workflow.model.{WorkflowCurrentStates, WorkflowTransactions}
 import scalikejdbc._
 
-class WorkflowTransactionQueryProcessor {
+class WorkflowTransactionQuery {
 
   val wcsc = WorkflowCurrentStates.column
   val wtc = WorkflowTransactions.column

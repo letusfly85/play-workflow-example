@@ -10,7 +10,7 @@ import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity,
 import javax.inject.Inject
 import play.api.Logger
 
-class UserTransaction @Inject()
+class ApplicationTransactionService @Inject()
   (orderRepository: OrderRepository,
    orderQueryProcessor: OrderQueryProcessor,
    craftLinesRepository: CraftLineRepository,

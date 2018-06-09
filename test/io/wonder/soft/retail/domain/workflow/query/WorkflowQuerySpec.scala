@@ -9,10 +9,10 @@ import org.specs2.mutable.{BeforeAfter, Specification}
 import scalikejdbc._
 import scalikejdbc.config.DBs
 
-class WorkflowQueryProcessorSpec extends Specification with Mockito {
+class WorkflowQuerySpec extends Specification with Mockito {
   DBs.setupAll()
 
-  val query = new WorkflowQueryProcessor
+  val query = new WorkflowQuery
 
   trait AfterScope extends BeforeAfter {
     val testWorkflowId = 99

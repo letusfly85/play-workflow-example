@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.application.workflow.service
 
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowStatusEntity => StatusEntity}
-import io.wonder.soft.retail.domain.workflow.query.WorkflowQueryProcessor
+import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository, WorkflowTransitionRepository}
 import repository.WorkflowDefinitionSummaryRepository
 import org.specs2.mutable.Specification
@@ -15,7 +15,7 @@ class WorkflowServiceSpec extends Specification with Mockito {
   val workflowDefinitionRepository = mock[WorkflowDefinitionRepository]
   val workflowStatusRepository = mock[WorkflowStatusRepository]
   val workflowTransitionRepository = mock[WorkflowTransitionRepository]
-  val queryProcessor = mock[WorkflowQueryProcessor]
+  val queryProcessor = mock[WorkflowQuery]
 
   // define mock functions
   queryProcessor.searchStatuses() returns List(StatusEntity(1, "test"), StatusEntity(2, "test"), StatusEntity(3, "test"))
@@ -43,7 +43,7 @@ object WorkflowServiceProperty extends Properties("WorkflowService") with Mockit
   val workflowDefinitionRepository = mock[WorkflowDefinitionRepository]
   val workflowStatusRepository = mock[WorkflowStatusRepository]
   val workflowTransitionRepository = mock[WorkflowTransitionRepository]
-  val queryProcessor = mock[WorkflowQueryProcessor]
+  val queryProcessor = mock[WorkflowQuery]
 
   // define mock functions
   queryProcessor.searchStatuses() returns List(StatusEntity(1, "test"), StatusEntity(2, "test"), StatusEntity(3, "test"))

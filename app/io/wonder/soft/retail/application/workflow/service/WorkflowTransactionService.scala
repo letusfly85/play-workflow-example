@@ -2,23 +2,23 @@ package io.wonder.soft.retail.application.workflow.service
 
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowUserTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowTransactionFactory
-import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQueryProcessor, WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
+import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQuery, WorkflowQuery, WorkflowTransactionQuery}
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowTransactionRepository}
-import io.wonder.soft.retail.domain.workflow.service.UserTransaction
+import io.wonder.soft.retail.domain.workflow.service.ApplicationTransactionService
 import javax.inject.Inject
 import play.api.Logger
 
 import scala.util.{Failure, Success, Try}
 
-class WorkflowTransactionService @Inject()(
-    userTransaction: UserTransaction,
-    defineQuery: WorkflowQueryProcessor,
-    transactionQuery: WorkflowTransactionQueryProcessor,
-    transactionRepository: WorkflowTransactionRepository,
-    actionProcessor: ActionTransactionQueryProcessor,
-    currentStateRepository: WorkflowCurrentStateRepository)
+class WorkflowTransactionService @Inject() (
+  appTransactionService: ApplicationTransactionService,
+  defineQuery: WorkflowQuery,
+  transactionQuery: WorkflowTransactionQuery,
+  transactionRepository: WorkflowTransactionRepository,
+  actionProcessor: ActionTransactionQuery,
+  currentStateRepository: WorkflowCurrentStateRepository)
     extends ApplicationService {
 
   def openTransaction(userId: String, workflowId: Int): Either[Exception, WorkflowTransactionEntity] = {
@@ -94,7 +94,7 @@ class WorkflowTransactionService @Inject()(
 
   private def proceedAppTransaction(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     val define = findDefinitionByStepId(currentStateEntity.workflowId, currentStateEntity.currentStepId).get
-    userTransaction.updateAppTransaction(define, currentStateEntity)
+    appTransactionService.updateAppTransaction(define, currentStateEntity)
   }
 
   private def recordTransaction(entity: WorkflowTransactionEntity): Either[Exception, WorkflowTransactionEntity] = {

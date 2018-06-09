@@ -8,7 +8,7 @@ import io.wonder.soft.retail.domain.workflow.entity.WorkflowActionConditionEntit
 import io.wonder.soft.retail.domain.example.craft.entity.CraftLineActionEntity
 import io.wonder.soft.retail.domain.workflow.factory.{ActionTransactionFactory, WorkflowFactory}
 
-class ActionTransactionQueryProcessor {
+class ActionTransactionQuery {
 
   val atc = ActionTransactions.column
   val at = ActionTransactions.syntax("at")

@@ -3,12 +3,12 @@ package io.wonder.soft.retail.application.workflow.service
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowActionConditionEntity, WorkflowActionTransitionEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
-import io.wonder.soft.retail.domain.workflow.query.ActionTransactionQueryProcessor
+import io.wonder.soft.retail.domain.workflow.query.ActionTransactionQuery
 import io.wonder.soft.retail.domain.workflow.repository.WorkflowActionConditionRepository
 import javax.inject.Inject
 
 class WorkflowConditionService @Inject()
-  (actionQuery: ActionTransactionQueryProcessor,
+  (actionQuery: ActionTransactionQuery,
    actionRepository: WorkflowActionConditionRepository)
   extends ApplicationService {
 

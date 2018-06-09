@@ -6,7 +6,7 @@ import io.wonder.soft.retail.domain.workflow.entity.{WorkflowStatusEntity, Workf
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import scalikejdbc._
 
-class WorkflowQueryProcessor {
+class WorkflowQuery {
   import WorkflowStatusEntity._
   import WorkflowDefinitionEntity._
 

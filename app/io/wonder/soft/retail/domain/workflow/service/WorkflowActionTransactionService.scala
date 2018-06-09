@@ -2,13 +2,13 @@ package io.wonder.soft.retail.domain.workflow.service
 
 import io.wonder.soft.retail.domain.workflow.entity.ActionTransactionEntity
 import io.wonder.soft.retail.domain.workflow.factory.ActionTransactionFactory
-import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQueryProcessor, WorkflowTransactionQueryProcessor}
+import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQuery, WorkflowTransactionQuery}
 import io.wonder.soft.retail.domain.workflow.repository.ActionTransactionRepository
 import javax.inject.Inject
 
 class WorkflowActionTransactionService @Inject()
-  (transactionQuery: WorkflowTransactionQueryProcessor,
-   actionQuery: ActionTransactionQueryProcessor,
+  (transactionQuery: WorkflowTransactionQuery,
+   actionQuery: ActionTransactionQuery,
    actionRepository: ActionTransactionRepository) {
 
   def saveActionTransaction(transactionId: String, actionId: Int): Either[Exception, ActionTransactionEntity] = {
