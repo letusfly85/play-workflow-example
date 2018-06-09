@@ -25,9 +25,9 @@ class OrderService @Inject()
     orderRepository.find(orderEntity.id) match {
       case Some(order) if order.transactionId.getOrElse("") == "" =>
         Logger.info(s"find not yet initialized order entity ${orderEntity.toString}")
-        transactionService.initialize(userId = "1", workflowId = orderExampleWorkflowId) match {
+        transactionService.openTransaction(userId = "1", workflowId = orderExampleWorkflowId) match {
           case Right(transaction) =>
-            val define = transactionService.showDefine(workflowId = orderExampleWorkflowId, transaction.stepId).get
+            val define = transactionService.findDefinitionByStepId(workflowId = orderExampleWorkflowId, transaction.stepId).get
             val newOrder = order.copy(
               transactionId = Some(transaction.transactionId),
               statusId = Some(define.stepId.toString),

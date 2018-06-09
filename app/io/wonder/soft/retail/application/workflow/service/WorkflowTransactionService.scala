@@ -3,7 +3,6 @@ package io.wonder.soft.retail.application.workflow.service
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowUserTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowTransactionFactory
 import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQueryProcessor, WorkflowQueryProcessor, WorkflowTransactionQueryProcessor}
-import io.wonder.soft.retail.domain.workflow.repository.WorkflowDefinitionRepository
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowTransactionRepository}
@@ -16,16 +15,13 @@ import scala.util.{Failure, Success, Try}
 class WorkflowTransactionService @Inject()(
     userTransaction: UserTransaction,
     defineQuery: WorkflowQueryProcessor,
-    definitionRepository: WorkflowDefinitionRepository,
     transactionQuery: WorkflowTransactionQueryProcessor,
     transactionRepository: WorkflowTransactionRepository,
     actionProcessor: ActionTransactionQueryProcessor,
     currentStateRepository: WorkflowCurrentStateRepository)
     extends ApplicationService {
 
-  def initialize(
-      userId: String,
-      workflowId: Int): Either[Exception, WorkflowTransactionEntity] = {
+  def openTransaction(userId: String, workflowId: Int): Either[Exception, WorkflowTransactionEntity] = {
     //find workflow definition
     val defines = defineQuery.searchDefinitions(workflowId)
     val maybeInitialDefine = defines.filter(d => d.isFirstStep).headOption
@@ -35,19 +31,26 @@ class WorkflowTransactionService @Inject()(
         val transactionId = java.util.UUID.randomUUID().toString
 
         val serviceId =
-        if (workflowId == 3) 3
-        else 0
-        val currentState = WorkflowTransactionFactory.buildCurrentState(
-          userId,
-          transactionId,
-          define, serviceId)
+          if (workflowId == 3) 3
+          else 0
+
+        val currentState =
+          WorkflowTransactionFactory.buildCurrentState(
+            userId,
+            transactionId,
+            define,
+            serviceId)
+
         currentStateRepository.create(currentState)
 
         val transaction =
-          WorkflowTransactionFactory.buildTransaction(userId,
-                                                      transactionId,
-                                                      define)
+          WorkflowTransactionFactory.buildTransaction(
+            userId,
+            transactionId,
+            define)
+
         val initialTransaction = transaction.copy(isInit = true)
+
         transactionRepository.create(initialTransaction)
 
       case None =>
@@ -57,27 +60,13 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  def showDefine(workflowId: Int, stepId: Int): Option[WorkflowDefinitionEntity] = {
+  def findDefinitionByStepId(workflowId: Int, stepId: Int): Option[WorkflowDefinitionEntity] = {
     defineQuery.findDefine(workflowId, stepId)
   }
 
-  def closeTransaction(currentState: WorkflowCurrentStateEntity,
-                       transition: WorkflowTransitionEntity)
-    : Either[Exception, WorkflowCurrentStateEntity] = {
-    Try {
-      WorkflowTransactionFactory.buildFinishedState(currentState, transition)
-    } match {
-      case Success(result)    => Right(result)
-      case Failure(exception) => Left(new Exception(exception))
-    }
-  }
-
-  def proceedState(transactionId: String,
-                   transition: WorkflowTransitionEntity)
-    : Either[Exception, WorkflowCurrentStateEntity] = {
+  def proceedState(transactionId: String, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     // build transaction entity from state and transition
     val maybeCurrentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
-
     maybeCurrentState match {
       case Some(currentState) =>
         Logger.info(currentState.toString)
@@ -94,7 +83,7 @@ class WorkflowTransactionService @Inject()(
         result.map{ currentStateEntity =>
           Logger.info(currentStateEntity.toString)
           currentStateRepository.update(currentStateEntity)
-          updateUserRepository(currentStateEntity)
+          proceedAppTransaction(currentStateEntity)
         }
         result
 
@@ -103,26 +92,32 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  /**
-    * update user workflow transaction results
-    *
-    * @param currentStateEntity
-    * @return
-    */
-  def updateUserRepository(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
-    val define = showDefine(currentStateEntity.workflowId, currentStateEntity.currentStepId).get
-    userTransaction.updateUserRepository(define, currentStateEntity)
+  private def proceedAppTransaction(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+    val define = findDefinitionByStepId(currentStateEntity.workflowId, currentStateEntity.currentStepId).get
+    userTransaction.updateAppTransaction(define, currentStateEntity)
   }
 
-  def recordTransaction(entity: WorkflowTransactionEntity)
+  private def recordTransaction(entity: WorkflowTransactionEntity)
     : Either[Exception, WorkflowTransactionEntity] = {
     //flush to database
     transactionRepository.create(entity)
   }
 
-  def generateNextState(currentState: WorkflowCurrentStateEntity,
-                        transition: WorkflowTransitionEntity)
-    : Either[Exception, WorkflowCurrentStateEntity] = {
+  private def closeTransaction(
+    currentState: WorkflowCurrentStateEntity,
+    transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+
+    Try {
+      WorkflowTransactionFactory.buildFinishedState(currentState, transition)
+    } match {
+      case Success(result)    => Right(result)
+      case Failure(exception) => Left(new Exception(exception))
+    }
+  }
+
+  private def generateNextState(
+    currentState: WorkflowCurrentStateEntity,
+    transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     Try {
       //todo validate whether state have next step or not
 
@@ -133,28 +128,9 @@ class WorkflowTransactionService @Inject()(
     }
   }
 
-  def isLast(workflowId: Int, stepId: Int): Either[Exception, Boolean] = {
-    val defines = defineQuery.searchDefinitions(workflowId)
-    val errorMessage = "there is no last step."
-    defines
-      .filter(d => d.stepId == stepId)
-      .headOption
-      .map(p => p.isLastStep)
-      .toRight(new RuntimeException(
-        s"{workflow_id: ${workflowId}, step_id: ${stepId}, message: ${errorMessage}"))
-  }
-
-  def isFinished(workflowId: Int, transactionId: String): Boolean = {
-    transactionQuery
-      .findFinishedTransaction(transactionId)
-      .map(t => t.isCompleted)
-      .getOrElse(false)
-  }
-
   def listTransition(workflowId: Int, transactionId: String): List[WorkflowUserTransitionEntity] = {
     val workflowTransitions = defineQuery.searchTransitions(workflowId)
     val currentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
-
 
     val userTransitions = WorkflowTransactionFactory.buildUserTransitions(currentState, workflowTransitions)
     userTransitions.map {userTransition =>

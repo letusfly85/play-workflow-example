@@ -21,7 +21,7 @@ class UserTransaction @Inject()
   val craftServiceId: Int = 3
   val serviceMap = Map(orderServiceId -> 'order, craftServiceId -> 'craft)
 
-  def updateUserRepository(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+  def updateAppTransaction(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     serviceMap.get(currentStateEntity.serviceId) match {
       case Some('order) =>
         updateOrderRepository(define, currentStateEntity) match {

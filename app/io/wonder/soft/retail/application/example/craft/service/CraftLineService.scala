@@ -22,9 +22,9 @@ class CraftLineService @Inject()
     craftLinesRepository.find(craftLineId.toInt) match {
       case Some(craftLine) if craftLine.transactionId.getOrElse("") == "" =>
         Logger.info(s"find not yet initialized craft entity ${craftLine.toString}")
-        transactionService.initialize(userId = "1", workflowId = craftExampleWorkflowId) match {
+        transactionService.openTransaction(userId = "1", workflowId = craftExampleWorkflowId) match {
           case Right(transaction) =>
-            val define = transactionService.showDefine(workflowId = craftExampleWorkflowId, transaction.stepId).get
+            val define = transactionService.findDefinitionByStepId(workflowId = craftExampleWorkflowId, transaction.stepId).get
             val newCraftLine = craftLine.copy(
               transactionId = Some(transaction.transactionId),
               statusId = define.stepId.toString,
