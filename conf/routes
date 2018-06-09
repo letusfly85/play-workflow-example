@@ -13,7 +13,9 @@
 
 # GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.listStatus
+->      /api/workflow                      io.wonder.soft.retail.application.workflow.WorkflowRouter
+
+# GET     /api/workflow/statuses             io.wonder.soft.retail.application.workflow.controller.WorkflowController.listStatus
 
 #POST    /api/workflow/statuses            io.wonder.soft.retail.application.workflow.controller.WorkflowController.createStatus
 #

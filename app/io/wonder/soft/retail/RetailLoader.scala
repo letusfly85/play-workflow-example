@@ -2,6 +2,7 @@ package io.wonder.soft.retail
 
 import play.filters.HttpFiltersComponents
 import com.softwaremill.macwire._
+import io.wonder.soft.retail.application.workflow.WorkflowRouter
 import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.mvc._
@@ -28,8 +29,13 @@ class RetailComponents(context: Context)
   DBs.setupAll()
 
   lazy val router: Router = {
-    // add the prefix string in local scope for the Routes constructor
     val prefix: String = "/"
-    wire[Routes]
+
+    lazy val workflowRouter: WorkflowRouter = wire[WorkflowRouter]
+    lazy val wiredRouter: Routes = wire[Routes]
+
+    lazy val router = wiredRouter.withPrefix(prefix)
+
+    router
   }
 }
