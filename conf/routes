@@ -15,20 +15,6 @@
 
 ->      /api/workflow                     io.wonder.soft.retail.application.workflow.WorkflowRouter
 
-GET     /api/workflow/definitions/:id     io.wonder.soft.retail.application.workflow.controller.WorkflowController.findDefinition(id: String)
-
-GET     /api/workflow/definitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.listDefinition
-
-POST    /api/workflow/definitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.createDefinition
-
-GET     /api/workflow/transitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.listTransition
-
-POST    /api/workflow/transitions         io.wonder.soft.retail.application.workflow.controller.WorkflowController.createTransition
-
-GET     /api/workflow-user-transitions    io.wonder.soft.retail.application.workflow.controller.WorkflowTransactionController.listTransition
-
-POST    /api/workflow-user-transactions   io.wonder.soft.retail.application.workflow.controller.WorkflowTransactionController.proceedState
-
 ################################################################################
 ###
 ### Example Application Action REST PATH ######
