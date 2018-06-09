@@ -1,6 +1,6 @@
 package io.wonder.soft.retail.application.workflow.service
 
-import javax.inject.Inject
+// import javax.inject.Inject
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowDefinitionSummaryEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQueryProcessor
@@ -8,6 +8,7 @@ import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepos
 import io.wonder.soft.retail.application.ApplicationService
 import repository.WorkflowDefinitionSummaryRepository
 
+/*
 class WorkflowService @Inject()
   (summaryRepository: WorkflowDefinitionSummaryRepository,
    workflowDefinitionRepository: WorkflowDefinitionRepository,
@@ -15,7 +16,14 @@ class WorkflowService @Inject()
    workflowTransitionRepository: WorkflowTransitionRepository,
    queryProcessor: WorkflowQueryProcessor
    )
-  extends ApplicationService {
+   */
+class WorkflowService
+(summaryRepository: WorkflowDefinitionSummaryRepository,
+ workflowDefinitionRepository: WorkflowDefinitionRepository,
+ workflowStatusRepository: WorkflowStatusRepository,
+ workflowTransitionRepository: WorkflowTransitionRepository,
+ queryProcessor: WorkflowQueryProcessor
+) extends ApplicationService {
 
   def listStatus: List[WorkflowStatusEntity] = {
     queryProcessor.searchStatuses

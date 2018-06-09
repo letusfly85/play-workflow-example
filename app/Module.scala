@@ -1,5 +1,4 @@
 import com.google.inject.AbstractModule
-import java.time.Clock
 
 import io.wonder.soft.retail.application.workflow.service.WorkflowService
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository}
@@ -19,10 +18,8 @@ class Module extends AbstractModule {
   override def configure() = {
     bind(classOf[WorkflowDefinitionRepository])
     bind(classOf[WorkflowStatusRepository])
-    bind(classOf[WorkflowService])
+    // bind(classOf[WorkflowService])
 
-    // Use the system clock as the default implementation of Clock
-    bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
   }
 
 }

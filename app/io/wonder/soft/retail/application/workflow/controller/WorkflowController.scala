@@ -11,8 +11,7 @@ import play.api.mvc._
 
 import scala.util.{Failure, Success, Try}
 
-@Singleton
-class WorkflowController @Inject()
+class WorkflowController
   (service: WorkflowService,
    conditionService: WorkflowConditionService,
    craftLineActionService: CraftLineActionService,
