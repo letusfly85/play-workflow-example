@@ -22,7 +22,6 @@ trait WorkflowService {
 
   def listTransition(workflowId: Int): List[WorkflowTransitionEntity]
 
-  //TODO implement
   def findTransition(workflowId: Int, fromStepId: Int, toStepId: Int): Either[Exception, WorkflowTransitionEntity]
 
   def createTransition(transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity]
