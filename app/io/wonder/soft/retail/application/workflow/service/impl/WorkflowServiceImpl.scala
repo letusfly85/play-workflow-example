@@ -4,16 +4,16 @@ import javax.inject.Inject
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowDefinitionSummaryEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository, WorkflowTransitionRepository}
+import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepositoryImpl, WorkflowStatusRepositoryImpl, WorkflowTransitionRepositoryImpl}
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.application.workflow.service.WorkflowService
-import repository.WorkflowDefinitionSummaryRepository
+import repository.WorkflowDefinitionSummaryRepositoryImpl
 
 class WorkflowServiceImpl @Inject()
-(summaryRepository: WorkflowDefinitionSummaryRepository,
- workflowDefinitionRepository: WorkflowDefinitionRepository,
- workflowStatusRepository: WorkflowStatusRepository,
- workflowTransitionRepository: WorkflowTransitionRepository,
+(summaryRepository: WorkflowDefinitionSummaryRepositoryImpl,
+ workflowDefinitionRepository: WorkflowDefinitionRepositoryImpl,
+ workflowStatusRepository: WorkflowStatusRepositoryImpl,
+ workflowTransitionRepository: WorkflowTransitionRepositoryImpl,
  queryProcessor: WorkflowQuery
 )
   extends ApplicationService with WorkflowService {

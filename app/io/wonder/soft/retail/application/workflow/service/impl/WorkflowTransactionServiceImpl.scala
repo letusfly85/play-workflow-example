@@ -6,7 +6,7 @@ import io.wonder.soft.retail.application.workflow.service.WorkflowTransactionSer
 import io.wonder.soft.retail.domain.workflow.entity._
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowTransactionFactory
 import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQuery, WorkflowQuery, WorkflowTransactionQuery}
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowCurrentStateRepository, WorkflowTransactionRepository}
+import io.wonder.soft.retail.domain.workflow.repository.{WorkflowCurrentStateRepositoryImpl, WorkflowTransactionRepositoryImpl}
 import io.wonder.soft.retail.domain.workflow.service.ApplicationTransactionService
 
 import javax.inject.Inject
@@ -15,12 +15,12 @@ import play.api.Logger
 import scala.util.{Failure, Success, Try}
 
 class WorkflowTransactionServiceImpl @Inject() (
-  appTransactionService: ApplicationTransactionService,
-  defineQuery: WorkflowQuery,
-  transactionQuery: WorkflowTransactionQuery,
-  transactionRepository: WorkflowTransactionRepository,
-  actionProcessor: ActionTransactionQuery,
-  currentStateRepository: WorkflowCurrentStateRepository)
+                                                 appTransactionService: ApplicationTransactionService,
+                                                 defineQuery: WorkflowQuery,
+                                                 transactionQuery: WorkflowTransactionQuery,
+                                                 transactionRepository: WorkflowTransactionRepositoryImpl,
+                                                 actionProcessor: ActionTransactionQuery,
+                                                 currentStateRepository: WorkflowCurrentStateRepositoryImpl)
     extends ApplicationService with WorkflowTransactionService {
 
   def openTransaction(userId: String, workflowId: Int): Either[Exception, WorkflowTransactionEntity] = {

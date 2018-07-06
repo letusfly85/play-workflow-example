@@ -1,52 +1,14 @@
 package io.wonder.soft.retail.domain.workflow.repository
 
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowStatusEntity
-import io.wonder.soft.retail.domain.workflow.model.WorkflowStatuses
-import io.wonder.soft.retail.domain.Repository
-import scalikejdbc._
 
-import scala.util.{Failure, Success, Try}
+trait WorkflowStatusRepository  {
 
-class WorkflowStatusRepository extends Repository[WorkflowStatusEntity] {
-  val wsc = WorkflowStatuses.column
+  def find(id: Int): Option[WorkflowStatusEntity]
 
-  import WorkflowStatusEntity._
+  def create(entity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity]
 
-  override def find(id: Int): Option[WorkflowStatusEntity] =
-    WorkflowStatuses.find(id).flatMap(status => Some(status))
+  def update(entity: WorkflowStatusEntity): Either[RuntimeException, WorkflowStatusEntity]
 
-  override def create(entity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] = {
-    Try {
-      DB localTx {implicit session =>
-        withSQL {
-          insert.into(WorkflowStatuses).namedValues(
-            wsc.name -> entity.name
-          )
-        }.update().apply()
-      }
-
-    } match {
-      case Success(_) => Right(entity)
-      case Failure(e) => Left(new Exception(e))
-    }
-  }
-
-  override def update(entity: WorkflowStatusEntity): Either[RuntimeException, WorkflowStatusEntity] = {
-    Try {
-      WorkflowStatuses.find(entity.id) match {
-        case Some(statuses) =>
-          statuses.copy(name = entity.name).save()
-          Right(entity)
-
-        case None =>
-          Left(new RuntimeException("")) //TODO
-      }
-
-    } match {
-      case Success(result) => result
-      case Failure(e) => Left(new RuntimeException(e))
-    }
-  }
-
-  override def destroy(id: Int): Option[WorkflowStatusEntity] = None
+  def destroy(id: Int): Option[WorkflowStatusEntity]
 }

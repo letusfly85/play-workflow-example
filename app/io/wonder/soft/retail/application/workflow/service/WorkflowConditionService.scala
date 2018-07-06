@@ -4,12 +4,12 @@ import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowActionConditionEntity, WorkflowActionTransitionEntity, WorkflowTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.ActionTransactionQuery
-import io.wonder.soft.retail.domain.workflow.repository.WorkflowActionConditionRepository
+import io.wonder.soft.retail.domain.workflow.repository.WorkflowActionConditionRepositoryImpl
 import javax.inject.Inject
 
 class WorkflowConditionService @Inject()
   (actionQuery: ActionTransactionQuery,
-   actionRepository: WorkflowActionConditionRepository)
+   actionRepository: WorkflowActionConditionRepositoryImpl)
   extends ApplicationService {
 
   def createActionCondition(actionTransitionEntity: WorkflowActionTransitionEntity): Either[Exception, WorkflowActionConditionEntity] = {
