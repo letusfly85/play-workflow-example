@@ -18,8 +18,8 @@ scalaVersion := "2.12.6"
 
 libraryDependencies ++= {
   val silhouetteVersion = "5.0.4"
-  val scalikeJDBCV = "3.2.3"
-  val playVersion = "2.6.13"
+  val scalikeJDBCV = "3.3.0"
+  val playVersion = "2.6.15"
   Seq(
     jdbc,
     ehcache,
