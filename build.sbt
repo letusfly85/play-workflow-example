@@ -17,7 +17,7 @@ resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 scalaVersion := "2.12.6"
 
 libraryDependencies ++= {
-  val silhouetteVersion = "5.0.4"
+  val silhouetteVersion = "5.0.5"
   val scalikeJDBCV = "3.3.0"
   val playVersion = "2.6.15"
   Seq(
