@@ -19,7 +19,10 @@ scalaVersion := "2.12.6"
 libraryDependencies ++= {
   val silhouetteVersion = "5.0.5"
   val scalikeJDBCV = "3.3.0"
-  val playVersion = "2.6.15"
+  val spec2V = "4.3.3"
+  val logbackV = "1.2.3"
+  val logbackJsonV = "0.1.5"
+  val jacksonV = "2.8.9" // 2.9.3 not working with logback-json dependencies
   Seq(
     jdbc,
     ehcache,
@@ -55,6 +58,17 @@ libraryDependencies ++= {
     "com.enragedginger" %% "akka-quartz-scheduler" % "1.6.1-akka-2.5.x",
 
     "org.typelevel" %% "cats-core" % "1.0.1",
+
+    // logback dependencies
+    "org.slf4j" % "slf4j-api" % "1.7.25",
+    "ch.qos.logback" % "logback-core" % logbackV,
+    "ch.qos.logback" % "logback-classic" % logbackV,
+    "ch.qos.logback.contrib" % "logback-json-core" % logbackJsonV,
+    "ch.qos.logback.contrib" % "logback-json-classic" % logbackJsonV,
+    "ch.qos.logback.contrib" % "logback-jackson" % logbackJsonV,
+    "com.fasterxml.jackson.core" % "jackson-core" % jacksonV,
+    "com.fasterxml.jackson.core" % "jackson-databind" % jacksonV,
+    "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonV,
 
     "org.specs2" %% "specs2-core" % spec2V % Test,
     "org.specs2" %% "specs2-mock" % spec2V % Test,
