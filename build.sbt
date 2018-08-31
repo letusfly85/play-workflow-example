@@ -25,7 +25,7 @@ libraryDependencies ++= {
     ehcache,
     ws,
     specs2 % Test,
-    //guice,
+    guice,
 
     //macwire
     "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided",
@@ -38,7 +38,6 @@ libraryDependencies ++= {
     "com.mohiva" %% "play-silhouette-testkit" % silhouetteVersion,
 
     //injection dependencies
-    "net.codingwell" %% "scala-guice" % "4.1.0",
     "com.iheart" %% "ficus" % "1.4.1",
     "net.codingwell" %% "scala-guice" % "4.1.0",
 
@@ -46,9 +45,9 @@ libraryDependencies ++= {
     "org.scalikejdbc" %% "scalikejdbc"                     % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-config"              % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-joda-time"           % scalikeJDBCV,
-    "org.scalikejdbc" %% "scalikejdbc-play-initializer"    % "2.6.0-scalikejdbc-3.2",
+    "org.scalikejdbc" %% "scalikejdbc-play-initializer"    % "2.6.0-scalikejdbc-3.3",
     "org.scalikejdbc" %% "scalikejdbc-test" % scalikeJDBCV % Test,
-    "mysql" % "mysql-connector-java" % "5.1.46",
+    "mysql" % "mysql-connector-java" % "5.1.47",
 
     "com.iheart" %% "ficus" % "1.4.1",
     "com.typesafe.play" %% "play-mailer" % "6.0.1",
@@ -57,10 +56,13 @@ libraryDependencies ++= {
 
     "org.typelevel" %% "cats-core" % "1.0.1",
 
-    "com.typesafe.play" %% "play-specs2" % playVersion % Test,
-    "org.specs2" %% "specs2" % "2.5" % Test,
-    "org.specs2" %% "specs2-mock" % "4.2.0" % Test,
-    "org.mockito" % "mockito-core" % "2.18.3" % Test,
+    "org.specs2" %% "specs2-core" % spec2V % Test,
+    "org.specs2" %% "specs2-mock" % spec2V % Test,
+    "org.specs2" %% "specs2-common" % spec2V % Test,
+    "org.specs2" %% "specs2-junit" % spec2V % Test,
+    "org.specs2" %% "specs2-matcher" % spec2V % Test,
+    "org.scalaz" %% "scalaz-core" % "7.2.24",
+    "org.mockito" % "mockito-core" % "2.21.0" % Test,
 
     //ScalaCheck
     "org.scalacheck" %% "scalacheck" % "1.14.0" % Test

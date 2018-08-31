@@ -2,7 +2,7 @@ logLevel := Level.Info
 
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.15")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.18")
 
 addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.5.0")
 
