@@ -25,6 +25,7 @@ class WorkflowDefinitionSummaryRepositoryImpl extends WorkflowDefinitionSummaryR
           insert.into(WorkflowDefinitionSummaries).namedValues(
           wds.workflowId -> entity.workflowId,
              wds.name -> entity.name,
+            wds.description -> entity.description,
              wds.serviceId -> entity.serviceId
              )
         }.update().apply()

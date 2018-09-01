@@ -11,7 +11,8 @@ case class WorkflowDefinitionSummaries(
   name: String,
   serviceId: Int,
   createdAt: Option[DateTime] = None,
-  updatedAt: Option[DateTime] = None) {
+  updatedAt: Option[DateTime] = None,
+  description: Option[String] = None) {
 
   def save()(implicit session: DBSession = WorkflowDefinitionSummaries.autoSession): WorkflowDefinitionSummaries = WorkflowDefinitionSummaries.save(this)(session)
 
@@ -24,7 +25,7 @@ object WorkflowDefinitionSummaries extends SQLSyntaxSupport[WorkflowDefinitionSu
 
   override val tableName = "workflow_definition_summaries"
 
-  override val columns = Seq("id", "workflow_id", "name", "service_id", "created_at", "updated_at")
+  override val columns = Seq("id", "workflow_id", "name", "service_id", "created_at", "updated_at", "description")
 
   def apply(wds: SyntaxProvider[WorkflowDefinitionSummaries])(rs: WrappedResultSet): WorkflowDefinitionSummaries = apply(wds.resultName)(rs)
   def apply(wds: ResultName[WorkflowDefinitionSummaries])(rs: WrappedResultSet): WorkflowDefinitionSummaries = new WorkflowDefinitionSummaries(
@@ -33,7 +34,8 @@ object WorkflowDefinitionSummaries extends SQLSyntaxSupport[WorkflowDefinitionSu
     name = rs.get(wds.name),
     serviceId = rs.get(wds.serviceId),
     createdAt = rs.get(wds.createdAt),
-    updatedAt = rs.get(wds.updatedAt)
+    updatedAt = rs.get(wds.updatedAt),
+    description = rs.get(wds.description)
   )
 
   val wds = WorkflowDefinitionSummaries.syntax("wds")
@@ -77,14 +79,16 @@ object WorkflowDefinitionSummaries extends SQLSyntaxSupport[WorkflowDefinitionSu
     name: String,
     serviceId: Int,
     createdAt: Option[DateTime] = None,
-    updatedAt: Option[DateTime] = None)(implicit session: DBSession = autoSession): WorkflowDefinitionSummaries = {
+    updatedAt: Option[DateTime] = None,
+    description: Option[String] = None)(implicit session: DBSession = autoSession): WorkflowDefinitionSummaries = {
     val generatedKey = withSQL {
       insert.into(WorkflowDefinitionSummaries).namedValues(
         column.workflowId -> workflowId,
         column.name -> name,
         column.serviceId -> serviceId,
         column.createdAt -> createdAt,
-        column.updatedAt -> updatedAt
+        column.updatedAt -> updatedAt,
+        column.description -> description
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -94,7 +98,8 @@ object WorkflowDefinitionSummaries extends SQLSyntaxSupport[WorkflowDefinitionSu
       name = name,
       serviceId = serviceId,
       createdAt = createdAt,
-      updatedAt = updatedAt)
+      updatedAt = updatedAt,
+      description = description)
   }
 
   def batchInsert(entities: Seq[WorkflowDefinitionSummaries])(implicit session: DBSession = autoSession): List[Int] = {
@@ -104,19 +109,22 @@ object WorkflowDefinitionSummaries extends SQLSyntaxSupport[WorkflowDefinitionSu
         'name -> entity.name,
         'serviceId -> entity.serviceId,
         'createdAt -> entity.createdAt,
-        'updatedAt -> entity.updatedAt))
+        'updatedAt -> entity.updatedAt,
+        'description -> entity.description))
     SQL("""insert into workflow_definition_summaries(
       workflow_id,
       name,
       service_id,
       created_at,
-      updated_at
+      updated_at,
+      description
     ) values (
       {workflowId},
       {name},
       {serviceId},
       {createdAt},
-      {updatedAt}
+      {updatedAt},
+      {description}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -128,7 +136,8 @@ object WorkflowDefinitionSummaries extends SQLSyntaxSupport[WorkflowDefinitionSu
         column.name -> entity.name,
         column.serviceId -> entity.serviceId,
         column.createdAt -> entity.createdAt,
-        column.updatedAt -> entity.updatedAt
+        column.updatedAt -> entity.updatedAt,
+        column.description -> entity.description
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

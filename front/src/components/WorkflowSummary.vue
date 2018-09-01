@@ -21,7 +21,7 @@
     </b-card>
     <at-btn v-bind:button-title="'Workflow'" v-bind:toggle-value="toggleValue" @child-event="toggleObserve"></at-btn>
     <!-- TODO create a component -->
-    <form @submit="createSummary" style="width: 80%; margin-left: 40%; margin-top: 2rem;">
+    <div style="width: 80%; margin-left: 40%; margin-top: 2rem;">
       <div v-if="toggleValue" >
         <div class="form-group col-3">
           <select class="custom-select">
@@ -37,10 +37,10 @@
           <textarea class="form-control" v-model="form.description" id="descriptionInput" rows="3"></textarea>
         </div>
         <div class="form-group col-3">
-          <button type="button" class="btn btn-success">save</button>
+          <button type="submit" class="btn btn-success" @click="createSummary">save</button>
         </div>
       </div>
-    </form>
+    </div>
     <app-footer></app-footer>
   </div>
 </template>
@@ -76,11 +76,15 @@ export default {
         id: 0,
         workflow_id: 0,
         name: this.form.name,
+        description: this.form.description,
         service_id: this.form.serviceId
       }
 
+      const self = this
       ApiClient.create(targetPath, params, (response) => {
         console.log(response)
+        self.searchSummaries()
+        self.toggleValue = false
       }, (error) => {
         console.log(error)
       })
