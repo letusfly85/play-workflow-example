@@ -7,12 +7,9 @@ import Status from '@/components/Status'
 import Order from '@/components/order/Order'
 import CraftLine from '@/components/craft/CraftLine'
 import CraftProduct from '@/components/craft/CraftProduct'
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+// import 'bootstrap/dist/css/bootstrap.css'
 
 Vue.use(Router)
-Vue.use(BootstrapVue)
 
 export default new Router({
   routes: [

@@ -1,24 +1,36 @@
 <template>
   <div>
     <workflow-header></workflow-header>
-    <b-card class="card-workflow-list">
-      <table class="table table-hover">
-        <thead>
-        <tr align="left">
-          <th scope="col">Name</th>
-          <th scope="col">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="row in summaries" v-bind:key="row.id">
-          <td align="left">
-            <button type="button" class="btn btn-primary"><a :href="'#/workflows/' + row.id">{{ row.name }}</a></button>
-          </td>
-          <td></td>
-        </tr>
-        </tbody>
-      </table>
-    </b-card>
+
+    <div class="card border-light mb-4 card-workflow-list">
+      <div class="card-body ">
+        <table class="table table-hover">
+          <thead>
+          <tr align="left">
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="row in summaries" v-bind:key="row.id">
+            <td align="left">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary">{{ row.name }}</button>
+                <div class="btn-group" role="group">
+                  <button :id="'btnGroupDrop'+row.id" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                  <div class="dropdown-menu" :aria-labelledby="'btnGroupDrop'+row.id" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 36px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    <a class="dropdown-item" :href="'#/workflows/' + row.id">ワークフローを作成・編集</a>
+                    <button class="dropdown-item alert-danger">このワークフローを削除</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td align="left">{{ row.description }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     <at-btn v-bind:button-title="'Workflow'" v-bind:toggle-value="toggleValue" @child-event="toggleObserve"></at-btn>
     <!-- TODO create a component -->
     <div style="width: 80%; margin-left: 40%; margin-top: 2rem;">
