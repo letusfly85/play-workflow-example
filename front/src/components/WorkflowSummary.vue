@@ -21,13 +21,26 @@
     </b-card>
     <at-btn v-bind:button-title="'Workflow'" v-bind:toggle-value="toggleValue" @child-event="toggleObserve"></at-btn>
     <!-- TODO create a component -->
-    <b-form @submit="createSummary">
-      <div v-if="toggleValue" class="form-add-summary">
-        <b-form-select v-model="form.serviceId" :options="serviceIdList" class="mb-3"></b-form-select>
-        <b-form-input value="" v-model="form.name" class="form-control"></b-form-input>
-        <button type="button" class="btn btn-success">save</button>
+    <form @submit="createSummary" style="width: 80%; margin-left: 40%; margin-top: 2rem;">
+      <div v-if="toggleValue" >
+        <div class="form-group col-3">
+          <select class="custom-select">
+            <option v-for="option in serviceIdList" v-bind:key="option.id">{{ option.text }}</option>
+          </select>
+        </div>
+        <div class="form-group col-3">
+          <label class="col-form-label" for="inputName">ワークフロー名</label>
+          <input type="text" class="form-control" v-model="form.name" placeholder="ワークフロー名を記入" id="inputName">
+        </div>
+        <div class="form-group col-6">
+          <label for="descriptionInput">説明</label>
+          <textarea class="form-control" v-model="form.description" id="descriptionInput" rows="3"></textarea>
+        </div>
+        <div class="form-group col-3">
+          <button type="button" class="btn btn-success">save</button>
+        </div>
       </div>
-    </b-form>
+    </form>
     <app-footer></app-footer>
   </div>
 </template>
@@ -47,7 +60,8 @@ export default {
       toggleValue: false,
       form: {
         name: '',
-        serviceId: 0
+        serviceId: 0,
+        description: ''
       },
       serviceIdList: [ { text: '受注サービス', value: 0 }, { text: '工房サービス', value: 1 } ]
     }
