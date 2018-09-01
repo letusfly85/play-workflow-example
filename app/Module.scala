@@ -1,9 +1,6 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
 
-import io.wonder.soft.retail.application.workflow.service.WorkflowService
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepositoryImpl, WorkflowStatusRepositoryImpl}
-
 /**
  * This class is a Guice module that tells Guice how to bind several
  * different types. This Guice module is created when the Play
@@ -17,10 +14,6 @@ import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepos
 class Module extends AbstractModule {
 
   override def configure() = {
-    bind(classOf[WorkflowDefinitionRepositoryImpl])
-    bind(classOf[WorkflowStatusRepositoryImpl])
-    bind(classOf[WorkflowService])
-
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
   }
