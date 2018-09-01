@@ -8,18 +8,10 @@
 
       <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#/workflows">workflows <span class="sr-only">(current)</span></a>
-          </li>
-          <!--
-          <li class="nav-item">
+          <li :class="navItemClass.workflow">
             <a class="nav-link" href="#/workflows">workflows</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#/transitions">transitions</a>
-          </li>
-          -->
-          <li class="nav-item">
+          <li :class="navItemClass.status">
             <a class="nav-link" href="#/statuses">statuses</a>
           </li>
         </ul>
@@ -35,8 +27,22 @@
 <script>
 export default {
   name: 'WorkflowHeader',
+  data () {
+    return {
+      navItemClass: {
+        workflow: 'nav-link',
+        status: 'nav-link'
+      }
+    }
+  },
   created: function () {
+    if ((this.$route.path) === '/workflows') {
+      this.navItemClass.workflow = 'nav-item active'
+      this.navItemClass.status = 'nav-item'
+    } else {
+      this.navItemClass.workflow = 'nav-item'
+      this.navItemClass.status = 'nav-item active'
+    }
   }
 }
 </script>
-

@@ -2,11 +2,22 @@
   <div>
     <workflow-header></workflow-header>
     <b-card class="card-workflow-list">
-      <b-table :items="summaries">
-        <template slot="name" slot-scope="row">
-          <button type="button" class="btn btn-primary"><a :href="'#/workflows/' + row.item.id">{{ row.item.name }}</a></button>
-        </template>
-      </b-table>
+      <table class="table table-hover">
+        <thead>
+        <tr align="left">
+          <th scope="col">Name</th>
+          <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="row in summaries" v-bind:key="row.id">
+          <td align="left">
+            <button type="button" class="btn btn-primary"><a :href="'#/workflows/' + row.id">{{ row.name }}</a></button>
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
     </b-card>
     <at-btn v-bind:button-title="'Workflow'" v-bind:toggle-value="toggleValue" @child-event="toggleObserve"></at-btn>
     <!-- TODO create a component -->
