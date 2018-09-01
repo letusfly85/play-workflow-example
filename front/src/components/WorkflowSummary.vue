@@ -1,23 +1,20 @@
 <template>
   <div>
-    <app-header></app-header>
+    <workflow-header></workflow-header>
     <b-card class="card-workflow-list">
       <b-table :items="summaries">
         <template slot="name" slot-scope="row">
-          <b-btn v-if="row.item.isDefault" variant="info" size="sm" @click="setAsDefault(row.item)"  disabled> {{ row.item.name }} </b-btn>
-          <b-btn v-if="!row.item.isDefault" variant="info" size="sm" @click="setAsDefault(row.item)"> {{ row.item.name }} </b-btn>
+          <button type="button" class="btn btn-primary"><a :href="'#/workflows/' + row.item.id">{{ row.item.name }}</a></button>
         </template>
       </b-table>
     </b-card>
-    <br/>
-    <br/>
     <at-btn v-bind:button-title="'Workflow'" v-bind:toggle-value="toggleValue" @child-event="toggleObserve"></at-btn>
     <!-- TODO create a component -->
     <b-form @submit="createSummary">
       <div v-if="toggleValue" class="form-add-summary">
         <b-form-select v-model="form.serviceId" :options="serviceIdList" class="mb-3"></b-form-select>
         <b-form-input value="" v-model="form.name" class="form-control"></b-form-input>
-        <b-button type="submit" class="btn-success">Save Summary</b-button>
+        <button type="button" class="btn btn-success">save</button>
       </div>
     </b-form>
     <app-footer></app-footer>
@@ -26,13 +23,13 @@
 
 <script>
 import ApiClient from './utils/ApiClient'
-import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
 import AddToggleButton from './ui/AddToggleButton'
+import WorkflowHeader from './workflow/WorkflowHeader'
 
 export default {
   name: 'WorkflowSummary',
-  components: { AppHeader, AppFooter, 'at-btn': AddToggleButton },
+  components: { WorkflowHeader, AppFooter, 'at-btn': AddToggleButton },
   data () {
     return {
       summaries: [],
@@ -63,24 +60,12 @@ export default {
         console.log(error)
       })
     },
-    setAsDefault: function (summary) {
-      this.$store.commit('updateWorkflowId', summary.workflow_id)
-
-      this.searchSummaries()
-    },
     searchSummaries: function () {
       const self = this
 
       let targetPath = '/api/workflow/summaries'
       ApiClient.search(targetPath, (response) => {
-        self.summaries = response.data.map(function (data) {
-          if (self.$store.state.workflowId !== null && self.$store.state.workflowId === data.workflow_id) {
-            data.isDefault = true
-          } else {
-            data.isDefault = false
-          }
-          return data
-        })
+        self.summaries = response.data
       }, (error) => {
         console.log(error)
       })

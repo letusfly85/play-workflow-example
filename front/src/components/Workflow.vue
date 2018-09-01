@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-header></app-header>
+    <workflow-header></workflow-header>
     <b-card class="card-workflow-list">
       <div v-for="workflow in workflows" v-bind:key="workflow.step_id">
         <div style="margin-bottom: 3px; height: 5rem;">
@@ -32,12 +32,12 @@
 
 <script>
 import ApiClient from './utils/ApiClient'
-import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
+import WorkflowHeader from './workflow/WorkflowHeader'
 
 export default {
   name: 'Workflow',
-  components: { AppHeader, AppFooter },
+  components: { WorkflowHeader, AppFooter },
   data () {
     return {
       statuses: [],
@@ -88,6 +88,7 @@ export default {
     }
   },
   created: function () {
+    this.$store.commit('updateWorkflowId', this.$route.params.workflowId)
     const self = this
 
     var targetPath = '/api/workflow/definitions?workflow-id=' + this.$store.state.workflowId

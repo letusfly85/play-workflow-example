@@ -1,6 +1,6 @@
 <template>
   <div id="add-toggle-button">
-    <button v-on:click="toggleChange(toggleValue)" class="btn-outline-success">
+    <button v-on:click="toggleChange(toggleValue)" class="btn btn-info">
       {{ childToggle ? 'Cancel' : ''}} Create new {{ buttonTitle }}
     </button>
   </div>

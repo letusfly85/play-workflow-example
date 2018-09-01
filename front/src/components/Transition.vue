@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-header></app-header>
+    <workflow-header></workflow-header>
     <svg id="graph"  :width="svgArea.width" :height="svgArea.height" style="border: 1px">
     </svg>
     <b-card class="card-workflow-list">
@@ -46,10 +46,10 @@
 
 <script>
 import ApiClient from './utils/ApiClient'
-import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
 // https://bl.ocks.org/heybignick/3faf257bbbbc7743bb72310d03b86ee8
 import * as d3 from 'd3v4'
+import WorkflowHeader from './workflow/WorkflowHeader'
 
 export default {
   name: 'Transition',
@@ -79,7 +79,7 @@ export default {
       }
     }
   },
-  components: { AppHeader, AppFooter },
+  components: { WorkflowHeader, AppFooter },
   methods: {
     searchConditions: function (tran, index) {
       let self = this

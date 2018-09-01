@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-header></app-header>
+    <workflow-header></workflow-header>
     <b-card class="card-status-list">
       <div v-for="status in statuses" v-bind:key="status.id">
         <div style="margin-bottom: 3px;">
@@ -15,8 +15,8 @@
 
 <script>
 import ApiClient from './utils/ApiClient'
-import AppHeader from './utils/AppHeader'
 import AppFooter from './utils/AppFooter'
+import WorkflowHeader from './workflow/WorkflowHeader'
 
 export default {
   name: 'Status',
@@ -25,7 +25,7 @@ export default {
       statuses: []
     }
   },
-  components: { AppHeader, AppFooter },
+  components: { WorkflowHeader, AppFooter },
   created: function () {
     let targetPath = '/api/workflow/statuses'
 

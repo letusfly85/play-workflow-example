@@ -17,12 +17,12 @@ Vue.use(BootstrapVue)
 export default new Router({
   routes: [
     {
-      path: '/summaries',
+      path: '/workflows',
       name: 'WorkflowSummary',
       component: WorkflowSummary
     },
     {
-      path: '/workflows',
+      path: '/workflows/:workflowId',
       name: 'Workflow',
       component: Workflow
     },
