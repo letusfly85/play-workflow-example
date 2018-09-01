@@ -13,7 +13,6 @@ class WorkflowServiceImpl @Inject()
 (summaryRepository: WorkflowDefinitionSummaryRepositoryImpl,
  workflowDefinitionRepository: WorkflowDefinitionRepositoryImpl,
  workflowStatusRepository: WorkflowStatusRepositoryImpl,
- workflowTransitionRepository: WorkflowTransitionRepositoryImpl,
  queryProcessor: WorkflowQuery
 )
   extends ApplicationService with WorkflowService {
@@ -61,13 +60,4 @@ class WorkflowServiceImpl @Inject()
     }
   }
 
-  def listTransition(workflowId: Int): List[WorkflowTransitionEntity] =
-    queryProcessor.searchTransitions(workflowId)
-
-  //TODO implement
-  def findTransition(workflowId: Int, fromStepId: Int, toStepId: Int): Either[Exception, WorkflowTransitionEntity] =
-    Left(new RuntimeException(""))
-
-  def createTransition(transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity] =
-    workflowTransitionRepository.create(transitionEntity)
 }

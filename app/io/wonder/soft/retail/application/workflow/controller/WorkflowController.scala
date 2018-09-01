@@ -2,7 +2,7 @@ package io.wonder.soft.retail.application.workflow.controller
 
 import io.wonder.soft.retail.application.example.craft.service.CraftLineActionService
 import javax.inject._
-import io.wonder.soft.retail.application.workflow.service.{WorkflowConditionService, WorkflowService}
+import io.wonder.soft.retail.application.workflow.service.{WorkflowConditionService, WorkflowService, WorkflowTransitionService}
 import io.wonder.soft.retail.domain.workflow.entity._
 import io.wonder.soft.retail.application.helper.JsResultHelper
 import play.api.Logger
@@ -14,6 +14,7 @@ import scala.util.{Failure, Success, Try}
 @Singleton
 class WorkflowController @Inject()
   (service: WorkflowService,
+   transitionService: WorkflowTransitionService,
    conditionService: WorkflowConditionService,
    craftLineActionService: CraftLineActionService,
    cc: ControllerComponents)
@@ -125,7 +126,7 @@ class WorkflowController @Inject()
   def listTransition = Action { implicit request =>
     request.getQueryString("workflow-id") match {
       case Some(workflowId) =>
-        Ok(Json.toJson(service.listTransition(workflowId.toInt)))
+        Ok(Json.toJson(transitionService.listTransition(workflowId.toInt)))
 
       case None =>
         InternalServerError(JsObject.empty)
@@ -137,7 +138,7 @@ class WorkflowController @Inject()
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
         transitionEntity <- Json.fromJson[WorkflowTransitionEntity](json).right
-        entity <- service.createTransition(transitionEntity).right
+        entity <- transitionService.createTransition(transitionEntity).right
       } yield entity
 
     } match {

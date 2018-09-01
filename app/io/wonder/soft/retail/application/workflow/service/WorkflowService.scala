@@ -1,6 +1,6 @@
 package io.wonder.soft.retail.application.workflow.service
 
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowDefinitionSummaryEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowDefinitionSummaryEntity, WorkflowStatusEntity, WorkflowTransitionEntity => TransitionEntity}
 
 trait WorkflowService {
 
@@ -20,10 +20,5 @@ trait WorkflowService {
 
   def createDefinition(schemeEntity: WorkflowDefinitionEntity): Either[Exception, WorkflowDefinitionEntity]
 
-  def listTransition(workflowId: Int): List[WorkflowTransitionEntity]
-
-  def findTransition(workflowId: Int, fromStepId: Int, toStepId: Int): Either[Exception, WorkflowTransitionEntity]
-
-  def createTransition(transitionEntity: WorkflowTransitionEntity): Either[Exception, WorkflowTransitionEntity]
 
 }
