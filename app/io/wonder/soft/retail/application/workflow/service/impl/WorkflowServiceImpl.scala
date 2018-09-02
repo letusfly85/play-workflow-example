@@ -1,17 +1,19 @@
 package io.wonder.soft.retail.application.workflow.service.impl
 
 import javax.inject.Inject
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowDefinitionSummaryEntity, WorkflowStatusEntity, WorkflowTransitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowDefinitionSummaryEntity => DefinitionSummaryEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepositoryImpl, WorkflowStatusRepositoryImpl, WorkflowTransitionRepositoryImpl}
+import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepositoryImpl, WorkflowStatusRepositoryImpl}
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.application.workflow.service.WorkflowService
 import repository.WorkflowDefinitionSummaryRepositoryImpl
 
+import scala.util.{Failure, Success, Try}
+
 class WorkflowServiceImpl @Inject()
 (summaryRepository: WorkflowDefinitionSummaryRepositoryImpl,
- workflowDefinitionRepository: WorkflowDefinitionRepositoryImpl,
+ workflowRepository: WorkflowDefinitionRepositoryImpl,
  workflowStatusRepository: WorkflowStatusRepositoryImpl,
  queryProcessor: WorkflowQuery
 )
@@ -31,13 +33,24 @@ class WorkflowServiceImpl @Inject()
     queryProcessor.searchDefinitions(workflowId)
   }
 
-  def listSummary: List[WorkflowDefinitionSummaryEntity] = {
+  def listSummary: List[DefinitionSummaryEntity] = {
     queryProcessor.searchSummaries
   }
 
-  def createSummary(entity: WorkflowDefinitionSummaryEntity): Either[Exception, WorkflowDefinitionSummaryEntity] = {
+  def createSummary(entity: DefinitionSummaryEntity): Either[Exception, DefinitionSummaryEntity] = {
     val nextWorkflowId = queryProcessor.findMaxSummaryWorkflowId + 1
     summaryRepository.create(entity.copy(workflowId = nextWorkflowId))
+  }
+
+  def destroySummary(entity: DefinitionSummaryEntity): Either[Exception, DefinitionSummaryEntity] = {
+    Try {
+      //TODO use WorkflowDefinitionRepositoryImpl repository
+      summaryRepository.destroy(entity.id)
+
+    } match {
+      case Success(_) => Right(entity)
+      case Failure(ex) => Left(new RuntimeException(ex))
+    }
   }
 
   def findDefinition(id: Int): Either[Exception, WorkflowDefinitionEntity] = {
@@ -53,7 +66,7 @@ class WorkflowServiceImpl @Inject()
     maybeStatus match {
       case Some(statusEntity) =>
         val entity = WorkflowFactory.buildDefinitionEntity(schemeEntity, statusEntity)
-        workflowDefinitionRepository.create(entity)
+        workflowRepository.create(entity)
 
       case None =>
         Left(new RuntimeException(""))

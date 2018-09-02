@@ -82,6 +82,27 @@ class WorkflowController @Inject()
     }
   }
 
+  def destroySummary = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        summaryEntity <- Json.fromJson[WorkflowDefinitionSummaryEntity](json).right
+        entity <- service.destroySummary(summaryEntity).right
+      } yield entity
+
+    } match {
+      case Success(either) => either match {
+        case Right(summaryEntity) => Ok(Json.toJson(summaryEntity))
+        case Left(e) =>
+          Logger.info(e.toString)
+          InternalServerError(JsObject.empty)
+      }
+      case Failure(e) =>
+        Logger.info(e.getMessage)
+        InternalServerError(JsObject.empty)
+    }
+  }
+
   def findDefinition(id: String) = Action {
     service.findDefinition(id.toInt) match {
       case Right(schemeEntity) => Ok(Json.toJson(schemeEntity))

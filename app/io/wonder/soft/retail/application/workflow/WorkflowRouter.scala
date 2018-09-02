@@ -30,6 +30,9 @@ class WorkflowRouter @Inject()
     case POST(p"/summaries") =>
       workflowController.createSummary
 
+    case DELETE(p"/summaries") =>
+      workflowController.destroySummary
+
     case GET(p"/definitions") =>
       workflowController.listDefinition
 
