@@ -18,7 +18,7 @@ scalaVersion := "2.12.6"
 
 libraryDependencies ++= {
   val silhouetteVersion = "5.0.5"
-  val scalikeJDBCV = "3.3.0"
+  val scalikeJDBCV = "3.3.1"
   val spec2V = "4.3.3"
   val logbackV = "1.2.3"
   val logbackJsonV = "0.1.5"
