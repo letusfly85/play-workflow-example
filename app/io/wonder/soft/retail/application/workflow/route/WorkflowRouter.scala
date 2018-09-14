@@ -19,14 +19,14 @@ class WorkflowRouter @Inject()
     case GET(p"/$id") =>
       workflowController.listDefinition(id)
 
-    case POST(p"/summaries") =>
+    case POST(p"/$id") =>
+      workflowController.createDefinition(id)
+
+    case POST(p"/") =>
       workflowController.createSummary
 
-    case DELETE(p"/summaries") =>
+    case DELETE(p"/$id") =>
       workflowController.destroySummary
-
-    case POST(p"/definitions") =>
-      workflowController.createDefinition
 
     case GET(p"/user-transitions") =>
       transactionController.listTransition

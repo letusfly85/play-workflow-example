@@ -71,7 +71,7 @@ class WorkflowController @Inject()
 
   //todo use cats
   //import cats.implicits._
-  def createDefinition = Action { implicit request =>
+  def createDefinition(workflowId: String) = Action { implicit request =>
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right

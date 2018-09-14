@@ -18,6 +18,14 @@ export default {
     }, (error) => {
       errorHandler(error)
     })
+  },
+  create: function (id, params, callback, errorHandler) {
+    let targetPath = `/api/workflows/${id}`
+    ApiClient.create(targetPath, params, (response) => {
+      callback(response)
+    }, (error) => {
+      errorHandler(error)
+    })
   }
 }
 </script>

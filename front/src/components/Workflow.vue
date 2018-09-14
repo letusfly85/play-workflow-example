@@ -28,11 +28,17 @@
     <br/>
     <form @submit="createRecord">
       <div v-if="addToggle" class="form-add-workflow">
-        <select v-model="form.status" :options="statuses" class="mb-3"></select>
+        <select v-model="form.status" class="mb-3">
+          <option v-for="option in statuses"
+                  v-bind:value="option.value"
+                  v-bind:key="option.id">
+            {{ option.text }}
+          </option>
+        </select>
         <input value="" v-model="form.step_label" class="form-control" />
         <br/>
-        <checkbox value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%"></checkbox>
-        <checkbox value=true v-model="form.is_last_step" class="form-control" style="width: 40%;"></checkbox>
+        <input type="checkbox" value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%">
+        <input type="checkbox" value=true v-model="form.is_last_step" class="form-control" style="width: 40%;">
         <br/><br/>
         <button type="submit" class="btn btn-success">Add Workflow Record</button>
       </div>
@@ -42,7 +48,6 @@
 </template>
 
 <script>
-import ApiClient from './utils/ApiClient'
 import AppFooter from './utils/AppFooter'
 import WorkflowHeader from './workflow/WorkflowHeader'
 import WorkflowService from './service/WorkflowService'
@@ -80,7 +85,7 @@ export default {
         maxStepId = Math.max(...this.workflows.map((workflow) => workflow.step_id))
       }
       let param = {
-        workflow_id: this.$store.state.workflowId,
+        workflow_id: Number(this.$store.state.workflowId),
         name: 'example',
         step_id: (maxStepId + 1),
         step_label: this.form.step_label,
@@ -91,8 +96,7 @@ export default {
       console.log(param)
 
       const self = this
-      let targetPath = '/api/workflow/definitions'
-      ApiClient.create(targetPath, param, (response) => {
+      WorkflowService.create(this.$store.state.workflowId, param, (response) => {
         console.log(response)
         self.workflows.push(param)
       }, (error) => {
@@ -111,7 +115,7 @@ export default {
       console.log(error)
     })
 
-    WorkflowStatusService((response) => {
+    WorkflowStatusService.list((response) => {
       console.log(response.data)
       self.statuses = response.data.map(function (record) {
         record.value = { id: record.id, name: record.name }
