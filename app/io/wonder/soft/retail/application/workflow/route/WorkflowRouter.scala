@@ -32,12 +32,6 @@ class WorkflowRouter @Inject()
     case POST(p"/definitions") =>
       workflowController.createDefinition
 
-    case GET(p"/transitions") =>
-      transitionController.listTransition
-
-    case POST(p"/transitions") =>
-      transitionController.createTransition
-
     case GET(p"/user-transitions") =>
       transactionController.listTransition
 

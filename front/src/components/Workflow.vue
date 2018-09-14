@@ -99,7 +99,7 @@ export default {
       console.log(error)
     })
 
-    targetPath = '/api/workflow/statuses'
+    targetPath = '/api/workflow-statuses'
     ApiClient.search(targetPath, (response) => {
       console.log(response.data)
       self.statuses = response.data.map(function (record) {

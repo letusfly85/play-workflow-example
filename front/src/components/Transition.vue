@@ -160,7 +160,7 @@ export default {
     }
   },
   created: function () {
-    let targetPath = '/api/workflow/transitions?workflow-id=' + this.$store.state.workflowId
+    let targetPath = '/api/workflows/' + this.$store.state.workflowId + '/transitions'
 
     const self = this
     ApiClient.search(targetPath, (response) => {

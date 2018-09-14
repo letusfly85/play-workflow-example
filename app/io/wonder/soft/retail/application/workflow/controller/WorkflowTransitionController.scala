@@ -16,17 +16,11 @@ class WorkflowTransitionController @Inject()
    cc: ControllerComponents)
   extends AbstractController(cc) with JsResultHelper {
 
-  def listTransition = Action { implicit request =>
-    request.getQueryString("workflow-id") match {
-      case Some(workflowId) =>
-        Ok(Json.toJson(transitionService.listTransition(workflowId.toInt)))
-
-      case None =>
-        InternalServerError(JsObject.empty)
-    }
+  def listTransition(workflowId: String) = Action { implicit request =>
+     Ok(Json.toJson(transitionService.listTransition(workflowId.toInt)))
   }
 
-  def createTransition = Action { implicit request =>
+  def createTransition(workflowId: String) = Action { implicit request =>
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right

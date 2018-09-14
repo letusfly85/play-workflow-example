@@ -17,6 +17,9 @@
 
 ->      /api/workflow-statuses            io.wonder.soft.retail.application.workflow.route.WorkflowStatusRouter
 
+->      /api/workflow-transitions         io.wonder.soft.retail.application.workflow.route.WorkflowTransitionRouter
+
+
 ################################################################################
 ###
 ### Example Application Action REST PATH ######
