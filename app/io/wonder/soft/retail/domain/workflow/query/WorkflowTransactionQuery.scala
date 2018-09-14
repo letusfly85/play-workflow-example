@@ -9,17 +9,14 @@ class WorkflowTransactionQuery {
   val wcsc = WorkflowCurrentStates.column
   val wtc = WorkflowTransactions.column
 
-  def findCurrentStateByTransactionId(
-      transactionId: String): Option[WorkflowCurrentStateEntity] =
+  def findCurrentStateByTransactionId(transactionId: String): Option[WorkflowCurrentStateEntity] =
     WorkflowCurrentStates
       .findBy(sqls.eq(wcsc.transactionId, transactionId))
       .map(t => t)
 
-  def findFinishedTransaction(
-      transactionId: String): Option[WorkflowTransactionEntity] =
+  def findFinishedTransaction(transactionId: String): Option[WorkflowTransactionEntity] =
     WorkflowTransactions
       .findBy(
-        sqls.eq(wtc.transactionId, transactionId).and.eq(wtc.isCompleted, true))
-      .map(t => t)
-
+        sqls.eq(wtc.transactionId, transactionId).and.eq(wtc.isCompleted, true)
+      ).map(t => t)
 }
