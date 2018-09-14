@@ -1,5 +1,4 @@
-package io.wonder.soft.retail.application.workflow
-
+package io.wonder.soft.retail.application.workflow.route
 
 import io.wonder.soft.retail.application.workflow.controller.{WorkflowController, WorkflowTransactionController, WorkflowTransitionController}
 import javax.inject.Inject
@@ -15,15 +14,6 @@ class WorkflowRouter @Inject()
   val prefix: String = "/api/workflow"
 
   override def routes: Routes = {
-    case GET(p"/statuses") =>
-      workflowController.listStatus
-
-    case POST(p"/statuses") =>
-      workflowController.createStatus
-
-    case PUT(p"/statuses") =>
-      workflowController.updateStatus
-
     case GET(p"/summaries") =>
       workflowController.listSummary
 

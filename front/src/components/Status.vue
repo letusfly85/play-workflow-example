@@ -27,7 +27,7 @@ export default {
   },
   components: { WorkflowHeader, AppFooter },
   created: function () {
-    let targetPath = '/api/workflow/statuses'
+    let targetPath = '/api/workflow-statuses'
 
     const self = this
     ApiClient.search(targetPath, (response) => {

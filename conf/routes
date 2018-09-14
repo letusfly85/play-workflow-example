@@ -13,7 +13,9 @@
 
 # GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
 
-->      /api/workflow                     io.wonder.soft.retail.application.workflow.WorkflowRouter
+->      /api/workflow                     io.wonder.soft.retail.application.workflow.route.WorkflowRouter
+
+->      /api/workflow-statuses            io.wonder.soft.retail.application.workflow.route.WorkflowStatusRouter
 
 ################################################################################
 ###
