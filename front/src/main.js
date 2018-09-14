@@ -5,7 +5,9 @@ import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import App from './App'
 import router from './router'
+// eslint-disable-next-line
 import jQuery from 'jquery'
+
 import 'bootstrap/dist/js/bootstrap'
 import 'bootswatch/dist/flatly/bootstrap.css'
 

@@ -62,6 +62,7 @@ import ApiClient from './utils/ApiClient'
 import AppFooter from './utils/AppFooter'
 import AddToggleButton from './ui/AddToggleButton'
 import WorkflowHeader from './workflow/WorkflowHeader'
+import WorkflowService from './service/WorkflowService'
 
 export default {
   name: 'WorkflowSummary',
@@ -100,20 +101,15 @@ export default {
       }, (error) => {
         console.log(error)
       })
-    },
-    searchSummaries: function () {
-      const self = this
-
-      let targetPath = '/api/workflow/summaries'
-      ApiClient.search(targetPath, (response) => {
-        self.summaries = response.data
-      }, (error) => {
-        console.log(error)
-      })
     }
   },
   created: function () {
-    this.searchSummaries()
+    const self = this
+    WorkflowService.list((response) => {
+      self.summaries = response.data
+    }, (error) => {
+      console.log(error)
+    })
   }
 }
 </script>

@@ -1,31 +1,33 @@
 <template>
   <div>
     <workflow-header></workflow-header>
-    <b-card class="card-workflow-list">
-      <div v-for="workflow in workflows" v-bind:key="workflow.step_id">
-        <div style="margin-bottom: 3px; height: 5rem;">
-          <b-card style="float: left; width: 10%; height: 100%; margin-right: 2px;">{{ workflow.step_id }}</b-card>
-          <b-card style="float: left; width: 70%; height: 100%; margin-right: 2px;">{{ workflow.step_label }}</b-card>
-          <b-card style="float: left; width: 18%; height: 100%; ">{{ workflow.status.name }}</b-card>
+    <div class="card border-secondary mb-3">
+      <div class="card-body text-left">
+        <div v-for="workflow in workflows" v-bind:key="workflow.step_id">
+          <div class="card border-secondary mb-2">
+            <p>{{ workflow.step_id }}</p>
+            <p>{{ workflow.status.name }}</p>
+            <p>{{ workflow.step_label }}</p>
+          </div>
         </div>
       </div>
-    </b-card>
-    <button v-on:click="toggleChange(addToggle)" class="btn-outline-success">
+    </div>
+    <button v-on:click="toggleChange(addToggle)" class="btn btn-outline-success">
       {{ addToggle ? 'Cancel' : ''}} Add Workflow Record
     </button>
     <br/>
     <br/>
-    <b-form @submit="createRecord">
+    <form @submit="createRecord">
       <div v-if="addToggle" class="form-add-workflow">
-        <b-form-select v-model="form.status" :options="statuses" class="mb-3"></b-form-select>
-        <b-form-input value="" v-model="form.step_label" class="form-control"></b-form-input>
+        <select v-model="form.status" :options="statuses" class="mb-3"></select>
+        <input value="" v-model="form.step_label" class="form-control" />
         <br/>
-        <b-form-checkbox value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%"></b-form-checkbox>
-        <b-form-checkbox value=true v-model="form.is_last_step" class="form-control" style="width: 40%;"></b-form-checkbox>
+        <checkbox value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%"></checkbox>
+        <checkbox value=true v-model="form.is_last_step" class="form-control" style="width: 40%;"></checkbox>
         <br/><br/>
-        <b-button type="submit" class="btn-success">Add Workflow Record</b-button>
+        <button type="submit" class="btn btn-success">Add Workflow Record</button>
       </div>
-    </b-form>
+    </form>
     <app-footer></app-footer>
   </div>
 </template>
@@ -34,6 +36,7 @@
 import ApiClient from './utils/ApiClient'
 import AppFooter from './utils/AppFooter'
 import WorkflowHeader from './workflow/WorkflowHeader'
+import WorkflowService from './service/WorkflowService'
 
 export default {
   name: 'Workflow',
@@ -91,15 +94,14 @@ export default {
     this.$store.commit('updateWorkflowId', this.$route.params.workflowId)
     const self = this
 
-    var targetPath = '/api/workflow/definitions?workflow-id=' + this.$store.state.workflowId
-    ApiClient.search(targetPath, (response) => {
+    WorkflowService.find(this.$store.state.workflowId, (response) => {
       console.log(response)
       self.workflows = response.data
     }, (error) => {
       console.log(error)
     })
 
-    targetPath = '/api/workflow-statuses'
+    let targetPath = '/api/workflow-statuses/'
     ApiClient.search(targetPath, (response) => {
       console.log(response.data)
       self.statuses = response.data.map(function (record) {
@@ -116,13 +118,6 @@ export default {
 </script>
 
 <style scoped>
-.card-workflow-list {
-  width: 80%;
-  margin-top: 5px;
-  margin-left: 10%;
-  border: transparent 1px solid;
-}
-
 .form-add-workflow {
   width: 70%;
   margin-left: 15%;
