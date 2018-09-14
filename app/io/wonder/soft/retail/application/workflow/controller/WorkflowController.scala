@@ -65,21 +65,8 @@ class WorkflowController @Inject()
     }
   }
 
-  def findDefinition(id: String) = Action {
-    service.findDefinition(id.toInt) match {
-      case Right(schemeEntity) => Ok(Json.toJson(schemeEntity))
-      case Left(e) => NotFound(JsObject.empty)
-    }
-  }
-
-  def listDefinition = Action { implicit request =>
-    request.getQueryString("workflow-id") match {
-      case Some(workflowId) =>
-        Ok(Json.toJson(service.listDefinition(workflowId.toInt)))
-
-      case None =>
-        InternalServerError(JsObject.empty)
-    }
+  def listDefinition(id: String) = Action { implicit request =>
+    Ok(Json.toJson(service.listDefinition(id.toInt)))
   }
 
   //todo use cats

@@ -2,8 +2,8 @@ package io.wonder.soft.retail.application.workflow.service
 
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowStatusEntity => StatusEntity}
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepository, WorkflowStatusRepository, WorkflowTransitionRepository}
-import repository.WorkflowDefinitionSummaryRepository
+import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepositoryImpl, WorkflowStatusRepositoryImpl, WorkflowTransitionRepositoryImpl}
+import repository.WorkflowDefinitionSummaryRepositoryImpl
 import org.specs2.mutable.Specification
 import org.specs2.mock.Mockito
 import org.scalacheck.Properties
@@ -11,10 +11,10 @@ import org.scalacheck.Prop.forAll
 
 class WorkflowServiceSpec extends Specification with Mockito {
 
-  val summaryRepository = mock[WorkflowDefinitionSummaryRepository]
-  val workflowDefinitionRepository = mock[WorkflowDefinitionRepository]
-  val workflowStatusRepository = mock[WorkflowStatusRepository]
-  val workflowTransitionRepository = mock[WorkflowTransitionRepository]
+  val summaryRepository = mock[WorkflowDefinitionSummaryRepositoryImpl]
+  val workflowDefinitionRepository = mock[WorkflowDefinitionRepositoryImpl]
+  val workflowStatusRepository = mock[WorkflowStatusRepositoryImpl]
+  val workflowTransitionRepository = mock[WorkflowTransitionRepositoryImpl]
   val queryProcessor = mock[WorkflowQuery]
 
   // define mock functions
@@ -39,10 +39,10 @@ class WorkflowServiceSpec extends Specification with Mockito {
 }
 
 object WorkflowServiceProperty extends Properties("WorkflowService") with Mockito {
-  val summaryRepository = mock[WorkflowDefinitionSummaryRepository]
-  val workflowDefinitionRepository = mock[WorkflowDefinitionRepository]
-  val workflowStatusRepository = mock[WorkflowStatusRepository]
-  val workflowTransitionRepository = mock[WorkflowTransitionRepository]
+  val summaryRepository = mock[WorkflowDefinitionSummaryRepositoryImpl]
+  val workflowDefinitionRepository = mock[WorkflowDefinitionRepositoryImpl]
+  val workflowStatusRepository = mock[WorkflowStatusRepositoryImpl]
+  val workflowTransitionRepository = mock[WorkflowTransitionRepositoryImpl]
   val queryProcessor = mock[WorkflowQuery]
 
   // define mock functions

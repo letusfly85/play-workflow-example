@@ -41,6 +41,7 @@ class WorkflowQuery {
     }
   }
 
+  /*
   def searchDefinitionsByDefinitionId(id: Int): Option[WorkflowDefinitionEntity] = {
     (DB localTx { implicit session =>
       withSQL {
@@ -53,6 +54,7 @@ class WorkflowQuery {
       WorkflowFactory.buildDefinitionEntity(scheme, status)
     }
   }
+  */
 
   def searchTransitions(workflowId: Int): List[WorkflowTransitionEntity] = {
     (DB localTx { implicit session =>

@@ -11,23 +11,19 @@ class WorkflowRouter @Inject()
    transitionController: WorkflowTransitionController,
    transactionController: WorkflowTransactionController) extends SimpleRouter {
 
-  val prefix: String = "/api/workflow"
-
   override def routes: Routes = {
-    case GET(p"/summaries") =>
+    case GET(p"/") =>
+      //TODO handle without '/'
       workflowController.listSummary
+
+    case GET(p"/$id") =>
+      workflowController.listDefinition(id)
 
     case POST(p"/summaries") =>
       workflowController.createSummary
 
     case DELETE(p"/summaries") =>
       workflowController.destroySummary
-
-    case GET(p"/definitions") =>
-      workflowController.listDefinition
-
-    case GET(p"/definitions/$id") =>
-      workflowController.findDefinition(id)
 
     case POST(p"/definitions") =>
       workflowController.createDefinition

@@ -53,12 +53,14 @@ class WorkflowServiceImpl @Inject()
     }
   }
 
+  /*
   def findDefinition(id: Int): Either[Exception, WorkflowDefinitionEntity] = {
     queryProcessor.searchDefinitionsByDefinitionId(id) match {
       case Some(entity) => Right(entity)
       case None => Left(new RuntimeException("not found scheme id"))
     }
   }
+  */
 
   def createDefinition(schemeEntity: WorkflowDefinitionEntity): Either[Exception, WorkflowDefinitionEntity] = {
     val maybeStatus = workflowStatusRepository.find(schemeEntity.status.get.id)

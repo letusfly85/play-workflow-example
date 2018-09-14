@@ -18,8 +18,6 @@ trait WorkflowService {
 
   def destroySummary(entity: DefinitionSummaryEntity): Either[Exception, DefinitionSummaryEntity]
 
-  def findDefinition(id: Int): Either[Exception, WorkflowDefinitionEntity]
-
   def createDefinition(schemeEntity: WorkflowDefinitionEntity): Either[Exception, WorkflowDefinitionEntity]
 
 

@@ -49,6 +49,7 @@ class WorkflowQuerySpec extends Specification with Mockito {
     }
   }
 
+  /*
   "WorkflowQueryProcessor" should {
 
     "searchDefinitionsByDefinitionId" in new  AfterScope {
@@ -61,5 +62,6 @@ class WorkflowQuerySpec extends Specification with Mockito {
     }
 
   }
+  */
 
 }
