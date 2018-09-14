@@ -1,15 +1,24 @@
 <template>
   <div>
     <workflow-header></workflow-header>
-    <div class="card border-secondary mb-3">
-      <div class="card-body text-left">
-        <div v-for="workflow in workflows" v-bind:key="workflow.step_id">
-          <div class="card border-secondary mb-2">
-            <p>{{ workflow.step_id }}</p>
-            <p>{{ workflow.status.name }}</p>
-            <p>{{ workflow.step_label }}</p>
-          </div>
-        </div>
+    <div class="card border-light mb-4 card-workflow-list">
+      <div class="card-body ">
+        <table class="table table-hover">
+          <thead>
+          <tr align="left">
+            <th scope="col">Id</th>
+            <th scope="col">Status</th>
+            <th scope="col">Step Label</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="row in workflows" v-bind:key="row.step_id">
+            <td align="left">{{ row.step_id }}</td>
+            <td align="left">{{ row.status.name }}</td>
+            <td align="left">{{ row.step_label }}</td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <button v-on:click="toggleChange(addToggle)" class="btn btn-outline-success">
@@ -37,6 +46,7 @@ import ApiClient from './utils/ApiClient'
 import AppFooter from './utils/AppFooter'
 import WorkflowHeader from './workflow/WorkflowHeader'
 import WorkflowService from './service/WorkflowService'
+import WorkflowStatusService from './service/WorkflowStatusService'
 
 export default {
   name: 'Workflow',
@@ -101,8 +111,7 @@ export default {
       console.log(error)
     })
 
-    let targetPath = '/api/workflow-statuses/'
-    ApiClient.search(targetPath, (response) => {
+    WorkflowStatusService((response) => {
       console.log(response.data)
       self.statuses = response.data.map(function (record) {
         record.value = { id: record.id, name: record.name }
