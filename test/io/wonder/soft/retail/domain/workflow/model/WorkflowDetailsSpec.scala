@@ -3,12 +3,31 @@ package io.wonder.soft.retail.domain.workflow.model
 import scalikejdbc.specs2.mutable.AutoRollback
 import org.specs2.mutable._
 import scalikejdbc._
-import org.joda.time.{DateTime}
+import org.joda.time.DateTime
+import org.specs2.specification.BeforeAfterAll
+import scalikejdbc.config.DBs
 import scalikejdbc.jodatime.JodaParameterBinderFactory._
 import scalikejdbc.jodatime.JodaTypeBinder._
 
 
-class WorkflowDetailsSpec extends Specification {
+class WorkflowDetailsSpec extends Specification with BeforeAfterAll {
+  DBs.setupAll()
+
+  def beforeAll = {
+    val testWorkflowId = 99
+    val testWorkflowName = "test"
+    DB localTx { implicit session =>
+      SQL("delete from workflow_details where id = ?").bind(123).update.apply
+      SQL("insert into workflow_details (id, workflow_id, name, status_id, step_id, step_label, is_first_step, is_last_step) values (?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(123, testWorkflowId, testWorkflowName, 99, 1, "step1", true, false).update.apply
+    }
+  }
+
+  def afterAll = {
+    DB localTx { implicit session =>
+      SQL("delete from workflow_details where id = ?").bind(123).update.apply
+    }
+  }
 
   "WorkflowDetails" should {
 
@@ -43,14 +62,13 @@ class WorkflowDetailsSpec extends Specification {
       created should not beNull
     }
     "save a record" in new AutoRollback {
-      val entity = WorkflowDetails.findAll().head
-      // TODO modify something
-      val modified = entity
+      val entity = WorkflowDetails.find(123).get
+      val modified = entity.copy(name = "hoge")
       val updated = WorkflowDetails.save(modified)
       updated should not equalTo(entity)
     }
     "destroy a record" in new AutoRollback {
-      val entity = WorkflowDetails.findAll().head
+      val entity = WorkflowDetails.find(123).get
       val deleted = WorkflowDetails.destroy(entity) == 1
       deleted should beTrue
       val shouldBeNone = WorkflowDetails.find(123)
