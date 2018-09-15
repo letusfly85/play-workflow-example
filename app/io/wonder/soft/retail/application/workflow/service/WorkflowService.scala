@@ -4,12 +4,6 @@ import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, Workf
 
 trait WorkflowService {
 
-  def listStatus: List[WorkflowStatusEntity]
-
-  def createStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity]
-
-  def updateStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity]
-
   def listDefinition(workflowId: Int): List[WorkflowDetailEntity]
 
   def listSummary: List[DefinitionSummaryEntity]

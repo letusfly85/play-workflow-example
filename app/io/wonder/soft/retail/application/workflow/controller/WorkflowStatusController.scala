@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.application.workflow.controller
 
 import io.wonder.soft.retail.application.helper.JsResultHelper
-import io.wonder.soft.retail.application.workflow.service.WorkflowService
+import io.wonder.soft.retail.application.workflow.service.WorkflowStatusService
 import io.wonder.soft.retail.domain.workflow.entity._
 import javax.inject._
 import play.api.Logger
@@ -12,12 +12,12 @@ import scala.util.{Failure, Success, Try}
 
 @Singleton
 class WorkflowStatusController @Inject()
-  (service: WorkflowService,
+  (service: WorkflowStatusService,
    cc: ControllerComponents)
   extends AbstractController(cc) with JsResultHelper {
 
   def listStatus = Action {
-    Ok(Json.toJson(service.listStatus))
+    Ok(Json.toJson(service.list))
   }
 
   def createStatus = Action { implicit request =>
@@ -25,7 +25,7 @@ class WorkflowStatusController @Inject()
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
         statusEntity <- Json.fromJson[WorkflowStatusEntity](json).right
-        entity <- service.createStatus(statusEntity).right
+        entity <- service.create(statusEntity).right
       } yield entity
 
     } match {
@@ -42,7 +42,7 @@ class WorkflowStatusController @Inject()
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
         statusEntity <- Json.fromJson[WorkflowStatusEntity](json).right
-        entity <- service.updateStatus(statusEntity).right
+        entity <- service.update(statusEntity).right
       } yield entity
 
     } match {
