@@ -1,4 +1,4 @@
-package repository
+package io.wonder.soft.retail.domain.workflow.repository
 
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowEntity
 
