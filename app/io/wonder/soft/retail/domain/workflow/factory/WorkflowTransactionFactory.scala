@@ -1,13 +1,13 @@
 package io.wonder.soft.retail.domain.workflow.factory
 
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowTransactionEntity, WorkflowTransitionEntity, WorkflowUserTransitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowTransactionEntity, WorkflowTransitionEntity, WorkflowUserTransitionEntity}
 import io.wonder.soft.retail.domain.workflow.entity._
 
 object WorkflowTransactionFactory {
 
   def buildTransaction(userId: String,
                        transactionId: String,
-                       define: WorkflowDefinitionEntity): WorkflowTransactionEntity = {
+                       define: WorkflowDetailEntity): WorkflowTransactionEntity = {
 
     WorkflowTransactionEntity(
       id = 0,
@@ -35,9 +35,9 @@ object WorkflowTransactionFactory {
   }
 
   def buildCurrentState(userId: String,
-            transactionId: String,
-            define: WorkflowDefinitionEntity,
-            serviceId: Int = 0): WorkflowCurrentStateEntity = {
+                        transactionId: String,
+                        define: WorkflowDetailEntity,
+                        serviceId: Int = 0): WorkflowCurrentStateEntity = {
     WorkflowCurrentStateEntity(
       id = 0,
       workflowId = define.workflowId,

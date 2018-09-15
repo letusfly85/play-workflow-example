@@ -27,7 +27,7 @@ class WorkflowController @Inject()
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
-        summaryEntity <- Json.fromJson[WorkflowDefinitionSummaryEntity](json).right
+        summaryEntity <- Json.fromJson[WorkflowEntity](json).right
         entity <- service.createSummary(summaryEntity).right
       } yield entity
 
@@ -48,7 +48,7 @@ class WorkflowController @Inject()
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
-        summaryEntity <- Json.fromJson[WorkflowDefinitionSummaryEntity](json).right
+        summaryEntity <- Json.fromJson[WorkflowEntity](json).right
         entity <- service.destroySummary(summaryEntity).right
       } yield entity
 
@@ -75,7 +75,7 @@ class WorkflowController @Inject()
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
-        schemeEntity <- Json.fromJson[WorkflowDefinitionEntity](json).right
+        schemeEntity <- Json.fromJson[WorkflowDetailEntity](json).right
         entity <- service.createDefinition(schemeEntity).right
       } yield entity
 

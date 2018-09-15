@@ -12,7 +12,7 @@ class DomainModule extends AbstractModule with ScalaModule {
 
   def configure = {
 
-    bind[WorkflowDefinitionRepository].to[WorkflowDefinitionRepositoryImpl]
+    bind[WorkflowDetailRepository].to[WorkflowDetailRepositoryImpl]
     bind[WorkflowStatusRepository].to[WorkflowStatusRepositoryImpl]
 
     bind[CraftLineRepository].to[CraftLineRepositoryImpl]

@@ -1,12 +1,12 @@
 package io.wonder.soft.retail.domain.workflow.entity
 
-import io.wonder.soft.retail.domain.workflow.model.WorkflowDefinitions
 import io.wonder.soft.retail.domain.Entity
+import io.wonder.soft.retail.domain.workflow.model.WorkflowDetails
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 
-final case class WorkflowDefinitionEntity(
+final case class WorkflowDetailEntity(
   workflowId: Int,
   name: String,
   status: Option[WorkflowStatusEntity],
@@ -16,8 +16,8 @@ final case class WorkflowDefinitionEntity(
   isLastStep: Boolean = false
 ) extends Entity
 
-object WorkflowDefinitionEntity {
-  implicit def workflowDefinitionReads: Reads[WorkflowDefinitionEntity] =
+object WorkflowDetailEntity {
+  implicit def workflowDetailReads: Reads[WorkflowDetailEntity] =
     (
       (JsPath \ "workflow_id").read[Int] and
       (JsPath \ "name").read[String] and
@@ -26,9 +26,9 @@ object WorkflowDefinitionEntity {
       (JsPath \ "step_label").read[String] and
       (JsPath \ "is_first_step").read[Boolean] and
       (JsPath \ "is_last_step").read[Boolean]
-    )(WorkflowDefinitionEntity.apply _)
+    )(WorkflowDetailEntity.apply _)
 
-  implicit def workflowDefinitionWrites: Writes[WorkflowDefinitionEntity] =
+  implicit def workflowDetailWrites: Writes[WorkflowDetailEntity] =
     (
       (JsPath \ "workflow_id").write[Int] and
       (JsPath \ "name").write[String] and
@@ -37,11 +37,11 @@ object WorkflowDefinitionEntity {
       (JsPath \ "step_label").write[String] and
       (JsPath \ "is_first_step").write[Boolean] and
       (JsPath \ "is_last_step").write[Boolean]
-    )(unlift(WorkflowDefinitionEntity.unapply))
+    )(unlift(WorkflowDetailEntity.unapply))
 
   implicit def convertFromModel(
-    model: WorkflowDefinitions): WorkflowDefinitionEntity = {
-    WorkflowDefinitionEntity(
+    model: WorkflowDetails): WorkflowDetailEntity = {
+    WorkflowDetailEntity(
       model.workflowId,
       model.name,
       None,
@@ -52,7 +52,7 @@ object WorkflowDefinitionEntity {
     )
   }
 
-  implicit def convertFromModels(models: List[WorkflowDefinitions]): List[WorkflowDefinitionEntity] = {
+  implicit def convertFromModels(models: List[WorkflowDetails]): List[WorkflowDetailEntity] = {
     models.map(convertFromModel)
   }
 }

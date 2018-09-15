@@ -62,7 +62,7 @@ class WorkflowTransactionServiceImpl @Inject() (
     }
   }
 
-  def findDefinitionByStepId(workflowId: Int, stepId: Int): Option[WorkflowDefinitionEntity] = {
+  def findDefinitionByStepId(workflowId: Int, stepId: Int): Option[WorkflowDetailEntity] = {
     defineQuery.findDefine(workflowId, stepId)
   }
 

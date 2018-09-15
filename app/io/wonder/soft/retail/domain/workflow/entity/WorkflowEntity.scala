@@ -1,12 +1,12 @@
 package io.wonder.soft.retail.domain.workflow.entity
 
 import io.wonder.soft.retail.domain.Entity
-import io.wonder.soft.retail.domain.workflow.model.WorkflowDefinitionSummaries
+import io.wonder.soft.retail.domain.workflow.model.Workflows
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 
-final case class WorkflowDefinitionSummaryEntity(
+final case class WorkflowEntity(
     id: Int,
     workflowId: Int,
     name: String,
@@ -14,25 +14,25 @@ final case class WorkflowDefinitionSummaryEntity(
     serviceId: Int,
 ) extends Entity
 
-object WorkflowDefinitionSummaryEntity {
-  implicit def workflowDefinitionSummariesReads: Reads[WorkflowDefinitionSummaryEntity] = (
+object WorkflowEntity {
+  implicit def workflowReads: Reads[WorkflowEntity] = (
     (JsPath \ "id").read[Int] and
     (JsPath \ "workflow_id").read[Int] and
     (JsPath \ "name").read[String] and
     (JsPath \ "description").readNullable[String] and
     (JsPath \ "service_id").read[Int]
-   )(WorkflowDefinitionSummaryEntity.apply _)
+   )(WorkflowEntity.apply _)
 
-  implicit def workflowDefinitionSummariesWrites: Writes[WorkflowDefinitionSummaryEntity] = (
+  implicit def workflowWrites: Writes[WorkflowEntity] = (
     (JsPath \ "id").write[Int] and
     (JsPath \ "workflow_id").write[Int] and
     (JsPath \ "name").write[String] and
     (JsPath \ "description").writeNullable[String] and
     (JsPath \ "service_id").write[Int]
-  )(unlift(WorkflowDefinitionSummaryEntity.unapply))
+  )(unlift(WorkflowEntity.unapply))
 
-  implicit def convertFromModel(model: WorkflowDefinitionSummaries): WorkflowDefinitionSummaryEntity = {
-    WorkflowDefinitionSummaryEntity(
+  implicit def convertFromModel(model: Workflows): WorkflowEntity = {
+    WorkflowEntity(
       model.id,
       model.workflowId,
       model.name,
@@ -41,7 +41,7 @@ object WorkflowDefinitionSummaryEntity {
     )
   }
 
-  implicit def convertFromModels(models: List[WorkflowDefinitionSummaries])
-    : List[WorkflowDefinitionSummaryEntity] =
+  implicit def convertFromModels(models: List[Workflows])
+    : List[WorkflowEntity] =
     models.map(convertFromModel)
 }

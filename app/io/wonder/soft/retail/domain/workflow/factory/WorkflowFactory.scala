@@ -5,14 +5,14 @@ import io.wonder.soft.retail.domain.workflow.entity._
 
 object WorkflowFactory {
 
-  def buildDefinitionEntity(schemeEntity: WorkflowDefinitionEntity, statusEntity: WorkflowStatusEntity): WorkflowDefinitionEntity = {
+  def buildDefinitionEntity(schemeEntity: WorkflowDetailEntity, statusEntity: WorkflowStatusEntity): WorkflowDetailEntity = {
     schemeEntity.copy(status = Some(statusEntity))
   }
 
   def buildTransitionEntity(
-    transitionEntity: WorkflowTransitionEntity,
-    fromStep: WorkflowDefinitionEntity,
-    toStep: WorkflowDefinitionEntity): WorkflowTransitionEntity = {
+                             transitionEntity: WorkflowTransitionEntity,
+                             fromStep: WorkflowDetailEntity,
+                             toStep: WorkflowDetailEntity): WorkflowTransitionEntity = {
 
     WorkflowTransitionEntity(
       transitionEntity.id,

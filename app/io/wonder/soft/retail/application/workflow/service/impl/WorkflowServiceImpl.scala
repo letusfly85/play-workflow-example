@@ -1,19 +1,19 @@
 package io.wonder.soft.retail.application.workflow.service.impl
 
 import javax.inject.Inject
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDefinitionEntity, WorkflowStatusEntity, WorkflowDefinitionSummaryEntity => DefinitionSummaryEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowStatusEntity, WorkflowEntity => DefinitionSummaryEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepositoryImpl, WorkflowStatusRepositoryImpl}
+import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDetailRepositoryImpl, WorkflowStatusRepositoryImpl}
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.application.workflow.service.WorkflowService
-import repository.WorkflowDefinitionSummaryRepositoryImpl
+import repository.WorkflowRepositoryImpl
 
 import scala.util.{Failure, Success, Try}
 
 class WorkflowServiceImpl @Inject()
-(summaryRepository: WorkflowDefinitionSummaryRepositoryImpl,
- workflowRepository: WorkflowDefinitionRepositoryImpl,
+(summaryRepository: WorkflowRepositoryImpl,
+ workflowRepository: WorkflowDetailRepositoryImpl,
  workflowStatusRepository: WorkflowStatusRepositoryImpl,
  queryProcessor: WorkflowQuery
 )
@@ -29,7 +29,7 @@ class WorkflowServiceImpl @Inject()
   def updateStatus(workflowStatusEntity: WorkflowStatusEntity): Either[Exception, WorkflowStatusEntity] =
     workflowStatusRepository.update(workflowStatusEntity)
 
-  def listDefinition(workflowId: Int): List[WorkflowDefinitionEntity] = {
+  def listDefinition(workflowId: Int): List[WorkflowDetailEntity] = {
     queryProcessor.searchDefinitions(workflowId)
   }
 
@@ -62,7 +62,7 @@ class WorkflowServiceImpl @Inject()
   }
   */
 
-  def createDefinition(schemeEntity: WorkflowDefinitionEntity): Either[Exception, WorkflowDefinitionEntity] = {
+  def createDefinition(schemeEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity] = {
     val maybeStatus = workflowStatusRepository.find(schemeEntity.status.get.id)
 
     maybeStatus match {

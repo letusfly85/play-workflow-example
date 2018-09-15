@@ -6,7 +6,7 @@ import io.wonder.soft.retail.domain.example.craft.repository.CraftLineRepository
 import io.wonder.soft.retail.domain.example.order.entity.OrderEntity
 import io.wonder.soft.retail.domain.example.order.query.OrderQueryProcessor
 import io.wonder.soft.retail.domain.example.order.repository.OrderRepository
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowDefinitionEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowDetailEntity}
 import javax.inject.Inject
 import play.api.Logger
 
@@ -21,7 +21,7 @@ class ApplicationTransactionService @Inject()
   val craftServiceId: Int = 3
   val serviceMap = Map(orderServiceId -> 'order, craftServiceId -> 'craft)
 
-  def updateAppTransaction(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
+  def updateAppTransaction(define: WorkflowDetailEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
     serviceMap.get(currentStateEntity.serviceId) match {
       case Some('order) =>
         updateOrderRepository(define, currentStateEntity) match {
@@ -40,7 +40,7 @@ class ApplicationTransactionService @Inject()
     }
   }
 
-  private def updateOrderRepository(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, OrderEntity] = {
+  private def updateOrderRepository(define: WorkflowDetailEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, OrderEntity] = {
     orderQueryProcessor.findByTransactionId(currentStateEntity.transactionId) match {
       case Some(orderEntity) =>
         val nextOrderEntity =
@@ -54,7 +54,7 @@ class ApplicationTransactionService @Inject()
     }
   }
 
-  private def updateCraftLineRepository(define: WorkflowDefinitionEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, CraftLineEntity] = {
+  private def updateCraftLineRepository(define: WorkflowDetailEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, CraftLineEntity] = {
     Logger.info(s"update craftLine for ${currentStateEntity.toString}")
     craftLineQueryProcessor.findByTransactionId(currentStateEntity.transactionId) match {
       case Some(craftLineEntity) =>

@@ -1,9 +1,10 @@
 package io.wonder.soft.retail.application.workflow.service
 
+import io.wonder.soft.retail.application.workflow.service.impl.WorkflowServiceImpl
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowStatusEntity => StatusEntity}
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
-import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDefinitionRepositoryImpl, WorkflowStatusRepositoryImpl, WorkflowTransitionRepositoryImpl}
-import repository.WorkflowDefinitionSummaryRepositoryImpl
+import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDetailRepositoryImpl, WorkflowStatusRepositoryImpl, WorkflowTransitionRepositoryImpl}
+import repository.WorkflowRepositoryImpl
 import org.specs2.mutable.Specification
 import org.specs2.mock.Mockito
 import org.scalacheck.Properties
@@ -11,21 +12,19 @@ import org.scalacheck.Prop.forAll
 
 class WorkflowServiceSpec extends Specification with Mockito {
 
-  val summaryRepository = mock[WorkflowDefinitionSummaryRepositoryImpl]
-  val workflowDefinitionRepository = mock[WorkflowDefinitionRepositoryImpl]
+  val summaryRepository = mock[WorkflowRepositoryImpl]
+  val workflowRepository = mock[WorkflowDetailRepositoryImpl]
   val workflowStatusRepository = mock[WorkflowStatusRepositoryImpl]
-  val workflowTransitionRepository = mock[WorkflowTransitionRepositoryImpl]
   val queryProcessor = mock[WorkflowQuery]
 
   // define mock functions
   queryProcessor.searchStatuses() returns List(StatusEntity(1, "test"), StatusEntity(2, "test"), StatusEntity(3, "test"))
 
   // create a service class
-  val service = new WorkflowService(
+  val service = new WorkflowServiceImpl(
     summaryRepository = summaryRepository,
-    workflowDefinitionRepository = workflowDefinitionRepository,
+    workflowRepository = workflowRepository,
     workflowStatusRepository = workflowStatusRepository,
-    workflowTransitionRepository = workflowTransitionRepository,
     queryProcessor = queryProcessor
   )
 
@@ -39,10 +38,9 @@ class WorkflowServiceSpec extends Specification with Mockito {
 }
 
 object WorkflowServiceProperty extends Properties("WorkflowService") with Mockito {
-  val summaryRepository = mock[WorkflowDefinitionSummaryRepositoryImpl]
-  val workflowDefinitionRepository = mock[WorkflowDefinitionRepositoryImpl]
+  val summaryRepository = mock[WorkflowRepositoryImpl]
+  val workflowRepository = mock[WorkflowDetailRepositoryImpl]
   val workflowStatusRepository = mock[WorkflowStatusRepositoryImpl]
-  val workflowTransitionRepository = mock[WorkflowTransitionRepositoryImpl]
   val queryProcessor = mock[WorkflowQuery]
 
   // define mock functions
@@ -54,11 +52,10 @@ object WorkflowServiceProperty extends Properties("WorkflowService") with Mockit
   }
 
   // create a service class
-  val service = new WorkflowService(
+  val service = new WorkflowServiceImpl(
     summaryRepository = summaryRepository,
-    workflowDefinitionRepository = workflowDefinitionRepository,
+    workflowRepository = workflowRepository,
     workflowStatusRepository = workflowStatusRepository,
-    workflowTransitionRepository = workflowTransitionRepository,
     queryProcessor = queryProcessor
   )
 
