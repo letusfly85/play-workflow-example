@@ -1,18 +1,20 @@
 package io.wonder.soft.retail.application.workflow.service
 
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowEntity => DefinitionSummaryEntity, WorkflowStatusEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowEntity}
 
 trait WorkflowService {
 
-  def listDefinition(workflowId: Int): List[WorkflowDetailEntity]
+  def show(workflowId: Int): List[WorkflowDetailEntity]
 
-  def listSummary: List[DefinitionSummaryEntity]
+  def list: List[WorkflowEntity]
 
-  def createSummary(entity: DefinitionSummaryEntity): Either[Exception, DefinitionSummaryEntity]
+  def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 
-  def destroySummary(entity: DefinitionSummaryEntity): Either[Exception, DefinitionSummaryEntity]
+  def destroy(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 
-  def createDefinition(schemeEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity]
+  def createDetail(detailEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity]
+
+  // def update(entity: WorkflowEntity)
 
 
 }

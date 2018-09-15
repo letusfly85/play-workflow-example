@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.application.workflow.service.impl
 
 import javax.inject.Inject
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowEntity => DefinitionSummaryEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowEntity}
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDetailRepository, WorkflowRepository, WorkflowStatusRepository}
@@ -18,22 +18,22 @@ class WorkflowServiceImpl @Inject()
   query: WorkflowQuery
 ) extends ApplicationService with WorkflowService {
 
-  def listDefinition(workflowId: Int): List[WorkflowDetailEntity] = {
-    query.searchDefinitions(workflowId)
-  }
-
-  def listSummary: List[DefinitionSummaryEntity] = {
+  def list: List[WorkflowEntity] = {
     query.searchSummaries
   }
 
-  def createSummary(entity: DefinitionSummaryEntity): Either[Exception, DefinitionSummaryEntity] = {
+  def show(workflowId: Int): List[WorkflowDetailEntity] = {
+    query.searchDefinitions(workflowId)
+  }
+
+  def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
     val nextWorkflowId = query.findMaxSummaryWorkflowId + 1
     summaryRepository.create(entity.copy(workflowId = nextWorkflowId))
   }
 
-  def destroySummary(entity: DefinitionSummaryEntity): Either[Exception, DefinitionSummaryEntity] = {
+  def destroy(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
     Try {
-      //TODO destroy related entitie
+      //TODO destroy related entities
       summaryRepository.destroy(entity.id)
 
     } match {
@@ -42,21 +42,12 @@ class WorkflowServiceImpl @Inject()
     }
   }
 
-  /*
-  def findDefinition(id: Int): Either[Exception, WorkflowDefinitionEntity] = {
-    queryProcessor.searchDefinitionsByDefinitionId(id) match {
-      case Some(entity) => Right(entity)
-      case None => Left(new RuntimeException("not found scheme id"))
-    }
-  }
-  */
-
-  def createDefinition(schemeEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity] = {
-    val maybeStatus = workflowStatusRepository.find(schemeEntity.status.get.id)
+  def createDetail(detailEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity] = {
+    val maybeStatus = workflowStatusRepository.find(detailEntity.status.get.id)
 
     maybeStatus match {
       case Some(statusEntity) =>
-        val entity = WorkflowFactory.buildDefinitionEntity(schemeEntity, statusEntity)
+        val entity = WorkflowFactory.buildDefinitionEntity(detailEntity, statusEntity)
         workflowRepository.create(entity)
 
       case None =>

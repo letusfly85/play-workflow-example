@@ -11,6 +11,7 @@ final case class WorkflowEntity(
     workflowId: Int,
     name: String,
     description: Option[String],
+    details: List[WorkflowDetailEntity],
     serviceId: Int,
 ) extends Entity
 
@@ -20,6 +21,7 @@ object WorkflowEntity {
     (JsPath \ "workflow_id").read[Int] and
     (JsPath \ "name").read[String] and
     (JsPath \ "description").readNullable[String] and
+    (JsPath \ "details").read[List[WorkflowDetailEntity]] and
     (JsPath \ "service_id").read[Int]
    )(WorkflowEntity.apply _)
 
@@ -28,6 +30,7 @@ object WorkflowEntity {
     (JsPath \ "workflow_id").write[Int] and
     (JsPath \ "name").write[String] and
     (JsPath \ "description").writeNullable[String] and
+    (JsPath \ "details").write[List[WorkflowDetailEntity]] and
     (JsPath \ "service_id").write[Int]
   )(unlift(WorkflowEntity.unapply))
 
@@ -37,7 +40,8 @@ object WorkflowEntity {
       model.workflowId,
       model.name,
       model.description,
-      model.serviceId,
+      List.empty[WorkflowDetailEntity],
+      model.serviceId
     )
   }
 

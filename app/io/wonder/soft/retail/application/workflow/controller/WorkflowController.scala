@@ -19,12 +19,12 @@ class WorkflowController @Inject()
    cc: ControllerComponents)
   extends AbstractController(cc) with JsResultHelper {
 
-  def list= Action {
-    Ok(Json.toJson(service.listSummary))
+  def list = Action {
+    Ok(Json.toJson(service.list))
   }
 
   def show(id: String) = Action { implicit request =>
-    Ok(Json.toJson(service.listDefinition(id.toInt)))
+    Ok(Json.toJson(service.show(id.toInt)))
   }
 
   def create = Action { implicit request =>
@@ -32,7 +32,7 @@ class WorkflowController @Inject()
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
         summaryEntity <- Json.fromJson[WorkflowEntity](json).right
-        entity <- service.createSummary(summaryEntity).right
+        entity <- service.create(summaryEntity).right
       } yield entity
 
     } match {
@@ -55,7 +55,7 @@ class WorkflowController @Inject()
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
         schemeEntity <- Json.fromJson[WorkflowDetailEntity](json).right
-        entity <- service.createDefinition(schemeEntity).right
+        entity <- service.createDetail(schemeEntity).right
       } yield entity
 
     } match {
@@ -76,7 +76,7 @@ class WorkflowController @Inject()
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
         summaryEntity <- Json.fromJson[WorkflowEntity](json).right
-        entity <- service.destroySummary(summaryEntity).right
+        entity <- service.destroy(summaryEntity).right
       } yield entity
 
     } match {
