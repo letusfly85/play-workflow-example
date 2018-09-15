@@ -7,13 +7,15 @@ import play.api.routing.SimpleRouter
 class ApiRouter @Inject()
  (workflowRouter: WorkflowRouter,
   workflowStatusRouter: WorkflowStatusRouter,
-  workflowTransitionRouter: WorkflowTransitionRouter
+  workflowTransitionRouter: WorkflowTransitionRouter,
+  userWorkflowRouter: UserWorkflowRouter
  ) extends SimpleRouter {
 
   override def routes: Routes = {
     workflowRouter.routes orElse
     workflowStatusRouter.routes orElse
-    workflowTransitionRouter.routes
+    workflowTransitionRouter.routes orElse
+    userWorkflowRouter.routes
   }
 
 }
