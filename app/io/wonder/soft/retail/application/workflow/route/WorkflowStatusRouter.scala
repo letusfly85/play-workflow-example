@@ -11,13 +11,13 @@ class WorkflowStatusRouter @Inject() (statusController: WorkflowStatusController
   val prefix: String = "/api/workflow-statuses"
 
   override def routes: Routes = {
-    case GET(p"/") =>
+    case GET(p"/workflow-statuses") =>
       statusController.listStatus
 
-    case POST(p"/") =>
+    case POST(p"/workflow-statuses") =>
       statusController.createStatus
 
-    case PUT(p"/") =>
+    case PUT(p"/workflow-statuses") =>
       statusController.updateStatus
   }
 }

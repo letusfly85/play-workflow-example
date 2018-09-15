@@ -11,10 +11,10 @@ class WorkflowTransitionRouter @Inject()(transitionController: WorkflowTransitio
   val prefix: String = "/api/workflows"
 
   override def routes: Routes = {
-    case GET(p"/${workflowId}/transitions") =>
+    case GET(p"/workflows/${workflowId}/transitions") =>
       transitionController.listTransition(workflowId)
 
-    case POST(p"/${workflowId}/transitions") =>
+    case POST(p"/workflows/${workflowId}/transitions") =>
       transitionController.createTransition(workflowId)
   }
 }
