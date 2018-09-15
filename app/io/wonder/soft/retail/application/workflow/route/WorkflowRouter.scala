@@ -1,6 +1,6 @@
 package io.wonder.soft.retail.application.workflow.route
 
-import io.wonder.soft.retail.application.workflow.controller.{WorkflowController, WorkflowTransactionController}
+import io.wonder.soft.retail.application.workflow.controller.{WorkflowController, UserTransactionController}
 import javax.inject.Inject
 import play.api.routing.Router.Routes
 import play.api.routing.SimpleRouter
@@ -8,7 +8,7 @@ import play.api.routing.sird._
 
 class WorkflowRouter @Inject()
   (workflowController: WorkflowController,
-   transactionController: WorkflowTransactionController) extends SimpleRouter {
+   transactionController: UserTransactionController) extends SimpleRouter {
 
   val prefix = "workflows"
 
@@ -27,12 +27,6 @@ class WorkflowRouter @Inject()
 
     case DELETE(p"/workflows/$id") =>
       workflowController.destroy(id)
-
-    case GET(p"/workflows/user-transitions") =>
-      transactionController.listTransition
-
-    case POST(p"/workflows/user-transactions") =>
-      transactionController.proceedState
   }
 
 }

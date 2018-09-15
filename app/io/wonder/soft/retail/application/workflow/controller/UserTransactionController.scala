@@ -11,24 +11,17 @@ import play.api.libs.json._
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class WorkflowTransactionController @Inject()(
+class UserTransactionController @Inject()(
     service: WorkflowTransactionService,
     cc: ControllerComponents)
     extends AbstractController(cc)
     with JsResultHelper {
 
-  def listTransition = Action { implicit request =>
-    (request.getQueryString("workflow-id"), request.getQueryString("transaction-id")) match {
-      case (Some(workflowId), Some(transactionId)) =>
-        Ok(Json.toJson(service.listTransition(workflowId.toInt, transactionId)))
-
-      case _ =>
-        Logger.info("workflow-id and transanction-id is necessary")
-        InternalServerError(JsObject.empty)
-    }
+  def findTransition(userId: String, workflowId: String, transactionId: String) = Action { implicit request =>
+    Ok(Json.toJson(service.listTransition(workflowId.toInt, transactionId)))
   }
 
-  def proceedState = Action { implicit request =>
+  def proceed(userId: String, workflowId: String, transactionId: String) = Action { implicit request =>
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
