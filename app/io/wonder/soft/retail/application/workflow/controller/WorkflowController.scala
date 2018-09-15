@@ -19,11 +19,15 @@ class WorkflowController @Inject()
    cc: ControllerComponents)
   extends AbstractController(cc) with JsResultHelper {
 
-  def listSummary = Action {
+  def list= Action {
     Ok(Json.toJson(service.listSummary))
   }
 
-  def createSummary = Action { implicit request =>
+  def show(id: String) = Action { implicit request =>
+    Ok(Json.toJson(service.listDefinition(id.toInt)))
+  }
+
+  def create = Action { implicit request =>
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
@@ -44,7 +48,30 @@ class WorkflowController @Inject()
     }
   }
 
-  def destroySummary = Action { implicit request =>
+  //todo use cats
+  //import cats.implicits._
+  def update(workflowId: String) = Action { implicit request =>
+    Try {
+      for {
+        json <- request.body.asJson.toRight(new Exception("")).right
+        schemeEntity <- Json.fromJson[WorkflowDetailEntity](json).right
+        entity <- service.createDefinition(schemeEntity).right
+      } yield entity
+
+    } match {
+      case Success(either) => either match {
+        case Right(definitionEntity) => Created(Json.toJson(definitionEntity))
+        case Left(e) =>
+          Logger.info(e.toString)
+          InternalServerError(JsObject.empty)
+      }
+      case Failure(e) =>
+        Logger.info(e.getMessage)
+        InternalServerError(JsObject.empty)
+    }
+  }
+
+  def destroy(id: String) = Action { implicit request =>
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
@@ -65,32 +92,6 @@ class WorkflowController @Inject()
     }
   }
 
-  def listDefinition(id: String) = Action { implicit request =>
-    Ok(Json.toJson(service.listDefinition(id.toInt)))
-  }
-
-  //todo use cats
-  //import cats.implicits._
-  def createDefinition(workflowId: String) = Action { implicit request =>
-    Try {
-      for {
-        json <- request.body.asJson.toRight(new Exception("")).right
-        schemeEntity <- Json.fromJson[WorkflowDetailEntity](json).right
-        entity <- service.createDefinition(schemeEntity).right
-      } yield entity
-
-    } match {
-      case Success(either) => either match {
-        case Right(definitionEntity) => Created(Json.toJson(definitionEntity))
-        case Left(e) =>
-          Logger.info(e.toString)
-          InternalServerError(JsObject.empty)
-      }
-      case Failure(e) =>
-        Logger.info(e.getMessage)
-        InternalServerError(JsObject.empty)
-    }
-  }
 
   def listCraftLineActions = Action { implicit request =>
     Ok(Json.toJson(craftLineActionService.listActions))
@@ -117,12 +118,5 @@ class WorkflowController @Inject()
       case Failure(_) => InternalServerError(JsObject.empty)
     }
   }
-
-  // TODO
-  def listOrderActions = ???
-
-  def createActionCondition = ???
-
-  def deleteActionCondition = ???
 
 }

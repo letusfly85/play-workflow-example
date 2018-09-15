@@ -14,19 +14,19 @@ class WorkflowRouter @Inject()
 
   override def routes: Routes = {
     case GET(p"/workflows") =>
-      workflowController.listSummary
+      workflowController.list
 
     case GET(p"/workflows/$id") =>
-      workflowController.listDefinition(id)
-
-    case POST(p"/workflows/$id") =>
-      workflowController.createDefinition(id)
+      workflowController.show(id)
 
     case POST(p"/workflows") =>
-      workflowController.createSummary
+      workflowController.create
+
+    case POST(p"/workflows/$id") =>
+      workflowController.update(id)
 
     case DELETE(p"/workflows/$id") =>
-      workflowController.destroySummary
+      workflowController.destroy(id)
 
     case GET(p"/workflows/user-transitions") =>
       transactionController.listTransition
