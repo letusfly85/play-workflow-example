@@ -3,11 +3,8 @@ package io.wonder.soft.retail.domain.workflow.model
 import scalikejdbc.specs2.mutable.AutoRollback
 import org.specs2.mutable._
 import scalikejdbc._
-import org.joda.time.DateTime
 import org.specs2.specification.BeforeAfterAll
 import scalikejdbc.config.DBs
-import scalikejdbc.jodatime.JodaParameterBinderFactory._
-import scalikejdbc.jodatime.JodaTypeBinder._
 
 
 class WorkflowDetailsSpec extends Specification with BeforeAfterAll {
@@ -17,6 +14,8 @@ class WorkflowDetailsSpec extends Specification with BeforeAfterAll {
     val testWorkflowId = 99
     val testWorkflowName = "test"
     DB localTx { implicit session =>
+      SQL("delete from workflow_statuses where id = ?").bind(1).update.apply
+      SQL("insert into workflow_statuses (id, name) values (?, ?)").bind(1, "未着手").update.apply
       SQL("delete from workflow_details where id = ?").bind(123).update.apply
       SQL("insert into workflow_details (id, workflow_id, name, status_id, step_id, step_label, is_first_step, is_last_step) values (?, ?, ?, ?, ?, ?, ?, ?)")
         .bind(123, testWorkflowId, testWorkflowName, 99, 1, "step1", true, false).update.apply
@@ -58,7 +57,15 @@ class WorkflowDetailsSpec extends Specification with BeforeAfterAll {
       count should be_>(0L)
     }
     "create new record" in new AutoRollback {
-      val created = WorkflowDetails.create(workflowId = 123, name = "MyString", statusId = 123, stepId = 123, stepLabel = "MyString", isFirstStep = false, isLastStep = false)
+      val created =
+        WorkflowDetails.create(
+          workflowId = 123,
+          name = "MyString",
+          statusId = 1,
+          stepId = 123,
+          stepLabel = "MyString",
+          isFirstStep = false,
+          isLastStep = false)
       created should not beNull
     }
     "save a record" in new AutoRollback {

@@ -1,14 +1,12 @@
 package io.wonder.soft.retail.application.workflow.route
 
-import io.wonder.soft.retail.application.workflow.controller.{WorkflowController, UserTransactionController}
+import io.wonder.soft.retail.application.workflow.controller.WorkflowController
 import javax.inject.Inject
 import play.api.routing.Router.Routes
 import play.api.routing.SimpleRouter
 import play.api.routing.sird._
 
-class WorkflowRouter @Inject()
-  (workflowController: WorkflowController,
-   transactionController: UserTransactionController) extends SimpleRouter {
+class WorkflowRouter @Inject() (workflowController: WorkflowController) extends SimpleRouter {
 
   val prefix = "workflows"
 
