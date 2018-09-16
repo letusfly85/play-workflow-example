@@ -29,24 +29,19 @@ class WorkflowQuery {
     Workflows.findAll.maxBy(ws => ws.workflowId).workflowId
   }
 
-  def search(workflowId: Int): Seq[Workflows] = {
-    val sub = SubQuery.syntax("x").include(wd, ws)
-    val subQuery =
-      select.all(wd, ws)
-      .from(WorkflowDetails as wd)
-        .innerJoin(WorkflowStatuses as ws).on(wd.statusId, ws.id)
-      .where(sqls.eq(WorkflowDetails.column.workflowId, workflowId))
-
+  def search(workflowId: Int): List[WorkflowEntity] = {
     (DB localTx { implicit session =>
       withSQL {
-        select.from(Workflows as w)
-        .leftJoin(subQuery.as(sub)).on(w.workflowId, wd.workflowId)
-          .where(sqls.eq(Workflows.column.workflowId, workflowId))
+        select.all(w, wd).from(Workflows as w)
+          .innerJoin(WorkflowDetails as wd).on(w.workflowId, wd.workflowId)
+          // .where(sqls.eq(w.workflowId, workflowId))
       }.one(Workflows(w))
         .toMany(WorkflowDetails.opt(wd))
         .map { (workflow, details) => workflow.copy(details = details) }
         .list.apply()
-    })
+    }).map { case workflows: Workflows =>
+        WorkflowFactory.build(workflows)
+    }
   }
 
   def searchDefinitions(workflowId: Int): List[WorkflowDetailEntity] = {

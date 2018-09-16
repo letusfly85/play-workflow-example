@@ -8,6 +8,8 @@ trait WorkflowService {
 
   def list: List[WorkflowEntity]
 
+  def search(workflowId: Int): List[WorkflowEntity]
+
   def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 
   def destroy(entity: WorkflowEntity): Either[Exception, WorkflowEntity]

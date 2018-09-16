@@ -16,6 +16,9 @@ class WorkflowRouter @Inject()
     case GET(p"/workflows") =>
       workflowController.list
 
+    case GET(p"/workflows/${id}") =>
+      workflowController.search(id)
+
     case GET(p"/workflows/$id") =>
       workflowController.show(id)
 

@@ -27,6 +27,10 @@ class WorkflowController @Inject()
     Ok(Json.toJson(service.show(id.toInt)))
   }
 
+  def search(workflowId: String) = Action { implicit request =>
+    Ok(Json.toJson(service.search(workflowId.toInt)))
+  }
+
   def create = Action { implicit request =>
     Try {
       for {

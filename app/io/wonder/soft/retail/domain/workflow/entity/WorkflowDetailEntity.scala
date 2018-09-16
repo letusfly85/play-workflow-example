@@ -44,7 +44,7 @@ object WorkflowDetailEntity {
     WorkflowDetailEntity(
       model.workflowId,
       model.name,
-      None,
+      Some(model.status),
       model.stepId,
       model.stepLabel,
       model.isFirstStep,

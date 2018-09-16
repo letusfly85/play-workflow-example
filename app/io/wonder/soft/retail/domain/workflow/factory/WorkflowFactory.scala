@@ -2,8 +2,20 @@ package io.wonder.soft.retail.domain.workflow.factory
 
 import io.wonder.soft.retail.domain.example.craft.entity.CraftLineActionEntity
 import io.wonder.soft.retail.domain.workflow.entity._
+import io.wonder.soft.retail.domain.workflow.model.Workflows
 
 object WorkflowFactory {
+
+  def build(workflows: Workflows): WorkflowEntity = {
+    WorkflowEntity(
+      id = workflows.id,
+      workflowId = workflows.workflowId,
+      name = workflows.name,
+      description = workflows.description,
+      details = workflows.details.map(wd => wd).toList,
+      serviceId = workflows.serviceId
+    )
+  }
 
   def buildDefinitionEntity(schemeEntity: WorkflowDetailEntity, statusEntity: WorkflowStatusEntity): WorkflowDetailEntity = {
     schemeEntity.copy(status = Some(statusEntity))

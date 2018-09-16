@@ -22,6 +22,8 @@ class WorkflowServiceImpl @Inject()
     query.searchSummaries
   }
 
+  def search(workflowId: Int): List[WorkflowEntity] = query.search(workflowId)
+
   def show(workflowId: Int): List[WorkflowDetailEntity] = {
     query.searchDefinitions(workflowId)
   }
