@@ -9,6 +9,7 @@ case class Workflows(
   id: Int,
   workflowId: Int,
   name: String,
+  details: Seq[WorkflowDetails] = Nil,
   serviceId: Int,
   createdAt: Option[DateTime] = None,
   updatedAt: Option[DateTime] = None,

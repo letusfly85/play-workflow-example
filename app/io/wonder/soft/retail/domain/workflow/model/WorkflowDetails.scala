@@ -44,6 +44,9 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
     updatedAt = rs.get(wd.updatedAt)
   )
 
+  def opt(m: SyntaxProvider[WorkflowDetails])(rs: WrappedResultSet): Option[WorkflowDetails] =
+    rs.longOpt(m.resultName.id).map(_ => WorkflowDetails(m)(rs))
+
   val wd = WorkflowDetails.syntax("wd")
 
   override val autoSession = AutoSession

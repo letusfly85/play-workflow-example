@@ -11,6 +11,7 @@ class WorkflowQuery {
   import WorkflowDetailEntity._
 
   // syntax
+  val w = Workflows.syntax("w")
   val wd = WorkflowDetails.syntax("wd")
   val wd_to = WorkflowDetails.syntax("wd_to")
   val ws = WorkflowStatuses.syntax("ws")
@@ -26,6 +27,18 @@ class WorkflowQuery {
 
   def findMaxSummaryWorkflowId: Int = {
     Workflows.findAll.maxBy(ws => ws.workflowId).workflowId
+  }
+
+  def search(workflowId: Int): Seq[Workflows] = {
+    val (w, wd) = (Workflows.syntax, WorkflowDetails.syntax)
+
+    (DB localTx { implicit session =>
+      withSQL { select.from(Workflows as w).leftJoin(WorkflowDetails as wd).on(w.workflowId, wd.workflowId) }
+        .one(Workflows(w))
+        .toMany(WorkflowDetails.opt(wd))
+        .map { (workflow, details) => workflow.copy(details = details) }
+        .list.apply()
+    })
   }
 
   def searchDefinitions(workflowId: Int): List[WorkflowDetailEntity] = {
