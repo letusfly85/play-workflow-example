@@ -4,11 +4,9 @@ import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, Workf
 
 trait WorkflowService {
 
-  def show(workflowId: Int): List[WorkflowDetailEntity]
-
   def list: List[WorkflowEntity]
 
-  def search(workflowId: Int): List[WorkflowEntity]
+  def find(workflowId: Int): Option[WorkflowEntity]
 
   def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 

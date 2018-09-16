@@ -29,16 +29,25 @@ class WorkflowQuery {
     Workflows.findAll.maxBy(ws => ws.workflowId).workflowId
   }
 
-  def search(workflowId: Int): List[WorkflowEntity] = {
+  def list: List[WorkflowEntity] = {
+    (DB localTx { implicit session =>
+      withSQL {
+        select.from(Workflows as w)
+      }.map(rs => (Workflows(w)(rs)))
+        .list.apply()
+    })
+  }
+
+  def find(workflowId: Int): Option[WorkflowEntity] = {
     (DB localTx { implicit session =>
       withSQL {
         select.all(w, wd).from(Workflows as w)
           .innerJoin(WorkflowDetails as wd).on(w.workflowId, wd.workflowId)
-          // .where(sqls.eq(w.workflowId, workflowId))
+          .where(sqls.eq(w.workflowId, workflowId))
       }.one(Workflows(w))
         .toMany(WorkflowDetails.opt(wd))
         .map { (workflow, details) => workflow.copy(details = details) }
-        .list.apply()
+        .single.apply()
     }).map { case workflows: Workflows =>
         WorkflowFactory.build(workflows)
     }

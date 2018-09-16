@@ -18,15 +18,9 @@ class WorkflowServiceImpl @Inject()
   query: WorkflowQuery
 ) extends ApplicationService with WorkflowService {
 
-  def list: List[WorkflowEntity] = {
-    query.searchSummaries
-  }
+  def list: List[WorkflowEntity] = query.list
 
-  def search(workflowId: Int): List[WorkflowEntity] = query.search(workflowId)
-
-  def show(workflowId: Int): List[WorkflowDetailEntity] = {
-    query.searchDefinitions(workflowId)
-  }
+  def find(workflowId: Int): Option[WorkflowEntity] = query.find(workflowId)
 
   def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
     val nextWorkflowId = query.findMaxSummaryWorkflowId + 1

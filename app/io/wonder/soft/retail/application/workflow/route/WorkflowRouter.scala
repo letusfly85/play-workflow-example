@@ -17,15 +17,12 @@ class WorkflowRouter @Inject()
       workflowController.list
 
     case GET(p"/workflows/${id}") =>
-      workflowController.search(id)
-
-    case GET(p"/workflows/$id") =>
-      workflowController.show(id)
+      workflowController.find(id)
 
     case POST(p"/workflows") =>
       workflowController.create
 
-    case POST(p"/workflows/$id") =>
+    case PUT(p"/workflows/$id") =>
       workflowController.update(id)
 
     case DELETE(p"/workflows/$id") =>
