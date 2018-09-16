@@ -30,11 +30,19 @@ class WorkflowQuery {
   }
 
   def search(workflowId: Int): Seq[Workflows] = {
-    val (w, wd) = (Workflows.syntax, WorkflowDetails.syntax)
+    val sub = SubQuery.syntax("x").include(wd, ws)
+    val subQuery =
+      select.all(wd, ws)
+      .from(WorkflowDetails as wd)
+        .innerJoin(WorkflowStatuses as ws).on(wd.statusId, ws.id)
+      .where(sqls.eq(WorkflowDetails.column.workflowId, workflowId))
 
     (DB localTx { implicit session =>
-      withSQL { select.from(Workflows as w).leftJoin(WorkflowDetails as wd).on(w.workflowId, wd.workflowId) }
-        .one(Workflows(w))
+      withSQL {
+        select.from(Workflows as w)
+        .leftJoin(subQuery.as(sub)).on(w.workflowId, wd.workflowId)
+          .where(sqls.eq(Workflows.column.workflowId, workflowId))
+      }.one(Workflows(w))
         .toMany(WorkflowDetails.opt(wd))
         .map { (workflow, details) => workflow.copy(details = details) }
         .list.apply()
