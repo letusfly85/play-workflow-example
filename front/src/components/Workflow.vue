@@ -1,128 +1,112 @@
 <template>
   <div>
     <workflow-header></workflow-header>
+
     <div class="card border-light mb-4 card-workflow-list">
       <div class="card-body ">
         <table class="table table-hover">
           <thead>
           <tr align="left">
-            <th scope="col">Id</th>
-            <th scope="col">Status</th>
-            <th scope="col">Step Label</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="row in workflows" v-bind:key="row.step_id">
-            <td align="left">{{ row.step_id }}</td>
-            <td align="left">{{ row.status.name }}</td>
-            <td align="left">{{ row.step_label }}</td>
+          <tr v-for="row in summaries" v-bind:key="row.id">
+            <td align="left">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary">{{ row.name }}</button>
+                <div class="btn-group" role="group">
+                  <button :id="'btnGroupDrop'+row.id" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                  <div class="dropdown-menu" :aria-labelledby="'btnGroupDrop'+row.id" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 36px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    <a class="dropdown-item" :href="'#/workflows/' + row.id">ワークフローを作成・編集</a>
+                    <button class="dropdown-item alert-danger">このワークフローを削除</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td align="left">{{ row.description }}</td>
           </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <button v-on:click="toggleChange(addToggle)" class="btn btn-outline-success">
-      {{ addToggle ? 'Cancel' : ''}} Add Workflow Record
-    </button>
-    <br/>
-    <br/>
-    <form @submit="createRecord">
-      <div v-if="addToggle" class="form-add-workflow">
-        <select v-model="form.status" class="mb-3">
-          <option v-for="option in statuses"
-                  v-bind:value="option.value"
-                  v-bind:key="option.id">
-            {{ option.text }}
-          </option>
-        </select>
-        <input value="" v-model="form.step_label" class="form-control" />
-        <br/>
-        <input type="checkbox" value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%">
-        <input type="checkbox" value=true v-model="form.is_last_step" class="form-control" style="width: 40%;">
-        <br/><br/>
-        <button type="submit" class="btn btn-success">Add Workflow Record</button>
+    <at-btn v-bind:button-title="'Workflow'" v-bind:toggle-value="toggleValue" @child-event="toggleObserve"></at-btn>
+    <!-- TODO create a component -->
+    <div style="width: 80%; margin-left: 40%; margin-top: 2rem;">
+      <div v-if="toggleValue" >
+        <div class="form-group col-3">
+          <select class="custom-select">
+            <option v-for="option in serviceIdList" v-bind:key="option.id">{{ option.text }}</option>
+          </select>
+        </div>
+        <div class="form-group col-3">
+          <label class="col-form-label" for="inputName">ワークフロー名</label>
+          <input type="text" class="form-control" v-model="form.name" placeholder="ワークフロー名を記入" id="inputName">
+        </div>
+        <div class="form-group col-6">
+          <label for="descriptionInput">説明</label>
+          <textarea class="form-control" v-model="form.description" id="descriptionInput" rows="3"></textarea>
+        </div>
+        <div class="form-group col-3">
+          <button type="submit" class="btn btn-success" @click="createSummary">save</button>
+        </div>
       </div>
-    </form>
+    </div>
     <app-footer></app-footer>
   </div>
 </template>
 
 <script>
+import ApiClient from './utils/ApiClient'
 import AppFooter from './utils/AppFooter'
+import AddToggleButton from './ui/AddToggleButton'
 import WorkflowHeader from './workflow/WorkflowHeader'
 import WorkflowService from './service/WorkflowService'
-import WorkflowStatusService from './service/WorkflowStatusService'
 
 export default {
-  name: 'Workflow',
-  components: { WorkflowHeader, AppFooter },
+  name: 'WorkflowSummary',
+  components: { WorkflowHeader, AppFooter, 'at-btn': AddToggleButton },
   data () {
     return {
-      statuses: [],
-      workflows: [],
-      addToggle: false,
+      summaries: [],
+      toggleValue: false,
       form: {
-        workflow_id: null,
-        status: null,
-        step_id: null,
-        step_label: null,
-        is_first_step: false,
-        is_last_step: false
-      }
+        name: '',
+        serviceId: 0,
+        description: ''
+      },
+      serviceIdList: [ { text: '受注サービス', value: 0 }, { text: '工房サービス', value: 1 } ]
     }
   },
   methods: {
-    toggleChange: function (toggle) {
-      if (toggle === true) {
-        this.addToggle = false
-      } else {
-        this.addToggle = true
-      }
+    toggleObserve: function (toggleValue) {
+      this.toggleValue = toggleValue
     },
-    createRecord: function () {
-      var maxStepId = 0
-      if (this.workflows.length > 0) {
-        maxStepId = Math.max(...this.workflows.map((workflow) => workflow.step_id))
+    createSummary: function () {
+      let targetPath = '/api/workflow/summaries'
+      let params = {
+        id: 0,
+        workflow_id: 0,
+        name: this.form.name,
+        description: this.form.description,
+        service_id: this.form.serviceId
       }
-      let param = {
-        workflow_id: Number(this.$store.state.workflowId),
-        name: 'example',
-        step_id: (maxStepId + 1),
-        step_label: this.form.step_label,
-        status: this.form.status,
-        is_first_step: Boolean(this.form.is_first_step),
-        is_last_step: Boolean(this.form.is_last_step)
-      }
-      console.log(param)
 
       const self = this
-      WorkflowService.create(this.$store.state.workflowId, param, (response) => {
+      ApiClient.create(targetPath, params, (response) => {
         console.log(response)
-        self.workflows.push(param)
+        self.searchSummaries()
+        self.toggleValue = false
       }, (error) => {
         console.log(error)
       })
     }
   },
   created: function () {
-    this.$store.commit('updateWorkflowId', this.$route.params.workflowId)
     const self = this
-
-    WorkflowService.find(this.$store.state.workflowId, (response) => {
-      console.log(response)
-      self.workflows = response.data
-    }, (error) => {
-      console.log(error)
-    })
-
-    WorkflowStatusService.list((response) => {
-      console.log(response.data)
-      self.statuses = response.data.map(function (record) {
-        record.value = { id: record.id, name: record.name }
-        record.text = record.name
-
-        return record
-      })
+    WorkflowService.list((response) => {
+      self.summaries = response.data
     }, (error) => {
       console.log(error)
     })
@@ -131,9 +115,10 @@ export default {
 </script>
 
 <style scoped>
-.form-add-workflow {
-  width: 70%;
-  margin-left: 15%;
+.card-workflow-list {
+  width: 80%;
+  margin-top: 5px;
+  margin-left: 10%;
   border: transparent 1px solid;
 }
 </style>
