@@ -37,7 +37,7 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
     workflowId = rs.get(wd.workflowId),
     name = rs.get(wd.name),
     statusId = rs.get(wd.statusId),
-    status = WorkflowStatuses(id = rs.int(wd.statusId), name = rs.string(wd.name)),
+    status = WorkflowStatuses.find(rs.int(wd.statusId)).get,
     stepId = rs.get(wd.stepId),
     stepLabel = rs.get(wd.stepLabel),
     isFirstStep = rs.get(wd.isFirstStep),
