@@ -54,8 +54,8 @@ class WorkflowController @Inject()
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
-        schemeEntity <- Json.fromJson[WorkflowDetailEntity](json).right
-        entity <- service.createDetail(schemeEntity).right
+        schemeEntity <- Json.fromJson[WorkflowEntity](json).right
+        entity <- service.update(schemeEntity).right
       } yield entity
 
     } match {

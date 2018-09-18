@@ -12,9 +12,9 @@ import scala.util.{Failure, Success, Try}
 
 class WorkflowServiceImpl @Inject()
 (
-  summaryRepository: WorkflowRepository,
-  workflowRepository: WorkflowDetailRepository,
-  workflowStatusRepository: WorkflowStatusRepository,
+  repository: WorkflowRepository,
+  detailRepository: WorkflowDetailRepository,
+  statusRepository: WorkflowStatusRepository,
   query: WorkflowQuery
 ) extends ApplicationService with WorkflowService {
 
@@ -24,13 +24,17 @@ class WorkflowServiceImpl @Inject()
 
   def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
     val nextWorkflowId = query.findMaxSummaryWorkflowId + 1
-    summaryRepository.create(entity.copy(workflowId = nextWorkflowId))
+    repository.create(entity.copy(workflowId = nextWorkflowId))
+  }
+
+  def update(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
+    repository.update(entity)
   }
 
   def destroy(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
     Try {
       //TODO destroy related entities
-      summaryRepository.destroy(entity.id)
+      repository.destroy(entity.id)
 
     } match {
       case Success(_) => Right(entity)
@@ -39,12 +43,12 @@ class WorkflowServiceImpl @Inject()
   }
 
   def createDetail(detailEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity] = {
-    val maybeStatus = workflowStatusRepository.find(detailEntity.status.get.id)
+    val maybeStatus = statusRepository.find(detailEntity.status.get.id)
 
     maybeStatus match {
       case Some(statusEntity) =>
         val entity = WorkflowFactory.buildDefinitionEntity(detailEntity, statusEntity)
-        workflowRepository.create(entity)
+        detailRepository.create(entity)
 
       case None =>
         Left(new RuntimeException(""))

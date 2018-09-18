@@ -26,23 +26,21 @@
     </button>
     <br/>
     <br/>
-    <form @submit="createRecord">
-      <div v-if="addToggle" class="form-add-workflow">
-        <select v-model="form.status" class="mb-3">
-          <option v-for="option in statuses"
-                  v-bind:value="option.value"
-                  v-bind:key="option.id">
-            {{ option.text }}
-          </option>
-        </select>
-        <input value="" v-model="form.step_label" class="form-control" />
-        <br/>
-        <input type="checkbox" value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%">
-        <input type="checkbox" value=true v-model="form.is_last_step" class="form-control" style="width: 40%;">
-        <br/><br/>
-        <button type="submit" class="btn btn-success">Add Workflow Record</button>
-      </div>
-    </form>
+    <div v-if="addToggle" class="form-add-workflow">
+      <select v-model="form.status" class="mb-3">
+        <option v-for="option in statuses"
+                v-bind:value="option.value"
+                v-bind:key="option.id">
+          {{ option.text }}
+        </option>
+      </select>
+      <input value="" v-model="form.step_label" class="form-control" />
+      <br/>
+      <input type="checkbox" value=true v-model="form.is_first_step" class="form-control" style="float: left; width: 40%">
+      <input type="checkbox" value=true v-model="form.is_last_step" class="form-control" style="width: 40%;">
+      <br/><br/>
+      <button class="btn btn-success" v-on:click="createRecord">Add Workflow Record</button>
+    </div>
     <app-footer></app-footer>
   </div>
 </template>

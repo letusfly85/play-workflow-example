@@ -21,9 +21,9 @@ class WorkflowServiceSpec extends Specification with Mockito {
 
   // create a service class
   val service = new WorkflowServiceImpl(
-    summaryRepository = summaryRepository,
-    workflowRepository = workflowRepository,
-    workflowStatusRepository = workflowStatusRepository,
+    repository = summaryRepository,
+    detailRepository = workflowRepository,
+    statusRepository = workflowStatusRepository,
     query = queryProcessor
   )
 }

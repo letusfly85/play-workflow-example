@@ -14,7 +14,7 @@ trait WorkflowService {
 
   def createDetail(detailEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity]
 
-  // def update(entity: WorkflowEntity)
+  def update(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 
 
 }
