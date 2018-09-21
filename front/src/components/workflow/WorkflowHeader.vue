@@ -12,7 +12,7 @@
             <a class="nav-link" href="#/workflows">workflows</a>
           </li>
           <li :class="navItemClass.status">
-            <a class="nav-link" href="#/statuses">statuses</a>
+            <a class="nav-link" href="#/workflow-statuses">statuses</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -36,12 +36,15 @@ export default {
     }
   },
   created: function () {
-    if ((this.$route.path) === '/workflows') {
+    if (this.$route.path.startsWith('/workflows')) {
       this.navItemClass.workflow = 'nav-item active'
       this.navItemClass.status = 'nav-item'
-    } else {
+    } else if (this.$route.path === '/workflow-statuses') {
       this.navItemClass.workflow = 'nav-item'
       this.navItemClass.status = 'nav-item active'
+    } else {
+      this.navItemClass.workflow = 'nav-item'
+      this.navItemClass.status = 'nav-item'
     }
   }
 }
