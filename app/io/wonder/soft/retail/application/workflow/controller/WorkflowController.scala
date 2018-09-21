@@ -54,20 +54,22 @@ class WorkflowController @Inject()
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
-        schemeEntity <- Json.fromJson[WorkflowEntity](json).right
-        entity <- service.update(schemeEntity).right
+        workflowEntity <- Json.fromJson[WorkflowEntity](json).right
+        entity <- service.update(workflowEntity).right
       } yield entity
 
     } match {
       case Success(either) => either match {
-        case Right(definitionEntity) => Created(Json.toJson(definitionEntity))
+        case Right(workflowEntity) => Created(Json.toJson(workflowEntity))
         case Left(e) =>
-          Logger.info(e.toString)
-          InternalServerError(JsObject.empty)
+          val exception = e.asInstanceOf[Exception]
+          Logger.error(exception.getMessage)
+          InternalServerError(JsObject(Seq("status" -> JsString("fail"), "message" -> JsString(s"${exception.getMessage}"))))
       }
       case Failure(e) =>
-        Logger.info(e.getMessage)
-        InternalServerError(JsObject.empty)
+        val exception = e.asInstanceOf[Exception]
+        Logger.error(exception.getMessage)
+        InternalServerError(JsObject(Seq("status" -> JsString("fail"), "message" -> JsString(s"${exception.getMessage}"))))
     }
   }
 
