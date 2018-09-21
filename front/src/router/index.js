@@ -24,12 +24,12 @@ export default new Router({
       component: WorkflowDetail
     },
     {
-      path: '/statuses',
+      path: '/workflow-statuses',
       name: 'Status',
       component: Status
     },
     {
-      path: '/transitions',
+      path: '/workflows/:workflowId/transitions',
       name: 'Transition',
       component: Transition
     },
