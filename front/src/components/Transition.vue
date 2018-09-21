@@ -1,7 +1,7 @@
 <template>
   <div>
     <workflow-header></workflow-header>
-    <svg id="graph"  :width="svgArea.width" :height="svgArea.height" style="border: 1px">
+    <svg id="graph" :width="svgArea.width" :height="svgArea.height" style="border: 1px">
     </svg>
     <b-card class="card-workflow-list">
       <div v-for="(transition, index) in transitions" v-bind:key="transition.id">
