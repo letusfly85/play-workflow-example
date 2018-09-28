@@ -44,7 +44,7 @@ object WorkflowDetailEntity {
     WorkflowDetailEntity(
       model.workflowId,
       model.name,
-      Some(model.status),
+      model.status.map(s => s),
       model.stepId,
       model.stepLabel,
       model.isFirstStep,

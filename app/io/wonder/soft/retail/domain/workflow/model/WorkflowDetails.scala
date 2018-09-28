@@ -10,7 +10,7 @@ case class WorkflowDetails(
   workflowId: Int,
   name: String,
   statusId: Int,
-  status: WorkflowStatuses,
+  status: Option[WorkflowStatuses] = None,
   stepId: Int,
   stepLabel: String,
   isFirstStep: Boolean,
@@ -32,19 +32,22 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
   override val columns = Seq("id", "workflow_id", "name", "status_id", "step_id", "step_label", "is_first_step", "is_last_step", "created_at", "updated_at")
 
   def apply(wd: SyntaxProvider[WorkflowDetails])(rs: WrappedResultSet): WorkflowDetails = apply(wd.resultName)(rs)
-  def apply(wd: ResultName[WorkflowDetails])(rs: WrappedResultSet): WorkflowDetails = new WorkflowDetails(
-    id = rs.get(wd.id),
-    workflowId = rs.get(wd.workflowId),
-    name = rs.get(wd.name),
-    statusId = rs.get(wd.statusId),
-    status = WorkflowStatuses.find(rs.int(wd.statusId)).get,
-    stepId = rs.get(wd.stepId),
-    stepLabel = rs.get(wd.stepLabel),
-    isFirstStep = rs.get(wd.isFirstStep),
-    isLastStep = rs.get(wd.isLastStep),
-    createdAt = rs.get(wd.createdAt),
-    updatedAt = rs.get(wd.updatedAt)
-  )
+  def apply(wd: ResultName[WorkflowDetails])(rs: WrappedResultSet): WorkflowDetails = {
+    val statusId: Int = rs.int(wd.statusId)
+    new WorkflowDetails(
+      id = rs.get(wd.id),
+      workflowId = rs.get(wd.workflowId),
+      name = rs.get(wd.name),
+      statusId = rs.get(wd.statusId),
+      status = WorkflowStatuses.find(statusId),
+      stepId = rs.get(wd.stepId),
+      stepLabel = rs.get(wd.stepLabel),
+      isFirstStep = rs.get(wd.isFirstStep),
+      isLastStep = rs.get(wd.isLastStep),
+      createdAt = rs.get(wd.createdAt),
+      updatedAt = rs.get(wd.updatedAt)
+    )
+  }
 
   def opt(m: SyntaxProvider[WorkflowDetails])(rs: WrappedResultSet): Option[WorkflowDetails] =
     rs.longOpt(m.resultName.id).map(_ => WorkflowDetails(m)(rs))
@@ -114,7 +117,7 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
       workflowId = workflowId,
       name = name,
       statusId = statusId,
-      status = WorkflowStatuses.find(statusId).get,
+      status = WorkflowStatuses.find(statusId),
       stepId = stepId,
       stepLabel = stepLabel,
       isFirstStep = isFirstStep,
