@@ -12,7 +12,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="row in summaries" v-bind:key="row.id">
+          <tr v-for="(row, index) in workflows" v-bind:key="row.id">
             <td align="left">
               <div class="btn-group" role="group">
                 <button type="button" class="btn btn-primary">{{ row.name }}</button>
@@ -25,7 +25,11 @@
                 </div>
               </div>
             </td>
-            <td align="left">{{ row.description }}</td>
+            <td align="left" v-if="!row.toggle" v-on:click="updateToggle(index)">{{ row.description }}</td>
+            <div v-if="row.toggle">
+              <input type="text" class="col-lg-8 form-control" style="margin-top: 1rem; float: left;" v-model="row.description" />
+              <button class="btn-primary" style="margin-top: 1.5rem;" v-on:click="saveWorkflow(index)">Save</button>
+            </div>
           </tr>
           </tbody>
         </table>
@@ -49,7 +53,7 @@
           <textarea class="form-control" v-model="form.description" id="descriptionInput" rows="3"></textarea>
         </div>
         <div class="form-group col-3">
-          <button type="submit" class="btn btn-success" @click="createSummary">save</button>
+          <button type="submit" class="btn btn-success" @click="createWorkflow">save</button>
         </div>
       </div>
     </div>
@@ -65,11 +69,11 @@ import WorkflowHeader from './workflow/WorkflowHeader'
 import WorkflowService from './service/WorkflowService'
 
 export default {
-  name: 'WorkflowSummary',
+  name: 'Workflow',
   components: { WorkflowHeader, AppFooter, 'at-btn': AddToggleButton },
   data () {
     return {
-      summaries: [],
+      workflows: [],
       toggleValue: false,
       form: {
         name: '',
@@ -83,7 +87,7 @@ export default {
     toggleObserve: function (toggleValue) {
       this.toggleValue = toggleValue
     },
-    createSummary: function () {
+    createWorkflow: function () {
       let targetPath = '/api/workflow/summaries'
       let params = {
         id: 0,
@@ -96,29 +100,52 @@ export default {
       const self = this
       ApiClient.create(targetPath, params, (response) => {
         console.log(response)
-        self.searchSummaries()
+        self.searchWorkflows()
         self.toggleValue = false
       }, (error) => {
         console.log(error)
       })
+    },
+    searchWorkflows: function () {
+      const self = this
+      WorkflowService.list((response) => {
+        self.workflows = response.data.map(function (workflow) {
+          workflow.toggle = false
+          return workflow
+        })
+      }, (error) => {
+        console.log(error)
+      })
+    },
+    updateToggle: function (index) {
+      let workflow = this.workflows[index]
+      if (workflow.toggle) {
+        workflow.toggle = false
+      } else {
+        workflow.toggle = true
+      }
+      const self = this
+      WorkflowService.update(workflow.id, workflow, (response) => {
+        console.log(response)
+        self.$set(this.workflows, index, workflow)
+      }, (error) => {
+        console.log(error)
+      })
+    },
+    saveWorkflow: function (index) {
+      this.updateToggle(index)
     }
   },
   created: function () {
-    const self = this
-    WorkflowService.list((response) => {
-      self.summaries = response.data
-    }, (error) => {
-      console.log(error)
-    })
+    this.searchWorkflows()
   }
 }
 </script>
 
-<style scoped>
+<style>
 .card-workflow-list {
   width: 80%;
   margin-top: 5px;
-  margin-left: 10%;
   border: transparent 1px solid;
 }
 </style>

@@ -2,6 +2,7 @@ package io.wonder.soft.retail.domain.workflow.repository
 
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowEntity
 import io.wonder.soft.retail.domain.workflow.model.Workflows
+import org.joda.time.DateTime
 import scalikejdbc._
 
 import scala.util.{Failure, Success, Try}
@@ -39,12 +40,16 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
   override def update(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
     Workflows.find(entity.id) match {
       case Some(model) =>
+        val newModel =
         model.copy(
           workflowId = entity.workflowId,
           name = entity.name,
-          serviceId = entity.serviceId
-        ).save()
-        Right(model)
+          description = entity.description,
+          serviceId = entity.serviceId,
+          updatedAt = Some(new DateTime())
+        )
+        newModel.save()
+        Right(newModel)
 
       case None => Left(new Exception(""))
     }

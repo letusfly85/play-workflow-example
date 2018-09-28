@@ -14,6 +14,11 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/',
+      name: 'Workflow',
+      component: Workflow
+    },
+    {
       path: '/workflows',
       name: 'Workflow',
       component: Workflow
