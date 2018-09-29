@@ -11,6 +11,21 @@ import jQuery from 'jquery'
 import 'bootstrap/dist/js/bootstrap'
 import 'bootswatch/dist/flatly/bootstrap.css'
 
+// eslint-disable-next-line
+import setimmediate from 'setimmediate'
+import winston from 'winston'
+Vue.mixin({
+  data: function () {
+    return {
+      logger: winston.createLogger({
+        transports: [
+          new winston.transports.Console()
+        ]
+      })
+    }
+  }
+})
+
 Vue.config.productionTip = false
 Vue.use(Vuex)
 

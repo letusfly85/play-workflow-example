@@ -95,11 +95,11 @@ export default {
 
       const self = this
       WorkflowService.create(params, (response) => {
-        console.log(response)
+        self.logger.info(response)
         self.searchWorkflows()
         self.toggleValue = false
       }, (error) => {
-        console.log(error)
+        self.logger.error(error)
       })
     },
     searchWorkflows: function () {
@@ -110,7 +110,7 @@ export default {
           return workflow
         })
       }, (error) => {
-        console.log(error)
+        self.logger.error(error)
       })
     },
     updateToggle: function (index) {
@@ -122,10 +122,10 @@ export default {
       }
       const self = this
       WorkflowService.update(workflow.id, workflow, (response) => {
-        console.log(response)
+        self.logger.info(response)
         self.$set(this.workflows, index, workflow)
       }, (error) => {
-        console.log(error)
+        self.logger.error(error)
       })
     },
     goDetail: function (index) {

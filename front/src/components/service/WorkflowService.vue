@@ -29,7 +29,6 @@ export default {
   },
   update: function (id, params, callback, errorHandler) {
     let targetPath = `/api/workflows/${id}`
-    console.log(targetPath)
     ApiClient.update(targetPath, params, (response) => {
       callback(response)
     }, (error) => {
