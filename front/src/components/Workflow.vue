@@ -9,27 +9,24 @@
           <tr align="left">
             <th scope="col">Name</th>
             <th scope="col">Description</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Destroy</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(row, index) in workflows" v-bind:key="row.id">
-            <td align="left">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary">{{ row.name }}</button>
-                <div class="btn-group" role="group">
-                  <button :id="'btnGroupDrop'+row.id" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                  <div class="dropdown-menu" :aria-labelledby="'btnGroupDrop'+row.id" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 36px, 0px); top: 0px; left: 0px; will-change: transform;">
-                    <a class="dropdown-item" :href="'#/workflows/' + row.id">ワークフローを作成・編集</a>
-                    <button class="dropdown-item alert-danger">このワークフローを削除</button>
-                  </div>
-                </div>
-              </div>
-            </td>
+            <td align="left">{{ row.name }}</td>
             <td align="left" v-if="!row.toggle" v-on:click="updateToggle(index)">{{ row.description }}</td>
             <div v-if="row.toggle">
               <input type="text" class="col-lg-8 form-control" style="margin-top: 1rem; float: left;" v-model="row.description" />
               <button class="btn-primary" style="margin-top: 1.5rem;" v-on:click="saveWorkflow(index)">Save</button>
             </div>
+            <td>
+              <button class="btn-primary" v-on:click="goDetail(index)">Edit</button>
+            </td>
+            <td>
+              <button class="btn-danger" v-on:click="destroyWorkflow(index)">Destroy</button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -62,7 +59,6 @@
 </template>
 
 <script>
-import ApiClient from './utils/ApiClient'
 import AppFooter from './utils/AppFooter'
 import AddToggleButton from './ui/AddToggleButton'
 import WorkflowHeader from './workflow/WorkflowHeader'
@@ -88,17 +84,17 @@ export default {
       this.toggleValue = toggleValue
     },
     createWorkflow: function () {
-      let targetPath = '/api/workflow/summaries'
       let params = {
         id: 0,
         workflow_id: 0,
         name: this.form.name,
         description: this.form.description,
+        details: [],
         service_id: this.form.serviceId
       }
 
       const self = this
-      ApiClient.create(targetPath, params, (response) => {
+      WorkflowService.create(params, (response) => {
         console.log(response)
         self.searchWorkflows()
         self.toggleValue = false
@@ -132,8 +128,17 @@ export default {
         console.log(error)
       })
     },
+    goDetail: function (index) {
+      let workflow = this.workflows[index]
+      this.$router.replace(`workflows/${workflow.workflow_id}`)
+    },
     saveWorkflow: function (index) {
       this.updateToggle(index)
+    },
+    destroyWorkflow: function (index) {
+      let workflow = this.workflows[index]
+      console.log(workflow)
+      // todo implement destroy operation
     }
   },
   created: function () {
@@ -145,6 +150,7 @@ export default {
 <style>
 .card-workflow-list {
   width: 80%;
+  margin-left: 10%;
   margin-top: 5px;
   border: transparent 1px solid;
 }
