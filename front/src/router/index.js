@@ -7,7 +7,6 @@ import Status from '@/components/Status'
 import Order from '@/components/order/Order'
 import CraftLine from '@/components/craft/CraftLine'
 import CraftProduct from '@/components/craft/CraftProduct'
-// import 'bootstrap/dist/css/bootstrap.css'
 
 Vue.use(Router)
 

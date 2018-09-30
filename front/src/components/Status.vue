@@ -1,14 +1,32 @@
 <template>
   <div>
     <workflow-header></workflow-header>
-    <b-card class="card-status-list">
-      <div v-for="status in statuses" v-bind:key="status.id">
-        <div style="margin-bottom: 3px;">
-          <b-card style="float: left; margin-right: 2px;">{{ status.id }}</b-card>
-          <b-card>{{ status.name }}</b-card>
-        </div>
+    <div class="card border-light mb-4 card-status-list">
+      <div class="card-body ">
+        <table class="table table-hover">
+          <thead>
+          <tr align="left">
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Destroy</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(row, index) in statuses" v-bind:key="row.id">
+            <td align="left">{{ row.id}}</td>
+            <td align="left">{{ row.name }}</td>
+            <td>
+              <button class="btn-primary" v-on:click="edit(index)">Edit</button>
+            </td>
+            <td>
+              <button class="btn-danger" v-on:click="destroy(index)">Destroy</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-    </b-card>
+    </div>
     <app-footer></app-footer>
   </div>
 </template>
@@ -26,15 +44,19 @@ export default {
     }
   },
   components: { WorkflowHeader, AppFooter },
+  methods: {
+    edit: function (index) {},
+    destroy: function (index) {}
+  },
   created: function () {
     let targetPath = '/api/workflow-statuses'
 
     const self = this
     ApiClient.search(targetPath, (response) => {
-      console.log(response)
+      self.logger.info(response.data)
       self.statuses = response.data
     }, (error) => {
-      console.log(error)
+      self.logger.error(error)
     })
   }
 }
