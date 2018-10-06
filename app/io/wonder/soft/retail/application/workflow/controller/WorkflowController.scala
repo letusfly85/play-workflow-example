@@ -40,21 +40,9 @@ class WorkflowController @Inject()
     } match {
       case Success(either) => either match {
         case Right(summaryEntity) => Created(Json.toJson(summaryEntity))
-        case Left(e) =>
-          Logger.info(e.getMessage)
-          val errorEntity = ErrorResponseEntity(
-            message = e.getMessage,
-            createdAt = new DateTime()
-          )
-          InternalServerError(Json.toJson(errorEntity))
+        case Left(e) => errorHandler(e)
       }
-      case Failure(e) =>
-        Logger.info(e.getMessage)
-        val errorEntity = ErrorResponseEntity(
-          message = e.getMessage,
-          createdAt = new DateTime()
-        )
-        InternalServerError(Json.toJson(errorEntity))
+      case Failure(e) => errorHandler(e.asInstanceOf[Exception])
     }
   }
 
@@ -71,15 +59,9 @@ class WorkflowController @Inject()
     } match {
       case Success(either) => either match {
         case Right(workflowEntity) => Created(Json.toJson(workflowEntity))
-        case Left(e) =>
-          val exception = e.asInstanceOf[Exception]
-          Logger.error(exception.getMessage)
-          InternalServerError(JsObject(Seq("status" -> JsString("fail"), "message" -> JsString(s"${exception.getMessage}"))))
+        case Left(e) => errorHandler(e)
       }
-      case Failure(e) =>
-        val exception = e.asInstanceOf[Exception]
-        Logger.error(exception.getMessage)
-        InternalServerError(JsObject(Seq("status" -> JsString("fail"), "message" -> JsString(s"${exception.getMessage}"))))
+      case Failure(e) => errorHandler(e.asInstanceOf[Exception])
     }
   }
 
@@ -95,12 +77,20 @@ class WorkflowController @Inject()
       case Success(either) => either match {
         case Right(summaryEntity) => Ok(Json.toJson(summaryEntity))
         case Left(e) =>
-          Logger.info(e.toString)
-          InternalServerError(JsObject.empty)
+          Logger.info(e.getMessage)
+          val errorEntity = ErrorResponseEntity(
+            message = e.getMessage,
+            createdAt = new DateTime()
+          )
+          InternalServerError(Json.toJson(errorEntity))
       }
       case Failure(e) =>
         Logger.info(e.getMessage)
-        InternalServerError(JsObject.empty)
+        val errorEntity = ErrorResponseEntity(
+          message = e.getMessage,
+          createdAt = new DateTime()
+        )
+        InternalServerError(Json.toJson(errorEntity))
     }
   }
 

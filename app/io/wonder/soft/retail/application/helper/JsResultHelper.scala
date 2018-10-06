@@ -1,6 +1,11 @@
 package io.wonder.soft.retail.application.helper
 
-import play.api.libs.json.{JsError, JsResult, JsSuccess}
+import io.wonder.soft.retail.domain.ErrorResponseEntity
+import org.joda.time.DateTime
+import play.api.Logger
+import play.api.libs.json.{JsError, JsResult, JsSuccess, Json}
+import play.api.mvc.Result
+import play.api.mvc.Results._
 
 trait JsResultHelper {
 
@@ -10,6 +15,15 @@ trait JsResultHelper {
     case JsError(errors) =>
       //refs: https://discuss.lightbend.com/t/exception-handling-in-play-framework-parsing-json/625
       Left(new Exception(JsError.toJson(errors).toString()))
+  }
+
+  def errorHandler(e: Exception): Result  = {
+    Logger.info(e.getMessage)
+    val errorEntity = ErrorResponseEntity(
+      message = e.getMessage,
+      createdAt = new DateTime()
+    )
+    InternalServerError(Json.toJson(errorEntity))
   }
 
 }
