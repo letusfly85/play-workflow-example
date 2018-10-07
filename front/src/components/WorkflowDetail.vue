@@ -11,7 +11,7 @@
             <th scope="col">Step Label</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody v-if="workflows.details">
           <tr v-for="row in workflows.details" v-bind:key="row.step_id">
             <td align="left">{{ row.step_id }}</td>
             <td align="left">{{ row.status.name }}</td>
@@ -57,7 +57,7 @@ export default {
   data () {
     return {
       statuses: [],
-      workflows: [],
+      workflows: { details: undefined },
       addToggle: false,
       form: {
         workflow_id: null,
@@ -95,8 +95,8 @@ export default {
 
       const self = this
       WorkflowService.create(this.$store.state.workflowId, param, (response) => {
-        console.log(response)
-        self.workflows.push(param)
+        self.logger.info(response)
+        self.workflows.details.push(param)
       }, (error) => {
         console.log(error)
       })
@@ -107,8 +107,11 @@ export default {
     const self = this
 
     WorkflowService.find(this.$store.state.workflowId, (response) => {
-      console.log(response)
-      self.workflows = response.data
+      self.logger.info(response)
+      self.workflows.details = []
+      if (response.data) {
+        self.workflows = response.data
+      }
     }, (error) => {
       console.log(error)
     })
