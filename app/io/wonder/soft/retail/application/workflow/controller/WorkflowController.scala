@@ -5,9 +5,6 @@ import javax.inject._
 import io.wonder.soft.retail.application.workflow.service.{WorkflowConditionService, WorkflowService}
 import io.wonder.soft.retail.domain.workflow.entity._
 import io.wonder.soft.retail.application.helper.JsResultHelper
-import io.wonder.soft.retail.domain.ErrorResponseEntity
-import org.joda.time.DateTime
-import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
@@ -61,7 +58,7 @@ class WorkflowController @Inject()
         case Right(workflowEntity) => Created(Json.toJson(workflowEntity))
         case Left(e) => errorHandler(e)
       }
-      case Failure(e) => errorHandler(e.asInstanceOf[Exception])
+      case Failure(e) => errorHandler(new Exception(e))
     }
   }
 
@@ -76,21 +73,9 @@ class WorkflowController @Inject()
     } match {
       case Success(either) => either match {
         case Right(summaryEntity) => Ok(Json.toJson(summaryEntity))
-        case Left(e) =>
-          Logger.info(e.getMessage)
-          val errorEntity = ErrorResponseEntity(
-            message = e.getMessage,
-            createdAt = new DateTime()
-          )
-          InternalServerError(Json.toJson(errorEntity))
+        case Left(e) => errorHandler(e)
       }
-      case Failure(e) =>
-        Logger.info(e.getMessage)
-        val errorEntity = ErrorResponseEntity(
-          message = e.getMessage,
-          createdAt = new DateTime()
-        )
-        InternalServerError(Json.toJson(errorEntity))
+      case Failure(e) => errorHandler(new Exception(e))
     }
   }
 
