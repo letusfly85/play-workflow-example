@@ -82,23 +82,32 @@ export default {
       if (this.workflows.length > 0) {
         maxStepId = Math.max(...this.workflows.map((workflow) => workflow.step_id))
       }
-      let param = {
-        workflow_id: Number(this.$store.state.workflowId),
+      let workflowId = Number(this.$store.state.workflowId)
+      let detail = {
+        workflow_id: workflowId,
         name: 'example',
+        status: this.form.status,
         step_id: (maxStepId + 1),
         step_label: this.form.step_label,
-        status: this.form.status,
         is_first_step: Boolean(this.form.is_first_step),
         is_last_step: Boolean(this.form.is_last_step)
       }
-      console.log(param)
+      this.workflows.details.push(detail)
+      let targetWorkflow = {
+        id: this.workflows.id,
+        name: this.workflows.name,
+        workflow_id: workflowId,
+        details: this.workflows.details,
+        description: this.workflows.description,
+        service_id: this.workflows.service_id
+      }
+      this.logger.info(targetWorkflow)
 
       const self = this
-      WorkflowService.create(this.$store.state.workflowId, param, (response) => {
+      WorkflowService.update(this.$store.state.workflowId, targetWorkflow, (response) => {
         self.logger.info(response)
-        self.workflows.details.push(param)
       }, (error) => {
-        console.log(error)
+        self.logger.error(error)
       })
     }
   },
@@ -107,13 +116,15 @@ export default {
     const self = this
 
     WorkflowService.find(this.$store.state.workflowId, (response) => {
+      self.logger.info('----------------')
       self.logger.info(response)
+      self.logger.info('----------------')
       self.workflows.details = []
       if (response.data) {
         self.workflows = response.data
       }
     }, (error) => {
-      console.log(error)
+      self.logger.error(error)
     })
 
     WorkflowStatusService.list((response) => {
@@ -125,7 +136,7 @@ export default {
         return record
       })
     }, (error) => {
-      console.log(error)
+      self.logger.error(error)
     })
   }
 }

@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.domain.workflow.repository
 
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowEntity
-import io.wonder.soft.retail.domain.workflow.model.Workflows
+import io.wonder.soft.retail.domain.workflow.model.{WorkflowDetails, Workflows}
 import org.joda.time.DateTime
 import scalikejdbc._
 
@@ -48,6 +48,23 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
           serviceId = entity.serviceId,
           updatedAt = Some(new DateTime())
         )
+        if (entity.details.nonEmpty) {
+          entity.details.foreach{ detail =>
+            WorkflowDetails.findBy(
+              sqls.eq(WorkflowDetails.column.stepId, detail.stepId)
+                .and.eq(WorkflowDetails.column.workflowId, detail.workflowId)
+            )
+            WorkflowDetails.create(
+              workflowId = entity.workflowId,
+              name = entity.name,
+              statusId = detail.status.map(s => s.id).getOrElse(0),
+              stepId = detail.stepId,
+              stepLabel = detail.stepLabel,
+              isFirstStep = detail.isFirstStep,
+              isLastStep = detail.isLastStep
+            ).save()
+          }
+        }
         newModel.save()
         Right(newModel)
 

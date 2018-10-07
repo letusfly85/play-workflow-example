@@ -42,7 +42,7 @@ class WorkflowQuery {
     (DB localTx { implicit session =>
       withSQL {
         select.all(w, wd).from(Workflows as w)
-          .innerJoin(WorkflowDetails as wd).on(w.workflowId, wd.workflowId)
+          .leftJoin(WorkflowDetails as wd).on(w.workflowId, wd.workflowId)
           .where(sqls.eq(w.workflowId, workflowId))
       }.one(Workflows(w))
         .toMany(WorkflowDetails.opt(wd))
