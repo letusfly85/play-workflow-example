@@ -79,8 +79,8 @@ export default {
     },
     createRecord: function () {
       var maxStepId = 0
-      if (this.workflows.length > 0) {
-        maxStepId = Math.max(...this.workflows.map((workflow) => workflow.step_id))
+      if (this.workflows.details.length > 0) {
+        maxStepId = Math.max(...this.workflows.details.map((detail) => detail.step_id))
       }
       let workflowId = Number(this.$store.state.workflowId)
       let detail = {
@@ -116,9 +116,6 @@ export default {
     const self = this
 
     WorkflowService.find(this.$store.state.workflowId, (response) => {
-      self.logger.info('----------------')
-      self.logger.info(response)
-      self.logger.info('----------------')
       self.workflows.details = []
       if (response.data) {
         self.workflows = response.data

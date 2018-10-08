@@ -6,9 +6,7 @@ trait WorkflowRepository {
 
   def find(id: Int): Option[WorkflowEntity]
 
-  def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
-
-  def update(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
+  def save(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 
   def destroy(id: Int): Option[WorkflowEntity]
 

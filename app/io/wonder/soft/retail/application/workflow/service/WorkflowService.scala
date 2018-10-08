@@ -12,8 +12,6 @@ trait WorkflowService {
 
   def destroy(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 
-  def createDetail(detailEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity]
-
   def update(entity: WorkflowEntity): Either[Exception, WorkflowEntity]
 
 

@@ -1,8 +1,7 @@
 package io.wonder.soft.retail.application.workflow.service.impl
 
 import javax.inject.Inject
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowEntity}
-import io.wonder.soft.retail.domain.workflow.factory.WorkflowFactory
+import io.wonder.soft.retail.domain.workflow.entity.WorkflowEntity
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowDetailRepository, WorkflowRepository, WorkflowStatusRepository}
 import io.wonder.soft.retail.application.ApplicationService
@@ -24,11 +23,11 @@ class WorkflowServiceImpl @Inject()
 
   def create(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
     val nextWorkflowId = query.findMaxSummaryWorkflowId + 1
-    repository.create(entity.copy(workflowId = nextWorkflowId))
+    repository.save(entity.copy(workflowId = nextWorkflowId))
   }
 
   def update(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
-    repository.update(entity)
+    repository.save(entity)
   }
 
   def destroy(entity: WorkflowEntity): Either[Exception, WorkflowEntity] = {
@@ -41,18 +40,4 @@ class WorkflowServiceImpl @Inject()
       case Failure(ex) => Left(new RuntimeException(ex))
     }
   }
-
-  def createDetail(detailEntity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity] = {
-    val maybeStatus = statusRepository.find(detailEntity.status.get.id)
-
-    maybeStatus match {
-      case Some(statusEntity) =>
-        val entity = WorkflowFactory.buildDefinitionEntity(detailEntity, statusEntity)
-        detailRepository.create(entity)
-
-      case None =>
-        Left(new RuntimeException(""))
-    }
-  }
-
 }
