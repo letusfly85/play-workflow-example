@@ -26,7 +26,7 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
     Try {
       DB localTx { implicit session =>
         Workflows.find(entity.id) match {
-          case Some(workflow) =>
+          case Some(_) =>
             if (entity.details.nonEmpty) {
               entity.details.foreach { detail =>
                 WorkflowDetails.findBy(
@@ -48,34 +48,29 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
                 }.update().apply()
               }
             }
-            val id = withSQL {
-              update(Workflows).set(
-                Workflows.column.name -> entity.name,
-                Workflows.column.description -> entity.description,
-                Workflows.column.serviceId -> entity.serviceId
-              ).where.eq(Workflows.column.id, workflow.id)
-            }.update.apply()
-
+            val id = this.createWorkflow(entity)
             Workflows.find(id).get
 
           case None =>
-            val id = withSQL {
-              insert.into(Workflows).namedValues(
-                wc.workflowId -> entity.workflowId,
-                wc.name -> entity.name,
-                wc.description -> entity.description,
-                wc.serviceId -> entity.serviceId
-              )
-            }.update().apply()
-
+            val id = this.createWorkflow(entity)
             Workflows.find(id).get
         }
-
       }
     } match {
       case Success(result) => Right(result)
       case Failure(ex) => Left(new Exception(ex))
     }
+  }
+
+  private def createWorkflow(entity: WorkflowEntity): Int = {
+    withSQL {
+      insert.into(Workflows).namedValues(
+        wc.workflowId -> entity.workflowId,
+        wc.name -> entity.name,
+        wc.description -> entity.description,
+        wc.serviceId -> entity.serviceId
+      )
+    }.update().apply()
   }
 
   override def destroy(id: Int): Option[WorkflowEntity] = {
