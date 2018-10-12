@@ -62,7 +62,7 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
     }
   }
 
-  private def createWorkflow(entity: WorkflowEntity): Int = {
+  private def createWorkflow(entity: WorkflowEntity)(implicit session: DBSession): Int = {
     withSQL {
       insert.into(Workflows).namedValues(
         wc.workflowId -> entity.workflowId,
