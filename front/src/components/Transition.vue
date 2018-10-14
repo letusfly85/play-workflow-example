@@ -3,43 +3,71 @@
     <workflow-header></workflow-header>
     <svg id="graph" :width="svgArea.width" :height="svgArea.height" style="border: 1px">
     </svg>
-    <b-card class="card-workflow-list">
-      <div v-for="(transition, index) in transitions" v-bind:key="transition.id">
-        <div style="margin-bottom: 3px; height: 5rem;">
-          <b-card style="float: left; width:  14%;  font-size:   12px; height: 100%; margin-right: 2px;">{{ transition.from_step.step_label }}</b-card>
-          <b-card style="float: left; height: 100%; margin-right: 2px; border: transparent 1px solid;"> ---> </b-card>
-          <b-card style="float: left; width:  14%;  font-size:   12px; height: 100%; margin-right: 10px;">{{ transition.to_step.step_label }}</b-card>
-          <b-card style="float: left; width:  40%;  height: 100%;">{{ transition.name }}</b-card>
-          <b-btn variant="outline-info" size="sm" style="margin-top: 2rem; border-radius: 25px;" @click="addCondition(transition, index)" > Conditionを編集する </b-btn>
-          <b-modal :ref="'transitionRef'+transition.id" title="Conditionを追加する" size="lg">
-            <div class="modal-content">
-              <div v-for="condition in transition.conditions" v-bind:key="condition.name">
-                {{ index.toString() + '_' + condition.action_id.toString() }}
-                <b-form-checkbox :id="index.toString() + '_' + condition.action_id.toString()"
-                                 v-model="condition.is_activate">
-                  {{ condition.name }}
-                </b-form-checkbox>
+    <div class="card border-light mb-4 card-workflow-list">
+      <div class="card-body ">
+        <div v-for="(transition, index) in transitions" v-bind:key="transition.id">
+          <div style="margin-bottom: 3px; height: 5rem;">
+            <div class="card border-light mb-4" style="float: left;">
+              <div class="card-body ">
+                {{ transition.from_step.step_label }}
               </div>
-              <b-btn @click="saveCondition(transition, index)">コンディションを保存する</b-btn>
             </div>
-          </b-modal>
+            <div class="card border-light mb-4" style="float: left;">
+              <div class="card-body ">
+                ----->
+              </div>
+            </div>
+            <div class="card border-light mb-4" style="float: left;">
+              <div class="card-body ">
+                {{ transition.to_step.step_label }}
+              </div>
+            </div>
+            <div class="card border-light mb-4" style="float: left;">
+              <div class="card-body ">
+                {{ transition.name }}
+              </div>
+            </div>
+            <button class="btn-sm btn-outline-info col-2" data-toggle="modal" :data-target="'#'+'transitionRef'+transition.id">コンディションを編集する</button>
+            <div class="modal" :id="'transitionRef'+transition.id" >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Conditionを追加する</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div v-for="condition in transition.conditions" v-bind:key="condition.name">
+                      {{ index.toString() + '_' + condition.action_id.toString() }}
+                      {{ condition.name }}
+                      <input type="checkbox" :id="index.toString() + '_' + condition.action_id.toString()" v-model="condition.is_activate">
+                    </div>
+                    <button v-on:click="saveCondition(transition, index)" class="btn-sm btn-info col-6">コンディションを保存する</button>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
         </div>
       </div>
-    </b-card>
+    </div>
     <br/><br/>
     <button v-on:click="toggleChange(addToggle)" class="btn-outline-success">
       {{ addToggle ? 'Cancel' : ''}} Add Transition
     </button>
     <br/>
     <br/>
-    <b-form @submit="createTransition">
       <div v-if="addToggle" class="form-add-transition">
-        <b-form-select v-model="form.from_step" :options="step_id_list" class="mb-3"></b-form-select>
-        <b-form-select v-model="form.to_step" :options="step_id_list" class="mb-3"></b-form-select>
-        <b-form-input value="" v-model="form.transition_name" class="form-control"></b-form-input>
-        <b-button type="submit" class="btn-success">Save Transition</b-button>
+        <input type="select" v-model="form.from_step" :options="step_id_list" class="mb-3">
+        <input type="select" v-model="form.to_step" :options="step_id_list" class="mb-3">
+        <input type="text" value="" v-model="form.transition_name" class="form-control">
+        <button class="btn-primary" v-on:click="createTransition">Save Transition</button>
       </div>
-    </b-form>
     <app-footer></app-footer>
   </div>
 </template>
@@ -50,6 +78,7 @@ import AppFooter from './utils/AppFooter'
 // https://bl.ocks.org/heybignick/3faf257bbbbc7743bb72310d03b86ee8
 import * as d3 from 'd3v4'
 import WorkflowHeader from './workflow/WorkflowHeader'
+import WorkflowTransisionService from './service/WorkflowTransitionService'
 
 export default {
   name: 'Transition',
@@ -94,6 +123,7 @@ export default {
     },
     addCondition: function (tran, index) {
       let modal = this.$refs['transitionRef' + tran.id][0]
+      console.log(modal)
       modal.show()
     },
     saveCondition: function (tran, index) {
@@ -160,10 +190,8 @@ export default {
     }
   },
   created: function () {
-    let targetPath = '/api/workflows/' + this.$store.state.workflowId + '/transitions'
-
     const self = this
-    ApiClient.search(targetPath, (response) => {
+    WorkflowTransisionService.list(this.$store.state.workflowId, (response) => {
       console.log(response)
       self.transitions = response.data.map(function (data) {
         data.conditions = []
@@ -177,7 +205,7 @@ export default {
       console.log(error)
     })
 
-    targetPath = '/api/workflow/definitions?workflow-id=' + this.$store.state.workflowId
+    let targetPath = '/api/workflow/definitions?workflow-id=' + this.$store.state.workflowId
     ApiClient.search(targetPath, (response) => {
       console.log(response)
       self.workflows = response.data
