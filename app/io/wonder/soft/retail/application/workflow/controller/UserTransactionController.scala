@@ -32,13 +32,9 @@ class UserTransactionController @Inject()(
     } match {
       case Success(either) => either match {
         case Right(statusEntity) => Created(Json.toJson(statusEntity))
-        case Left(exception) =>
-          Logger.info(exception.toString)
-          InternalServerError(JsObject.empty)
+        case Left(e) => errorHandler(e)
       }
-      case Failure(exception) =>
-        exception.printStackTrace()
-        InternalServerError(JsObject.empty)
+      case Failure(e) => errorHandler(new Exception(e))
     }
   }
 }

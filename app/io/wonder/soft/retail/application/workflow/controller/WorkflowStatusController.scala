@@ -4,7 +4,6 @@ import io.wonder.soft.retail.application.helper.JsResultHelper
 import io.wonder.soft.retail.application.workflow.service.WorkflowStatusService
 import io.wonder.soft.retail.domain.workflow.entity._
 import javax.inject._
-import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
@@ -31,9 +30,9 @@ class WorkflowStatusController @Inject()
     } match {
       case Success(either) => either match {
         case Right(statusEntity) => Created(Json.toJson(statusEntity))
-        case Left(e) => InternalServerError(JsObject.empty)
+        case Left(e) => errorHandler(e)
       }
-      case Failure(_) => InternalServerError(JsObject.empty)
+      case Failure(e) => errorHandler(new Exception(e))
     }
   }
 
@@ -48,9 +47,9 @@ class WorkflowStatusController @Inject()
     } match {
       case Success(either) => either match {
         case Right(statusEntity) => Created(Json.toJson(statusEntity))
-        case Left(e) => InternalServerError(JsObject.empty)
+        case Left(e) => errorHandler(e)
       }
-      case Failure(_) => InternalServerError(JsObject.empty)
+      case Failure(e) => errorHandler(new Exception(e))
     }
   }
 }
