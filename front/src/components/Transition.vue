@@ -5,50 +5,26 @@
     </svg>
     <div class="card border-light mb-4 card-workflow-list">
       <div class="card-body ">
-        <div v-for="(transition, index) in transitions" v-bind:key="transition.id">
+        <div v-for="transition in transitions" v-bind:key="transition.id">
           <div style="margin-bottom: 3px; height: 5rem;">
-            <div class="card border-light mb-4" style="float: left;">
+            <div class="card border-light col-2" style="float: left;">
               <div class="card-body ">
                 {{ transition.from_step.step_label }}
               </div>
             </div>
-            <div class="card border-light mb-4" style="float: left;">
+            <div class="card border-light col-2" style="float: left;">
               <div class="card-body ">
-                ----->
+                -->
               </div>
             </div>
-            <div class="card border-light mb-4" style="float: left;">
+            <div class="card border-light col-2" style="float: left;">
               <div class="card-body ">
                 {{ transition.to_step.step_label }}
               </div>
             </div>
-            <div class="card border-light mb-4" style="float: left;">
+            <div class="card border-light col-6">
               <div class="card-body ">
                 {{ transition.name }}
-              </div>
-            </div>
-            <button class="btn-sm btn-outline-info col-2" data-toggle="modal" :data-target="'#'+'transitionRef'+transition.id">コンディションを編集する</button>
-            <div class="modal" :id="'transitionRef'+transition.id" >
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Conditionを追加する</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <div v-for="condition in transition.conditions" v-bind:key="condition.name">
-                      {{ index.toString() + '_' + condition.action_id.toString() }}
-                      {{ condition.name }}
-                      <input type="checkbox" :id="index.toString() + '_' + condition.action_id.toString()" v-model="condition.is_activate">
-                    </div>
-                    <button v-on:click="saveCondition(transition, index)" class="btn-sm btn-info col-6">コンディションを保存する</button>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -62,23 +38,31 @@
     </button>
     <br/>
     <br/>
-      <div v-if="addToggle" class="form-add-transition">
-        <input type="select" v-model="form.from_step" :options="step_id_list" class="mb-3">
-        <input type="select" v-model="form.to_step" :options="step_id_list" class="mb-3">
-        <input type="text" value="" v-model="form.transition_name" class="form-control">
-        <button class="btn-primary" v-on:click="createTransition">Save Transition</button>
-      </div>
+    <div v-if="addToggle" class="form-add-transition">
+      <select v-model="form.from_step">
+        <option v-for="option in step_id_list" v-bind:key="option.id" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+      <select  v-model="form.to_step">
+        <option v-for="option in step_id_list" v-bind:key="option.id" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+      <input type="text" value="" v-model="form.transition_name" class="form-control">
+      <button class="btn-primary" v-on:click="createTransition">Save Transition</button>
+    </div>
     <app-footer></app-footer>
   </div>
 </template>
 
 <script>
-import ApiClient from './utils/ApiClient'
 import AppFooter from './utils/AppFooter'
 // https://bl.ocks.org/heybignick/3faf257bbbbc7743bb72310d03b86ee8
 import * as d3 from 'd3v4'
 import WorkflowHeader from './workflow/WorkflowHeader'
-import WorkflowTransisionService from './service/WorkflowTransitionService'
+import WorkflowTransitionService from './service/WorkflowTransitionService'
+import WorkflowService from './service/WorkflowService'
 
 export default {
   name: 'Transition',
@@ -110,43 +94,15 @@ export default {
   },
   components: { WorkflowHeader, AppFooter },
   methods: {
-    searchConditions: function (tran, index) {
-      let self = this
-      let targetPath = '/api/workflow/craft-conditions/' + this.$store.state.workflowId + '/' + tran.id
-      ApiClient.search(targetPath, (response) => {
-        self.transitions[index].conditions = response.data.map(function (record) {
-          return record
-        })
-      }, (error) => {
-        console.log(error)
-      })
-    },
-    addCondition: function (tran, index) {
-      let modal = this.$refs['transitionRef' + tran.id][0]
-      console.log(modal)
-      modal.show()
-    },
-    saveCondition: function (tran, index) {
-      let targetPath = '/api/workflow/craft-conditions/' + this.$store.state.workflowId + '/' + tran.id
-      let params = tran.conditions.map(function (data) {
-        data.is_activate = Boolean(data.is_activate)
-        return data
-      })
-      console.log(params)
-      ApiClient.create(targetPath, params, (response) => {
-        console.log(response)
-      }, (error) => {
-        console.log(error)
-      })
-      console.log(tran)
-    },
     toggleChange: function (toggle) {
       if (toggle) this.addToggle = false
       else this.addToggle = true
     },
     createTransition: function () {
+      let workflowId = Number(this.$store.state.workflowId)
       let param = {
-        workflow_id: this.$store.state.workflowId,
+        id: 0,
+        workflow_id: workflowId,
         name: this.form.transition_name,
         from_step: this.form.from_step,
         to_step: this.form.to_step
@@ -154,8 +110,7 @@ export default {
       console.log(param)
 
       const self = this
-      let targetPath = '/api/workflow/transitions'
-      ApiClient.create(targetPath, param, (response) => {
+      WorkflowTransitionService.create(workflowId, param, (response) => {
         console.log(response)
         self.transitions.push(param)
       }, (error) => {
@@ -191,26 +146,20 @@ export default {
   },
   created: function () {
     const self = this
-    WorkflowTransisionService.list(this.$store.state.workflowId, (response) => {
+    WorkflowTransitionService.list(this.$store.state.workflowId, (response) => {
       console.log(response)
       self.transitions = response.data.map(function (data) {
         data.conditions = []
         return data
       })
-      self.transitions.forEach(function (data, index) {
-        self.searchConditions(data, index)
-        console.log(self.transitions[index])
-      })
     }, (error) => {
       console.log(error)
     })
 
-    let targetPath = '/api/workflow/definitions?workflow-id=' + this.$store.state.workflowId
-    ApiClient.search(targetPath, (response) => {
+    WorkflowService.find(this.$store.state.workflowId, (response) => {
       console.log(response)
       self.workflows = response.data
-
-      self.step_id_list = self.workflows.map(function (record) {
+      self.step_id_list = self.workflows.details.map(function (record) {
         record.value = {
           step_id: record.step_id,
           step_label: record.step_label,
