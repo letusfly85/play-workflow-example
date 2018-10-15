@@ -39,7 +39,7 @@ class WorkflowController @Inject()
         case Right(summaryEntity) => Created(Json.toJson(summaryEntity))
         case Left(e) => errorHandler(e)
       }
-      case Failure(e) => errorHandler(e.asInstanceOf[Exception])
+      case Failure(e) => errorHandler(new Exception(e))
     }
   }
 

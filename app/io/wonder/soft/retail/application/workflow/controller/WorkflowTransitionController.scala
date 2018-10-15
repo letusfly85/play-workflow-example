@@ -31,9 +31,9 @@ class WorkflowTransitionController @Inject()
     } match {
       case Success(either) => either match {
         case Right(transitionEntity) => Created(Json.toJson(transitionEntity))
-        case Left(e) => InternalServerError(JsObject.empty)
+        case Left(e) => errorHandler(e)
       }
-      case Failure(_) => InternalServerError(JsObject.empty)
+      case Failure(e) => errorHandler(new Exception(e))
     }
   }
 
