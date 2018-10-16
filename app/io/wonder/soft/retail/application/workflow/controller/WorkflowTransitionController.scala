@@ -4,7 +4,6 @@ import io.wonder.soft.retail.application.helper.JsResultHelper
 import io.wonder.soft.retail.application.workflow.service.WorkflowTransitionService
 import io.wonder.soft.retail.domain.workflow.entity._
 import javax.inject._
-import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
@@ -16,11 +15,11 @@ class WorkflowTransitionController @Inject()
    cc: ControllerComponents)
   extends AbstractController(cc) with JsResultHelper {
 
-  def listTransition(workflowId: String) = Action { implicit request =>
+  def list(workflowId: String) = Action { implicit request =>
      Ok(Json.toJson(transitionService.listTransition(workflowId.toInt)))
   }
 
-  def createTransition(workflowId: String) = Action { implicit request =>
+  def create(workflowId: String) = Action { implicit request =>
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
@@ -36,12 +35,4 @@ class WorkflowTransitionController @Inject()
       case Failure(e) => errorHandler(new Exception(e))
     }
   }
-
-  // TODO
-  def listOrderActions = ???
-
-  def createActionCondition = ???
-
-  def deleteActionCondition = ???
-
 }

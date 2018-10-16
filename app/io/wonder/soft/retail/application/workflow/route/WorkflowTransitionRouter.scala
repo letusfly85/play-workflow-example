@@ -12,9 +12,9 @@ class WorkflowTransitionRouter @Inject()(transitionController: WorkflowTransitio
 
   override def routes: Routes = {
     case GET(p"/workflows/${workflowId}/transitions") =>
-      transitionController.listTransition(workflowId)
+      transitionController.list(workflowId)
 
     case POST(p"/workflows/${workflowId}/transitions") =>
-      transitionController.createTransition(workflowId)
+      transitionController.create(workflowId)
   }
 }
