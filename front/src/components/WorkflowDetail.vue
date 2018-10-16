@@ -21,6 +21,7 @@
         </table>
       </div>
     </div>
+    <button class="btn btn-outline-info"><a :href="`#/workflows/${workflowId}/transitions`">Edit Transition</a></button>
     <button v-on:click="toggleChange(addToggle)" class="btn btn-outline-success">
       {{ addToggle ? 'Cancel' : ''}} Add Workflow Record
     </button>
@@ -56,6 +57,7 @@ export default {
   components: { WorkflowHeader, AppFooter },
   data () {
     return {
+      workflowId: '',
       statuses: [],
       workflows: { details: undefined },
       addToggle: false,
@@ -112,6 +114,7 @@ export default {
     }
   },
   created: function () {
+    this.workflowId = this.$route.params.workflowId
     this.$store.commit('updateWorkflowId', this.$route.params.workflowId)
     const self = this
 
