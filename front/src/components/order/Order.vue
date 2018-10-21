@@ -36,15 +36,18 @@
             <button class="btn-primary" style="margin-top: 1.5rem;" v-on:click="saveWorkflow(index)">Save</button>
           </div>
           <td>
-            <button class="btn-primary" v-on:click="showOrderOf(index)">Edit</button>
-            <div class="modal" size="lg" :ref="'orderRef'+row.id">
+            <button class="btn-primary"  v-on:click="showOrderOf(index)">Edit</button>
+            <div class="modal fade" :ref="`orderRef${row.id}`">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">"編集する</h5>
+                    <h5 class="modal-title">Edit</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
+                    <div class="modal-content">
+                      <t-btn :ref="'tbRef'+row.id" v-on:reloadParent="searchOrders"></t-btn>
+                    </div>
                   </div>
                   <div class="modal-body">
                     <p>Modal body text goes here.</p>
@@ -72,10 +75,13 @@ import ApiClient from '../utils/ApiClient'
 import OrderHeader from './OrderHeader'
 import TransitionButton from '../workflow/TransitionButton'
 import AppConst from '../utils/AppConst'
+import Transition from '../Transition'
+// eslint-disable-next-line
+import jQuery from 'jquery'
 
 export default {
   name: 'Order',
-  components: { OrderHeader, 't-btn': TransitionButton },
+  components: { 'b-transition': Transition, OrderHeader, 't-btn': TransitionButton },
   data () {
     return {
       orders: [],
@@ -92,9 +98,6 @@ export default {
     showOrderOf: function (index) {
       let self = this
 
-      console.log(this.orders)
-      console.log(index)
-      console.log(this.orders[index])
       const order = this.orders[index]
       let targetPath = `/api/example/orders/${order.order_id}`
       let params = order
@@ -103,14 +106,14 @@ export default {
         console.log(response)
         self.orders[index] = response.data
         self.orders[index].workflow_id = AppConst.data().orderExampleWorkflowId
+
+        const modalRef = this.$refs[`orderRef${order.id}`]
+        jQuery(modalRef).modal('show')
       }, (error) => {
         console.log(error)
       })
       // let transactionId = this.orders[index].transaction_id
       // this.$refs['tbRef' + order.id].childMethod(AppConst.data().orderExampleWorkflowId, transactionId)
-
-      const modalRef = this.$refs[`orderRef${order.id}`]
-      modalRef.modal('show')
     },
     searchOrders: function () {
       let self = this
