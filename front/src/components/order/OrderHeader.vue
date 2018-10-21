@@ -1,32 +1,26 @@
 <template>
   <div id="order-header">
-    <b-navbar toggleable="md" class="navbar-order">
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="#">Orders</b-navbar-brand>
-      <b-collapse is-nav id="nav_collapse">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="#/orders">Orders</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <b-navbar-nav>
-          <b-nav-item href="#/orders">Orders</b-nav-item>
-          <b-nav-item href="#/workflows">Workflows</b-nav-item>
-        </b-navbar-nav>
-
-        <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
-
-          <b-nav-item-dropdown right>
-            <!-- Using button-content slot -->
-            <template slot="button-content">
-              <em>User</em>
-            </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#/password/change">Password Change</b-dropdown-item>
-            <b-dropdown-item-button>Sign Out</b-dropdown-item-button>
-          </b-nav-item-dropdown>
-
-        </b-navbar-nav>
-
-      </b-collapse>
-    </b-navbar>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+          <li>
+            <a class="nav-link" href="#/orders">orders</a>
+          </li>
+          <li>
+            <a class="nav-link" href="#/workflows">workflows</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
   </div>
 </template>
 
@@ -37,12 +31,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .navbar-order {
-    background-color: lavender;
-    opacity: 1.0;
-    color: black;
-    z-index: 10;
-  }
-</style>
