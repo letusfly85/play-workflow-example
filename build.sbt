@@ -2,7 +2,7 @@ organization := "io.wonder.soft"
 
 name := "retail.workflow"
 
-val _version = "3.0.4"
+val _version = "0.0.1"
 
 version := s"${_version}-SNAPSHOT"
 
@@ -120,6 +120,6 @@ flywayPassword := conf.getString("db.default.password")
 
 flywayLocations := Seq("filesystem:conf/db/migration")
 
-flywayTarget := _version
+flywayTarget := "4.0.0"
 
 flywayBaselineVersion := "1.0.0"
