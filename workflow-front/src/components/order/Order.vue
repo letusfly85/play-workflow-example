@@ -17,8 +17,11 @@
       <table class="table table-hover">
         <thead>
         <tr align="left">
-          <th scope="col">Name</th>
-          <th scope="col">Description</th>
+          <th scope="col">Id</th>
+          <th scope="col">Order Id</th>
+          <th scope="col">Status</th>
+          <th scope="col">Customer</th>
+          <th scope="col">Assign</th>
           <th scope="col">Edit</th>
           <th scope="col">Destroy</th>
         </tr>
@@ -30,27 +33,15 @@
           <td align="left">{{ row.status_name }}</td>
           <td align="left">{{ row.customer_name }}</td>
           <td align="left">{{ row.assigned_member_name }}</td>
-          <td align="left" v-if="!row.toggle" v-on:click="updateToggle(index)">{{ row.description }}</td>
-          <div v-if="row.toggle">
-            <input type="text" class="col-lg-8 form-control" style="margin-top: 1rem; float: left;" v-model="row.description" />
-            <button class="btn-primary" style="margin-top: 1.5rem;" v-on:click="saveWorkflow(index)">Save</button>
-          </div>
           <td>
             <button class="btn-primary"  v-on:click="showOrderOf(index)">Edit</button>
-            <div class="modal fade" :ref="`orderRef${row.id}`">
-              <div class="modal-dialog" role="document">
+            <div class="modal fade" style="width: 1500px;" :ref="`orderRef${row.id}`">
+              <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Edit</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                    <div class="modal-content">
-                      <t-btn :ref="'tbRef'+row.id" v-on:reloadParent="searchOrders"></t-btn>
+                    <div class="modal-body">
+                      <t-btn :ref="`tbRef${row.id}`" v-on:reloadParent="searchOrders"></t-btn>
                     </div>
-                  </div>
-                  <div class="modal-body">
-                    <p>Modal body text goes here.</p>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-primary">Save changes</button>
@@ -74,14 +65,12 @@
 import ApiClient from '../utils/ApiClient'
 import OrderHeader from './OrderHeader'
 import TransitionButton from '../workflow/TransitionButton'
-import AppConst from '../utils/AppConst'
-import Transition from '../Transition'
 // eslint-disable-next-line
 import jQuery from 'jquery'
 
 export default {
   name: 'Order',
-  components: { 'b-transition': Transition, OrderHeader, 't-btn': TransitionButton },
+  components: { OrderHeader, 't-btn': TransitionButton },
   data () {
     return {
       orders: [],
@@ -96,6 +85,7 @@ export default {
   },
   methods: {
     showOrderOf: function (index) {
+      const workflowId = this.$store.state.workflowId
       let self = this
 
       const order = this.orders[index]
@@ -105,15 +95,17 @@ export default {
       ApiClient.update(targetPath, params, (response) => {
         console.log(response)
         self.orders[index] = response.data
-        self.orders[index].workflow_id = AppConst.data().orderExampleWorkflowId
+        self.orders[index].workflow_id = workflowId
 
         const modalRef = this.$refs[`orderRef${order.id}`]
         jQuery(modalRef).modal('show')
       }, (error) => {
         console.log(error)
       })
-      // let transactionId = this.orders[index].transaction_id
-      // this.$refs['tbRef' + order.id].childMethod(AppConst.data().orderExampleWorkflowId, transactionId)
+      let transactionId = this.orders[index].transaction_id
+      const refName = 'tbRef' + order.id
+      const targetRef = this.$refs[refName]
+      targetRef[0].childMethod(workflowId, transactionId)
     },
     searchOrders: function () {
       let self = this
@@ -122,7 +114,7 @@ export default {
       ApiClient.search(targetPath, (response) => {
         console.log(response)
         self.orders = response.data.map(function (data) {
-          data.workflow_id = AppConst.data().orderExampleWorkflowId
+          data.workflow_id = self.$store.state.workflowId
           return data
         })
         console.log(self.orders)

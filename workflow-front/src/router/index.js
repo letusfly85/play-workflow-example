@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Workflow from '@/components/Workflow'
 import WorkflowDetail from '@/components/WorkflowDetail'
-import Transition from '@/components/Transition'
+import WorkflowTransition from '@/components/WorkflowTransition'
 import Status from '@/components/Status'
 import Order from '@/components/order/Order'
 import CraftLine from '@/components/craft/CraftLine'
@@ -34,8 +34,8 @@ export default new Router({
     },
     {
       path: '/workflows/:workflowId/transitions',
-      name: 'Transition',
-      component: Transition
+      name: 'WorkflowTransition',
+      component: WorkflowTransition
     },
     {
       path: '/orders',

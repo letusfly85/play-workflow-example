@@ -1,15 +1,17 @@
 <template>
-  <div id="transition-button">
-    <b-card class="t-btn-list">
-      <div v-for="(transition, index) in trans" v-bind:key="index" v-if="trans.length>0">
-        <div v-if="transition.is_active">
-          <b-btn class="t-btn" variant="outline-success" @click="changeStatus(transition.transition, index)">{{ transition.transition.name }}</b-btn>
-        </div>
-        <div v-if="!transition.is_active">
-          <b-btn class="t-btn" variant="secondary" disable>{{ transition.transition.name }}</b-btn>
+  <div id="t-btn">
+    <div class="card border-light mb-4 card-workflow-list">
+      <div class="card-body ">
+        <div v-for="(transition, index) in trans" v-bind:key="index" v-if="trans.length>0">
+          <div v-if="transition.is_active">
+            <button class="btn-info" style="float: left; margin-left: 2rem;" v-on:click="changeStatus(transition.transition, index)">{{ transition.transition.name }}</button>
+          </div>
+          <div v-if="!transition.is_active">
+            <button class="btn-dark" style="float: left; margin-left: 2rem;"  disable>{{ transition.transition.name }}</button>
+          </div>
         </div>
       </div>
-    </b-card>
+    </div>
   </div>
 </template>
 
@@ -33,7 +35,8 @@ export default {
     findTransitions: function () {
       let self = this
       console.log(this.workflowId)
-      let targetPath = '/api/workflow-user-transitions?workflow-id=' + this.workflowId + '&transaction-id=' + this.transactionId
+      const userId = '1' // this is dummy value
+      let targetPath = `/api/users/${userId}/workflows/${this.workflowId}/transactions/${this.transactionId}/transitions`
       console.log(targetPath)
 
       ApiClient.search(targetPath, (response) => {
@@ -62,14 +65,7 @@ export default {
 }
 </script>
 
-<style scoped>
-  .t-btn-list {
-    margin-top: 3px;
-    margin-right: 3px;
-    margin-left: 20%;
-    height: 8rem;
-    border: transparent 1px solid;
-  }
+<style>
   .t-btn {
     float: left;
     margin-bottom: 3px;
