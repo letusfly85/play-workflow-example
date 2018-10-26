@@ -12,6 +12,6 @@ trait WorkflowTransitionService {
 
   def updateTransition(transitionEntity: TransitionEntity): Either[Exception, TransitionEntity]
 
-  def destroyTransition(transitionEntity: TransitionEntity): Either[Exception, TransitionEntity]
+  def destroyTransition(workflowId: Int, transitionId: Int): Either[Exception, TransitionEntity]
 
 }

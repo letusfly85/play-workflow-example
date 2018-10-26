@@ -16,5 +16,8 @@ class WorkflowTransitionRouter @Inject()(transitionController: WorkflowTransitio
 
     case POST(p"/workflows/${workflowId}/transitions") =>
       transitionController.create(workflowId)
+
+    case DELETE(p"/workflows/${workflowId}/transitions/${transitionId}") =>
+      transitionController.delete(workflowId, transitionId)
   }
 }

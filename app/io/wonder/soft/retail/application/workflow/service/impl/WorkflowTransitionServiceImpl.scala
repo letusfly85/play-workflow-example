@@ -5,10 +5,13 @@ import io.wonder.soft.retail.domain.workflow.entity.{WorkflowTransitionEntity =>
 import io.wonder.soft.retail.domain.workflow.repository.WorkflowTransitionRepository
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
 import javax.inject.Inject
+import play.api.Logger
+
+import scala.util.{Failure, Success, Try}
 
 class WorkflowTransitionServiceImpl @Inject() (
   query: WorkflowQuery,
-  workflowTransitionRepository: WorkflowTransitionRepository) extends WorkflowTransitionService {
+  transitionRepository: WorkflowTransitionRepository) extends WorkflowTransitionService {
 
   def listTransition(workflowId: Int): List[TransitionEntity] =
     query.searchTransitions(workflowId)
@@ -18,12 +21,20 @@ class WorkflowTransitionServiceImpl @Inject() (
     Left(new RuntimeException(""))
 
   def createTransition(transitionEntity: TransitionEntity): Either[Exception, TransitionEntity] =
-    workflowTransitionRepository.create(transitionEntity)
+    transitionRepository.create(transitionEntity)
 
   //TODO
   def updateTransition(transitionEntity: TransitionEntity): Either[Exception, TransitionEntity] = ???
 
-  //TODO
-  def destroyTransition(transitionEntity: TransitionEntity): Either[Exception, TransitionEntity] = ???
+  def destroyTransition(workflowId: Int, transitionId: Int): Either[Exception, TransitionEntity] = {
+    Try {
+      Logger.info(s"destroying ${workflowId}, ${transitionId}")
+      transitionRepository.destroy(transitionId)
+    } match {
+      case Success(Some(entity)) => Right(entity)
+      case Success(None) => Left(new RuntimeException(s"NOT_FOUND transition: ${transitionId}"))
+      case Failure(ex) => Left(new RuntimeException(ex))
+    }
+  }
 
 }

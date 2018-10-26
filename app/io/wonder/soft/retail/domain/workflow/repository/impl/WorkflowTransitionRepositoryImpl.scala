@@ -51,6 +51,14 @@ class WorkflowTransitionRepositoryImpl extends WorkflowTransitionRepository  {
     }
   }
 
-  override def destroy(id: Int): Option[WorkflowTransitionEntity] = None
+  override def destroy(id: Int): Option[WorkflowTransitionEntity] = {
+    WorkflowTransitions.find(id) match {
+      case Some(entity) =>
+        entity.destroy()
+        Some(entity)
+
+      case None => None
+    }
+  }
 
 }

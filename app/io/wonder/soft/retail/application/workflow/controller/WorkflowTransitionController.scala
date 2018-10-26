@@ -35,4 +35,16 @@ class WorkflowTransitionController @Inject()
       case Failure(e) => errorHandler(new Exception(e))
     }
   }
+
+  def delete(workflowId: String, transitionId: String) = Action { implicit request =>
+    Try {
+        transitionService.destroyTransition(workflowId.toInt, transitionId.toInt)
+    } match {
+      case Success(either) => either match {
+        case Right(transitionEntity) => Ok(Json.toJson(transitionEntity))
+        case Left(e) => errorHandler(e)
+      }
+      case Failure(e) => errorHandler(new Exception(e))
+    }
+  }
 }
