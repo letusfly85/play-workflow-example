@@ -7,7 +7,7 @@
             <button class="btn-info" style="float: left; margin-left: 2rem;" v-on:click="changeStatus(transition.transition, index)">{{ transition.transition.name }}</button>
           </div>
           <div v-if="!transition.is_active">
-            <button class="btn-dark" style="float: left; margin-left: 2rem;"  disable>{{ transition.transition.name }}</button>
+            <button class="btn-dark" style="float: left; margin-left: 2rem;" disable>{{ transition.transition.name }}</button>
           </div>
         </div>
       </div>
@@ -48,7 +48,8 @@ export default {
     },
     changeStatus: function (transition, index) {
       console.log(index)
-      let targetPath = '/api/workflow-user-transactions'
+      const userId = '1' // this is dummy value
+      let targetPath = `/api/users/${userId}/workflows/${this.workflowId}/transactions/${this.transactionId}`
       let params = {
         transaction_id: this.transactionId,
         transition: transition

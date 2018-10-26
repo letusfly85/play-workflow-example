@@ -27,9 +27,9 @@ export default {
       errorHandler(error)
     })
   },
-  destroy: function (id, workflowId, params, callback, errorHandler) {
-    let targetPath = `/api/workflows/${workflowId}/transitions/${id}`
-    ApiClient.delete(targetPath, params, (response) => {
+  destroy: function (workflowId, transitionId, callback, errorHandler) {
+    let targetPath = `/api/workflows/${workflowId}/transitions`
+    ApiClient.destroy(targetPath, transitionId, (response) => {
       callback(response)
     }, (error) => {
       errorHandler(error)

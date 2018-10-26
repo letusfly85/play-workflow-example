@@ -22,10 +22,13 @@
                 {{ transition.to_step.step_label }}
               </div>
             </div>
-            <div class="card border-light col-6">
+            <div class="card border-light col-4" style="float: left;">
               <div class="card-body ">
                 {{ transition.name }}
               </div>
+            </div>
+            <div class="card border-0 col-2">
+              <button class="btn-danger btn-sm" v-on:click="destroyTransition(transition)">destroy</button>
             </div>
           </div>
           <br/>
@@ -52,7 +55,7 @@
       <input type="text" value="" v-model="form.transition_name" class="form-control">
       <button class="btn-primary" v-on:click="createTransition">Save Transition</button>
     </div>
-    <app-footer></app-footer>
+    <!-- <app-footer></app-footer> -->
   </div>
 </template>
 
@@ -98,6 +101,31 @@ export default {
       if (toggle) this.addToggle = false
       else this.addToggle = true
     },
+    loadTransition: function () {
+      const self = this
+      WorkflowTransitionService.list(this.$store.state.workflowId, (response) => {
+        self.transitions = response.data
+      }, (error) => {
+        console.log(error)
+      })
+
+      WorkflowService.find(this.$store.state.workflowId, (response) => {
+        console.log(response)
+        self.workflows = response.data
+        self.step_id_list = self.workflows.details.map(function (record) {
+          record.value = {
+            step_id: record.step_id,
+            step_label: record.step_label,
+            is_first_step: record.is_first_step,
+            is_last_step: record.is_last_step }
+          record.text = record.step_label
+
+          return record
+        })
+      }, (error) => {
+        console.log(error)
+      })
+    },
     createTransition: function () {
       let workflowId = Number(this.$store.state.workflowId)
       let param = {
@@ -109,10 +137,18 @@ export default {
       }
       console.log(param)
 
-      const self = this
       WorkflowTransitionService.create(workflowId, param, (response) => {
         console.log(response)
-        self.transitions.push(param)
+        this.loadTransition()
+      }, (error) => {
+        console.log(error)
+      })
+    },
+    destroyTransition: function (transition) {
+      console.log(transition)
+      WorkflowTransitionService.destroy(transition.workflow_id, transition.id, (response) => {
+        console.log(response)
+        this.loadTransition()
       }, (error) => {
         console.log(error)
       })
@@ -145,33 +181,7 @@ export default {
     }
   },
   created: function () {
-    const self = this
-    WorkflowTransitionService.list(this.$store.state.workflowId, (response) => {
-      console.log(response)
-      self.transitions = response.data.map(function (data) {
-        data.conditions = []
-        return data
-      })
-    }, (error) => {
-      console.log(error)
-    })
-
-    WorkflowService.find(this.$store.state.workflowId, (response) => {
-      console.log(response)
-      self.workflows = response.data
-      self.step_id_list = self.workflows.details.map(function (record) {
-        record.value = {
-          step_id: record.step_id,
-          step_label: record.step_label,
-          is_first_step: record.is_first_step,
-          is_last_step: record.is_last_step }
-        record.text = record.step_label
-
-        return record
-      })
-    }, (error) => {
-      console.log(error)
-    })
+    this.loadTransition()
   },
   mounted: function () {
     const svg = d3.selectAll('#graph')
