@@ -3,40 +3,38 @@
     <workflow-header></workflow-header>
     <svg id="graph" :width="svgArea.width" :height="svgArea.height" style="border: 1px">
     </svg>
-    <div class="card border-light mb-4 card-workflow-list">
+    <div class="card border-0 card-transition-list">
       <div class="card-body ">
         <div v-for="transition in transitions" v-bind:key="transition.id">
-          <div style="margin-bottom: 3px; height: 5rem;">
-            <div class="card border-light col-2" style="float: left;">
+          <div>
+            <div class="card border-info col-2" style="float: left;">
               <div class="card-body ">
                 {{ transition.from_step.step_label }}
               </div>
             </div>
-            <div class="card border-light col-2" style="float: left;">
+            <div class="card border-0 col-2" style="float: left;">
               <div class="card-body ">
                 -->
               </div>
             </div>
-            <div class="card border-light col-2" style="float: left;">
+            <div class="card border-info col-2" style="margin-left: 1rem; float: left;">
               <div class="card-body ">
                 {{ transition.to_step.step_label }}
               </div>
             </div>
-            <div class="card border-light col-4" style="float: left;">
+            <div class="card bg-info col-3" style="color: white; margin-left: 1rem; float: left;">
               <div class="card-body ">
                 {{ transition.name }}
               </div>
             </div>
-            <div class="card border-0 col-2">
-              <button class="btn-danger btn-sm" v-on:click="destroyTransition(transition)">destroy</button>
-            </div>
+            <button class="btn-danger btn-lg mt-2" v-on:click="destroyTransition(transition)">destroy</button>
           </div>
           <br/>
         </div>
       </div>
     </div>
     <br/><br/>
-    <button v-on:click="toggleChange(addToggle)" class="btn-outline-success">
+    <button v-on:click="toggleChange(addToggle)" class="btn-primary btn-lg">
       {{ addToggle ? 'Cancel' : ''}} Add Transition
     </button>
     <br/>
@@ -53,7 +51,9 @@
         </option>
       </select>
       <input type="text" value="" v-model="form.transition_name" class="form-control">
-      <button class="btn-primary" v-on:click="createTransition">Save Transition</button>
+      <br/>
+      <br/>
+      <button class="btn-success btn-lg" v-on:click="createTransition">Save Transition</button>
     </div>
     <!-- <app-footer></app-footer> -->
   </div>
@@ -238,10 +238,9 @@ export default {
 }
 </script>
 
-<style scoped>
-  .card-workflow-list {
+<style>
+  .card-transition-list {
     width: 80%;
-    margin-top: 5px;
     margin-left: 10%;
     border: transparent 1px solid;
   }
