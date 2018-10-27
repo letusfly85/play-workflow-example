@@ -8,7 +8,7 @@ import scalikejdbc._
 
 class WorkflowQuery {
   import WorkflowStatusEntity._
-  import WorkflowDetailEntity._
+  import WorkflowStepEntity._
 
   // syntax
   val w = Workflows.syntax("w")
@@ -53,7 +53,7 @@ class WorkflowQuery {
     }
   }
 
-  def searchDefinitions(workflowId: Int): List[WorkflowDetailEntity] = {
+  def searchDefinitions(workflowId: Int): List[WorkflowStepEntity] = {
     (DB localTx { implicit session =>
       withSQL {
         select.from(WorkflowSteps as wd)
@@ -103,7 +103,7 @@ class WorkflowQuery {
 
   }
 
-  def findDefine(workflowId: Int, stepId: Int): Option[WorkflowDetailEntity] = {
+  def findDefine(workflowId: Int, stepId: Int): Option[WorkflowStepEntity] = {
     WorkflowSteps.findBy(sqls.eq(wd.workflowId, workflowId).and.eq(wd.stepId, stepId)).map(d => d)
   }
 

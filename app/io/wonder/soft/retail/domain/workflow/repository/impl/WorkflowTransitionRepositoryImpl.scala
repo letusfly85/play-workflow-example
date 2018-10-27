@@ -19,8 +19,8 @@ class WorkflowTransitionRepositoryImpl extends WorkflowTransitionRepository  {
           insert.into(WorkflowTransitions).namedValues(
             wtc.workflowId -> entity.workflowId,
             wtc.name -> entity.name,
-            wtc.fromStepId -> entity.fromStep.stepId,
-            wtc.toStepId -> entity.toStep.stepId
+            wtc.fromStepId -> entity.fromStep.get.stepId,
+            wtc.toStepId -> entity.toStep.get.stepId
           )
         }.update().apply()
       }
@@ -35,8 +35,8 @@ class WorkflowTransitionRepositoryImpl extends WorkflowTransitionRepository  {
     Try {
       WorkflowTransitions.findBy(sqls
           .eq(wtc.workflowId, entity.workflowId)
-          .eq(wtc.fromStepId, entity.fromStep.stepId)
-          .eq(wtc.toStepId, entity.toStep.stepId)) match {
+          .eq(wtc.fromStepId, entity.fromStep.get.stepId)
+          .eq(wtc.toStepId, entity.toStep.get.stepId)) match {
         case Some(transitions) =>
           transitions.copy(name = entity.name).save()
           Right(entity)

@@ -7,14 +7,13 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 
 final case class WorkflowTransitionEntity(
-                   id: Int = 0,
-                   workflowId: Int,
-                   name: String,
-                   fromStep: WorkflowStepEntity,
-                   toStep: WorkflowStepEntity,
-                   conditionSuiteId: Option[Int], //TODO implement and use entity
-                   isDefined: Option[Boolean] = Some(false)
-                 ) extends Entity
+  id: Int = 0,
+  workflowId: Int,
+  name: String,
+  fromStep: Option[WorkflowStepEntity] = None,
+  toStep: Option[WorkflowStepEntity] = None,
+  isDefined: Option[Boolean] = Some(false)
+) extends Entity
 
 
 object WorkflowTransitionEntity {
@@ -22,9 +21,8 @@ object WorkflowTransitionEntity {
     (JsPath \ "id").read[Int] and
     (JsPath \ "workflow_id").read[Int] and
     (JsPath \ "name").read[String] and
-    (JsPath \ "from_step").read[WorkflowStepEntity] and
-    (JsPath \ "to_step").read[WorkflowStepEntity] and
-    (JsPath \ "condition_suite_id").readNullable[Int] and
+    (JsPath \ "from_step").readNullable[WorkflowStepEntity] and
+    (JsPath \ "to_step").readNullable[WorkflowStepEntity] and
     (JsPath \ "is_defined").readNullable[Boolean]
   )(WorkflowTransitionEntity.apply _)
 
@@ -32,9 +30,8 @@ object WorkflowTransitionEntity {
     (JsPath \ "id").write[Int] and
     (JsPath \ "workflow_id").write[Int] and
     (JsPath \ "name").write[String] and
-    (JsPath \ "from_step").write[WorkflowStepEntity] and
-    (JsPath \ "to_step").write[WorkflowStepEntity] and
-    (JsPath \ "condition_suite_id").writeNullable[Int] and
+    (JsPath \ "from_step").writeNullable[WorkflowStepEntity] and
+    (JsPath \ "to_step").writeNullable[WorkflowStepEntity] and
     (JsPath \ "is_defined").writeNullable[Boolean]
   )(unlift(WorkflowTransitionEntity.unapply))
 
@@ -43,9 +40,8 @@ object WorkflowTransitionEntity {
       model.id,
       model.workflowId,
       model.name,
-      WorkflowStepEntity(),
-      WorkflowStepEntity(),
-      model.conditionSuiteId,
+      None,
+      None,
       Some(model.isDefined)
     )
   }

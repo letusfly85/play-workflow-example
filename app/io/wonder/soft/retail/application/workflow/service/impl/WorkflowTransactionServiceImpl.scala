@@ -62,7 +62,7 @@ class WorkflowTransactionServiceImpl @Inject() (
     }
   }
 
-  def findStep(workflowId: Int, stepId: Int): Option[WorkflowDetailEntity] = {
+  def findStep(workflowId: Int, stepId: Int): Option[WorkflowStepEntity] = {
     defineQuery.findDefine(workflowId, stepId)
   }
 
@@ -75,7 +75,7 @@ class WorkflowTransactionServiceImpl @Inject() (
         val transaction =
           WorkflowTransactionFactory.buildTransaction(currentState, transition)
         recordTransaction(transaction)
-        val result = transition.toStep.isLastStep match {
+        val result = transition.toStep.get.isLastStep match {
           case true =>
             closeTransaction(currentState, transition)
 

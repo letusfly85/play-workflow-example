@@ -1,6 +1,6 @@
 package io.wonder.soft.retail.application.workflow.service
 
-import io.wonder.soft.retail.domain.workflow.entity.{WorkflowDetailEntity, WorkflowEntity}
+import io.wonder.soft.retail.domain.workflow.entity.{WorkflowStepEntity, WorkflowEntity}
 
 trait WorkflowService {
 

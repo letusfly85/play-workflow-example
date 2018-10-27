@@ -7,12 +7,12 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 
 final case class WorkflowEntity(
-    id: Int,
-    workflowId: Int,
-    name: String,
-    description: Option[String],
-    details: List[WorkflowDetailEntity],
-    serviceId: Int,
+  id: Int,
+  workflowId: Int,
+  name: String,
+  description: Option[String],
+  steps: List[WorkflowStepEntity],
+  serviceId: Int,
 ) extends Entity
 
 object WorkflowEntity {
@@ -21,7 +21,7 @@ object WorkflowEntity {
     (JsPath \ "workflow_id").read[Int] and
     (JsPath \ "name").read[String] and
     (JsPath \ "description").readNullable[String] and
-    (JsPath \ "details").read[List[WorkflowDetailEntity]] and
+    (JsPath \ "details").read[List[WorkflowStepEntity]] and
     (JsPath \ "service_id").read[Int]
    )(WorkflowEntity.apply _)
 
@@ -30,7 +30,7 @@ object WorkflowEntity {
     (JsPath \ "workflow_id").write[Int] and
     (JsPath \ "name").write[String] and
     (JsPath \ "description").writeNullable[String] and
-    (JsPath \ "details").write[List[WorkflowDetailEntity]] and
+    (JsPath \ "details").write[List[WorkflowStepEntity]] and
     (JsPath \ "service_id").write[Int]
   )(unlift(WorkflowEntity.unapply))
 
@@ -40,7 +40,7 @@ object WorkflowEntity {
       model.workflowId,
       model.name,
       model.description,
-      List.empty[WorkflowDetailEntity],
+      List.empty[WorkflowStepEntity],
       model.serviceId
     )
   }

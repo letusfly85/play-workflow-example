@@ -1,15 +1,15 @@
 package io.wonder.soft.retail.domain.workflow.repository
 
-import io.wonder.soft.retail.domain.workflow.entity.WorkflowDetailEntity
+import io.wonder.soft.retail.domain.workflow.entity.WorkflowStepEntity
 
 trait WorkflowDetailRepository  {
 
-  def find(id: Int): Option[WorkflowDetailEntity]
+  def find(id: Int): Option[WorkflowStepEntity]
 
-  def create(entity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity]
+  def create(entity: WorkflowStepEntity): Either[Exception, WorkflowStepEntity]
 
-  def destroy(id: Int): Option[WorkflowDetailEntity]
+  def destroy(id: Int): Option[WorkflowStepEntity]
 
-  def update(entity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity]
+  def update(entity: WorkflowStepEntity): Either[Exception, WorkflowStepEntity]
 
 }

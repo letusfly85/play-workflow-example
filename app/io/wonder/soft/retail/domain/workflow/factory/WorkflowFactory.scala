@@ -12,33 +12,42 @@ object WorkflowFactory {
       workflowId = workflows.workflowId,
       name = workflows.name,
       description = workflows.description,
-      details = workflows.steps.map(wd => wd).toList,
+      steps = workflows.steps.map(wd => wd).toList,
       serviceId = workflows.serviceId
     )
   }
 
-  def buildDefinitionEntity(schemeEntity: WorkflowDetailEntity, statusEntity: WorkflowStatusEntity): WorkflowDetailEntity = {
+  def buildDefinitionEntity(schemeEntity: WorkflowStepEntity, statusEntity: WorkflowStatusEntity): WorkflowStepEntity = {
     schemeEntity.copy(status = Some(statusEntity))
   }
 
   def buildTransitionEntity(
                              transitionEntity: WorkflowTransitionEntity,
-                             fromStep: WorkflowDetailEntity,
-                             toStep: WorkflowDetailEntity): WorkflowTransitionEntity = {
+                             fromStep: WorkflowStepEntity,
+                             toStep: WorkflowStepEntity): WorkflowTransitionEntity = {
 
     WorkflowTransitionEntity(
       transitionEntity.id,
       transitionEntity.workflowId,
       transitionEntity.name,
-      WorkflowStepEntity(
-        stepId = fromStep.stepId, stepLabel = fromStep.stepLabel,
-        isFirstStep = fromStep.isFirstStep, isLastStep = fromStep.isLastStep
-      ),
-      WorkflowStepEntity(
-        stepId = toStep.stepId, stepLabel = toStep.stepLabel,
-        isFirstStep = toStep.isFirstStep, isLastStep = toStep.isLastStep
-      ),
-      transitionEntity.conditionSuiteId,
+      Some(WorkflowStepEntity(
+        workflowId = fromStep.workflowId,
+        name = fromStep.name,
+        status = None,
+        stepId = fromStep.stepId,
+        stepLabel = fromStep.stepLabel,
+        isFirstStep = fromStep.isFirstStep,
+        isLastStep = fromStep.isLastStep
+      )),
+      Some(WorkflowStepEntity(
+        workflowId = fromStep.workflowId,
+        name = toStep.name,
+        status = None,
+        stepId = toStep.stepId,
+        stepLabel = toStep.stepLabel,
+        isFirstStep = toStep.isFirstStep,
+        isLastStep = toStep.isLastStep
+      )),
       transitionEntity.isDefined
     )
   }

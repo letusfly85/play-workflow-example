@@ -6,7 +6,7 @@ trait WorkflowTransactionService  {
 
   def openTransaction(userId: String, workflowId: Int): Either[Exception, WorkflowTransactionEntity]
 
-  def findStep(workflowId: Int, stepId: Int): Option[WorkflowDetailEntity]
+  def findStep(workflowId: Int, stepId: Int): Option[WorkflowStepEntity]
 
   def proceedState(transactionId: String, transition: WorkflowTransitionEntity): Either[Exception, WorkflowCurrentStateEntity]
 

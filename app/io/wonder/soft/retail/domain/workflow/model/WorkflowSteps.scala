@@ -27,7 +27,7 @@ case class WorkflowSteps(
 
 object WorkflowSteps extends SQLSyntaxSupport[WorkflowSteps] {
 
-  override val tableName = "workflow_details"
+  override val tableName = "workflow_steps"
 
   override val columns = Seq("id", "workflow_id", "name", "status_id", "step_id", "step_label", "is_first_step", "is_last_step", "created_at", "updated_at")
 

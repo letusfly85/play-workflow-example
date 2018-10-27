@@ -27,14 +27,14 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
       DB localTx { implicit session =>
         Workflows.find(entity.id) match {
           case Some(_) =>
-            if (entity.details.nonEmpty) {
-              entity.details.foreach { detail =>
+            if (entity.steps.nonEmpty) {
+              entity.steps.foreach { detail =>
                 WorkflowSteps.findBy(
                   sqls.eq(WorkflowSteps.column.workflowId, detail.workflowId)
                 ).map(detail => detail.destroy())
               }
 
-              entity.details.foreach { detail =>
+              entity.steps.foreach { detail =>
                 withSQL {
                   insert.into(WorkflowSteps).namedValues(
                     wdc.workflowId -> entity.workflowId,
