@@ -19,12 +19,12 @@ class OrderController @Inject()
     Ok(Json.toJson(service.listOrder))
   }
 
-  def findOrder(orderId: String) = Action { implicit request =>
+  def findOrder(workflowId: String, orderId: String) = Action { implicit request =>
     Try {
       for {
         json <- request.body.asJson.toRight(new Exception("")).right
         orderEntity <- Json.fromJson[OrderEntity](json).right
-        entity <- service.openOrder(orderEntity).right
+        entity <- service.openOrder(workflowId, orderEntity).right
       } yield entity
 
     } match {

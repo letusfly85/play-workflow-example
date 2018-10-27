@@ -17,17 +17,15 @@ class OrderService @Inject()
    orderQuery: OrderQueryProcessor
   ) extends ApplicationService {
 
-  val orderExampleWorkflowId = 2
-
   def listOrder: List[OrderEntity] = orderQuery.listOrder
 
-  def openOrder(orderEntity: OrderEntity): Either[Exception, OrderEntity] = {
+  def openOrder(workflowId: String, orderEntity: OrderEntity): Either[Exception, OrderEntity] = {
     orderRepository.find(orderEntity.id) match {
       case Some(order) if order.transactionId.getOrElse("") == "" =>
         Logger.info(s"find not yet initialized order entity ${orderEntity.toString}")
-        transactionService.openTransaction(userId = "1", workflowId = orderExampleWorkflowId) match {
+        transactionService.openTransaction(userId = "1", workflowId = workflowId.toInt) match {
           case Right(transaction) =>
-            val define = transactionService.findDefinitionByStepId(workflowId = orderExampleWorkflowId, transaction.stepId).get
+            val define = transactionService.findDefinitionByStepId(workflowId = workflowId.toInt, transaction.stepId).get
             val newOrder = order.copy(
               transactionId = Some(transaction.transactionId),
               statusId = Some(define.stepId.toString),

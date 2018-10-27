@@ -7,12 +7,17 @@
       <div class="card-body ">
         <div v-for="transition in transitions" v-bind:key="transition.id">
           <div>
-            <div class="card border-info col-2" style="float: left;">
+            <div class="card border-info col-1" style="float: left;">
+              <div class="card-body small">
+                {{ transition.id }}
+              </div>
+            </div>
+            <div class="card border-info col-2" style="margin-left: 1rem; float: left;">
               <div class="card-body ">
                 {{ transition.from_step.step_label }}
               </div>
             </div>
-            <div class="card border-0 col-2" style="float: left;">
+            <div class="card border-0 col-1" style="float: left;">
               <div class="card-body ">
                 -->
               </div>
@@ -240,8 +245,8 @@ export default {
 
 <style>
   .card-transition-list {
-    width: 80%;
-    margin-left: 10%;
+    width: 90%;
+    margin-left: 5%;
     border: transparent 1px solid;
   }
 

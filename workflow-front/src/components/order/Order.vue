@@ -89,7 +89,7 @@ export default {
       let self = this
 
       const order = this.orders[index]
-      let targetPath = `/api/example/orders/${order.order_id}`
+      let targetPath = `/api/example/workflows/${workflowId}/orders/${order.order_id}`
       let params = order
       console.log(targetPath)
       ApiClient.update(targetPath, params, (response) => {
