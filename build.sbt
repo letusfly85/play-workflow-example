@@ -120,6 +120,6 @@ flywayPassword := conf.getString("db.default.password")
 
 flywayLocations := Seq("filesystem:conf/db/migration")
 
-flywayTarget := "4.0.0"
+flywayTarget := "4.0.1"
 
 flywayBaselineVersion := "1.0.0"

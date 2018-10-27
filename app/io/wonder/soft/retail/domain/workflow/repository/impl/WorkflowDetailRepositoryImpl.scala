@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.domain.workflow.repository
 
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowDetailEntity
-import io.wonder.soft.retail.domain.workflow.model.WorkflowDetails
+import io.wonder.soft.retail.domain.workflow.model.WorkflowSteps
 import scalikejdbc._
 
 import scala.util.{Failure, Success, Try}
@@ -9,17 +9,17 @@ import scala.util.{Failure, Success, Try}
 class WorkflowDetailRepositoryImpl extends WorkflowDetailRepository  {
   import WorkflowDetailEntity._
 
-  val wsc = WorkflowDetails.column
+  val wsc = WorkflowSteps.column
 
   override def find(id: Int): Option[WorkflowDetailEntity] = {
-    WorkflowDetails.find(id).map(definitions => definitions)
+    WorkflowSteps.find(id).map(definitions => definitions)
   }
 
   override def create(entity: WorkflowDetailEntity): Either[Exception, WorkflowDetailEntity] = {
     Try {
       DB localTx {implicit session =>
         withSQL {
-          insert.into(WorkflowDetails).namedValues(
+          insert.into(WorkflowSteps).namedValues(
             wsc.workflowId -> entity.workflowId,
             wsc.name -> entity.name,
             wsc.statusId -> entity.status.get.id,

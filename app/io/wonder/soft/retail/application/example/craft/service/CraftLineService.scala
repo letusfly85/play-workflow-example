@@ -24,7 +24,7 @@ class CraftLineService @Inject()
         Logger.info(s"find not yet initialized craft entity ${craftLine.toString}")
         transactionService.openTransaction(userId = "1", workflowId = craftExampleWorkflowId) match {
           case Right(transaction) =>
-            val define = transactionService.findDefinitionByStepId(workflowId = craftExampleWorkflowId, transaction.stepId).get
+            val define = transactionService.findStep(workflowId = craftExampleWorkflowId, transaction.stepId).get
             val newCraftLine = craftLine.copy(
               transactionId = Some(transaction.transactionId),
               statusId = define.stepId.toString,

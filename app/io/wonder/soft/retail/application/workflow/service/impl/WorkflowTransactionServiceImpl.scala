@@ -62,7 +62,7 @@ class WorkflowTransactionServiceImpl @Inject() (
     }
   }
 
-  def findDefinitionByStepId(workflowId: Int, stepId: Int): Option[WorkflowDetailEntity] = {
+  def findStep(workflowId: Int, stepId: Int): Option[WorkflowDetailEntity] = {
     defineQuery.findDefine(workflowId, stepId)
   }
 
@@ -95,7 +95,7 @@ class WorkflowTransactionServiceImpl @Inject() (
   }
 
   private def proceedAppTransaction(currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, WorkflowCurrentStateEntity] = {
-    val define = findDefinitionByStepId(currentStateEntity.workflowId, currentStateEntity.currentStepId).get
+    val define = findStep(currentStateEntity.workflowId, currentStateEntity.currentStepId).get
     appTransactionService.updateAppTransaction(define, currentStateEntity)
   }
 

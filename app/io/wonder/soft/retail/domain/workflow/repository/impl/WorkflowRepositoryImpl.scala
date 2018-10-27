@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.domain.workflow.repository
 
 import io.wonder.soft.retail.domain.workflow.entity.WorkflowEntity
-import io.wonder.soft.retail.domain.workflow.model.{WorkflowDetails, Workflows}
+import io.wonder.soft.retail.domain.workflow.model.{WorkflowSteps, Workflows}
 import scalikejdbc._
 
 import scala.util.{Failure, Success, Try}
@@ -10,10 +10,10 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
   import WorkflowEntity._
 
   val w = Workflows.syntax("w")
-  val wd = WorkflowDetails.syntax("wd")
+  val wd = WorkflowSteps.syntax("wd")
 
   val wc = Workflows.column
-  val wdc = WorkflowDetails.column
+  val wdc = WorkflowSteps.column
 
   override def find(id: Int): Option[WorkflowEntity] = {
     Workflows.find(id) match {
@@ -29,14 +29,14 @@ class WorkflowRepositoryImpl extends WorkflowRepository {
           case Some(_) =>
             if (entity.details.nonEmpty) {
               entity.details.foreach { detail =>
-                WorkflowDetails.findBy(
-                  sqls.eq(WorkflowDetails.column.workflowId, detail.workflowId)
+                WorkflowSteps.findBy(
+                  sqls.eq(WorkflowSteps.column.workflowId, detail.workflowId)
                 ).map(detail => detail.destroy())
               }
 
               entity.details.foreach { detail =>
                 withSQL {
-                  insert.into(WorkflowDetails).namedValues(
+                  insert.into(WorkflowSteps).namedValues(
                     wdc.workflowId -> entity.workflowId,
                     wdc.name -> entity.name,
                     wdc.statusId -> detail.status.map(s => s.id).getOrElse(0),

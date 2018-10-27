@@ -25,11 +25,11 @@ class OrderService @Inject()
         Logger.info(s"find not yet initialized order entity ${orderEntity.toString}")
         transactionService.openTransaction(userId = "1", workflowId = workflowId.toInt) match {
           case Right(transaction) =>
-            val define = transactionService.findDefinitionByStepId(workflowId = workflowId.toInt, transaction.stepId).get
+            val workflowStep = transactionService.findStep(workflowId.toInt, transaction.stepId).get
             val newOrder = order.copy(
               transactionId = Some(transaction.transactionId),
-              statusId = Some(define.stepId.toString),
-              statusName = Some(define.stepLabel)
+              statusId = Some(workflowStep.stepId.toString),
+              statusName = Some(workflowStep.stepLabel)
             )
             orderRepository.update(newOrder)
 
@@ -37,12 +37,12 @@ class OrderService @Inject()
             Left(new Exception(exception))
         }
 
-      case Some(craftLine) =>
-        Logger.info(s"find order entity ${craftLine.toString}")
-        Right(craftLine)
+      case Some(order) =>
+        Logger.info(s"find order entity ${order.toString}")
+        Right(order)
 
       case None =>
-        Left(new RuntimeException(""))
+        Left(new RuntimeException(s"NO_ORDER_FOUND ${workflowId} ${orderEntity.id}"))
     }
   }
 

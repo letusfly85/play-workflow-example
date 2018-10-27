@@ -6,14 +6,14 @@ import scalikejdbc.jodatime.JodaParameterBinderFactory._
 import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class Workflows(
-  id: Int,
-  workflowId: Int,
-  name: String,
-  details: Seq[WorkflowDetails] = Nil,
-  serviceId: Int,
-  createdAt: Option[DateTime] = None,
-  updatedAt: Option[DateTime] = None,
-  description: Option[String] = None) {
+                      id: Int,
+                      workflowId: Int,
+                      name: String,
+                      steps: Seq[WorkflowSteps] = Nil,
+                      serviceId: Int,
+                      createdAt: Option[DateTime] = None,
+                      updatedAt: Option[DateTime] = None,
+                      description: Option[String] = None) {
 
   def save()(implicit session: DBSession = Workflows.autoSession): Workflows = Workflows.save(this)(session)
 

@@ -23,7 +23,7 @@
 
 GET     /api/example/orders               io.wonder.soft.retail.application.example.order.controller.OrderController.listOrder
 
-PUT     /api/example/orders/:id           io.wonder.soft.retail.application.example.order.controller.OrderController.findOrder(id: String)
+PUT     /api/example/workflows/:workflowId/orders/:orderId   io.wonder.soft.retail.application.example.order.controller.OrderController.findOrder(workflowId: String, orderId: String)
 
 GET     /api/example/craft-lines          io.wonder.soft.retail.application.example.craft.controller.CraftLineController.listCraftLine
 

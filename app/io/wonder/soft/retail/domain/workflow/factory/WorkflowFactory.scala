@@ -12,7 +12,7 @@ object WorkflowFactory {
       workflowId = workflows.workflowId,
       name = workflows.name,
       description = workflows.description,
-      details = workflows.details.map(wd => wd).toList,
+      details = workflows.steps.map(wd => wd).toList,
       serviceId = workflows.serviceId
     )
   }

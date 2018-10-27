@@ -12,8 +12,8 @@ class WorkflowQuery {
 
   // syntax
   val w = Workflows.syntax("w")
-  val wd = WorkflowDetails.syntax("wd")
-  val wd_to = WorkflowDetails.syntax("wd_to")
+  val wd = WorkflowSteps.syntax("wd")
+  val wd_to = WorkflowSteps.syntax("wd_to")
   val ws = WorkflowStatuses.syntax("ws")
   val wt = WorkflowTransitions.syntax("wt")
 
@@ -42,11 +42,11 @@ class WorkflowQuery {
     (DB localTx { implicit session =>
       withSQL {
         select.all(w, wd).from(Workflows as w)
-          .leftJoin(WorkflowDetails as wd).on(w.workflowId, wd.workflowId)
+          .leftJoin(WorkflowSteps as wd).on(w.workflowId, wd.workflowId)
           .where(sqls.eq(w.workflowId, workflowId))
       }.one(Workflows(w))
-        .toMany(WorkflowDetails.opt(wd))
-        .map { (workflow, details) => workflow.copy(details = details) }
+        .toMany(WorkflowSteps.opt(wd))
+        .map { (workflow, steps) => workflow.copy(steps = steps) }
         .single.apply()
     }).map { case workflows: Workflows =>
         WorkflowFactory.build(workflows)
@@ -56,12 +56,12 @@ class WorkflowQuery {
   def searchDefinitions(workflowId: Int): List[WorkflowDetailEntity] = {
     (DB localTx { implicit session =>
       withSQL {
-        select.from(WorkflowDetails as wd)
+        select.from(WorkflowSteps as wd)
           .innerJoin(WorkflowStatuses as ws)
           .on(wd.statusId, ws.id)
           .where(sqls.eq(wd.workflowId, workflowId))
-      }.map(res => (WorkflowDetails(wd)(res), WorkflowStatuses(ws)(res))).list().apply()
-    }).map{ case (scheme: WorkflowDetails, status: WorkflowStatuses) =>
+      }.map(res => (WorkflowSteps(wd)(res), WorkflowStatuses(ws)(res))).list().apply()
+    }).map{ case (scheme: WorkflowSteps, status: WorkflowStatuses) =>
       WorkflowFactory.buildDefinitionEntity(scheme, status)
     }
   }
@@ -85,17 +85,17 @@ class WorkflowQuery {
     (DB localTx { implicit session =>
       withSQL {
         select.from(WorkflowTransitions as wt)
-          .innerJoin(WorkflowDetails as wd)
+          .innerJoin(WorkflowSteps as wd)
           .on(wt.fromStepId, wd.stepId)
-          .innerJoin(WorkflowDetails as wd_to)
+          .innerJoin(WorkflowSteps as wd_to)
           .on(wt.toStepId, wd_to.stepId)
           .where(
             sqls.eq(wt.workflowId, workflowId)
               .and.eq(wd.workflowId, workflowId)
               .and.eq(wd_to.workflowId, workflowId)
           )
-      }.map(res => (WorkflowTransitions(wt)(res), WorkflowDetails(wd)(res), WorkflowDetails(wd_to)(res))).list.apply
-    }).map{ case (transition: WorkflowTransitions, fromStep: WorkflowDetails, toStep: WorkflowDetails) =>
+      }.map(res => (WorkflowTransitions(wt)(res), WorkflowSteps(wd)(res), WorkflowSteps(wd_to)(res))).list.apply
+    }).map{ case (transition: WorkflowTransitions, fromStep: WorkflowSteps, toStep: WorkflowSteps) =>
       WorkflowFactory.buildTransitionEntity(
         transition, fromStep, toStep
       )
@@ -104,7 +104,7 @@ class WorkflowQuery {
   }
 
   def findDefine(workflowId: Int, stepId: Int): Option[WorkflowDetailEntity] = {
-    WorkflowDetails.findBy(sqls.eq(wd.workflowId, workflowId).and.eq(wd.stepId, stepId)).map(d => d)
+    WorkflowSteps.findBy(sqls.eq(wd.workflowId, workflowId).and.eq(wd.stepId, stepId)).map(d => d)
   }
 
 }

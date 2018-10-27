@@ -5,7 +5,7 @@ import org.joda.time.{DateTime}
 import scalikejdbc.jodatime.JodaParameterBinderFactory._
 import scalikejdbc.jodatime.JodaTypeBinder._
 
-case class WorkflowDetails(
+case class WorkflowSteps(
   id: Int,
   workflowId: Int,
   name: String,
@@ -18,23 +18,23 @@ case class WorkflowDetails(
   createdAt: Option[DateTime] = None,
   updatedAt: Option[DateTime] = None) {
 
-  def save()(implicit session: DBSession = WorkflowDetails.autoSession): WorkflowDetails = WorkflowDetails.save(this)(session)
+  def save()(implicit session: DBSession = WorkflowSteps.autoSession): WorkflowSteps = WorkflowSteps.save(this)(session)
 
-  def destroy()(implicit session: DBSession = WorkflowDetails.autoSession): Int = WorkflowDetails.destroy(this)(session)
+  def destroy()(implicit session: DBSession = WorkflowSteps.autoSession): Int = WorkflowSteps.destroy(this)(session)
 
 }
 
 
-object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
+object WorkflowSteps extends SQLSyntaxSupport[WorkflowSteps] {
 
   override val tableName = "workflow_details"
 
   override val columns = Seq("id", "workflow_id", "name", "status_id", "step_id", "step_label", "is_first_step", "is_last_step", "created_at", "updated_at")
 
-  def apply(wd: SyntaxProvider[WorkflowDetails])(rs: WrappedResultSet): WorkflowDetails = apply(wd.resultName)(rs)
-  def apply(wd: ResultName[WorkflowDetails])(rs: WrappedResultSet): WorkflowDetails = {
+  def apply(wd: SyntaxProvider[WorkflowSteps])(rs: WrappedResultSet): WorkflowSteps = apply(wd.resultName)(rs)
+  def apply(wd: ResultName[WorkflowSteps])(rs: WrappedResultSet): WorkflowSteps = {
     val statusId: Int = rs.int(wd.statusId)
-    new WorkflowDetails(
+    new WorkflowSteps(
       id = rs.get(wd.id),
       workflowId = rs.get(wd.workflowId),
       name = rs.get(wd.name),
@@ -49,42 +49,42 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
     )
   }
 
-  def opt(m: SyntaxProvider[WorkflowDetails])(rs: WrappedResultSet): Option[WorkflowDetails] =
-    rs.longOpt(m.resultName.id).map(_ => WorkflowDetails(m)(rs))
+  def opt(m: SyntaxProvider[WorkflowSteps])(rs: WrappedResultSet): Option[WorkflowSteps] =
+    rs.longOpt(m.resultName.id).map(_ => WorkflowSteps(m)(rs))
 
-  val wd = WorkflowDetails.syntax("wd")
+  val wd = WorkflowSteps.syntax("wd")
 
   override val autoSession = AutoSession
 
-  def find(id: Int)(implicit session: DBSession = autoSession): Option[WorkflowDetails] = {
+  def find(id: Int)(implicit session: DBSession = autoSession): Option[WorkflowSteps] = {
     withSQL {
-      select.from(WorkflowDetails as wd).where.eq(wd.id, id)
-    }.map(WorkflowDetails(wd.resultName)).single.apply()
+      select.from(WorkflowSteps as wd).where.eq(wd.id, id)
+    }.map(WorkflowSteps(wd.resultName)).single.apply()
   }
 
-  def findAll()(implicit session: DBSession = autoSession): List[WorkflowDetails] = {
-    withSQL(select.from(WorkflowDetails as wd)).map(WorkflowDetails(wd.resultName)).list.apply()
+  def findAll()(implicit session: DBSession = autoSession): List[WorkflowSteps] = {
+    withSQL(select.from(WorkflowSteps as wd)).map(WorkflowSteps(wd.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(WorkflowDetails as wd)).map(rs => rs.long(1)).single.apply().get
+    withSQL(select(sqls.count).from(WorkflowSteps as wd)).map(rs => rs.long(1)).single.apply().get
   }
 
-  def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[WorkflowDetails] = {
+  def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[WorkflowSteps] = {
     withSQL {
-      select.from(WorkflowDetails as wd).where.append(where)
-    }.map(WorkflowDetails(wd.resultName)).single.apply()
+      select.from(WorkflowSteps as wd).where.append(where)
+    }.map(WorkflowSteps(wd.resultName)).single.apply()
   }
 
-  def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[WorkflowDetails] = {
+  def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[WorkflowSteps] = {
     withSQL {
-      select.from(WorkflowDetails as wd).where.append(where)
-    }.map(WorkflowDetails(wd.resultName)).list.apply()
+      select.from(WorkflowSteps as wd).where.append(where)
+    }.map(WorkflowSteps(wd.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
     withSQL {
-      select(sqls.count).from(WorkflowDetails as wd).where.append(where)
+      select(sqls.count).from(WorkflowSteps as wd).where.append(where)
     }.map(_.long(1)).single.apply().get
   }
 
@@ -97,9 +97,9 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
     isFirstStep: Boolean,
     isLastStep: Boolean,
     createdAt: Option[DateTime] = None,
-    updatedAt: Option[DateTime] = None)(implicit session: DBSession = autoSession): WorkflowDetails = {
+    updatedAt: Option[DateTime] = None)(implicit session: DBSession = autoSession): WorkflowSteps = {
     val generatedKey = withSQL {
-      insert.into(WorkflowDetails).namedValues(
+      insert.into(WorkflowSteps).namedValues(
         column.workflowId -> workflowId,
         column.name -> name,
         column.statusId -> statusId,
@@ -112,7 +112,7 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
       )
     }.updateAndReturnGeneratedKey.apply()
 
-    WorkflowDetails(
+    WorkflowSteps(
       id = generatedKey.toInt,
       workflowId = workflowId,
       name = name,
@@ -126,7 +126,7 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
       updatedAt = updatedAt)
   }
 
-  def batchInsert(entities: Seq[WorkflowDetails])(implicit session: DBSession = autoSession): List[Int] = {
+  def batchInsert(entities: Seq[WorkflowSteps])(implicit session: DBSession = autoSession): List[Int] = {
     val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'workflowId -> entity.workflowId,
@@ -161,9 +161,9 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
     )""").batchByName(params: _*).apply[List]()
   }
 
-  def save(entity: WorkflowDetails)(implicit session: DBSession = autoSession): WorkflowDetails = {
+  def save(entity: WorkflowSteps)(implicit session: DBSession = autoSession): WorkflowSteps = {
     withSQL {
-      update(WorkflowDetails).set(
+      update(WorkflowSteps).set(
         column.id -> entity.id,
         column.workflowId -> entity.workflowId,
         column.name -> entity.name,
@@ -179,8 +179,8 @@ object WorkflowDetails extends SQLSyntaxSupport[WorkflowDetails] {
     entity
   }
 
-  def destroy(entity: WorkflowDetails)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(WorkflowDetails).where.eq(column.id, entity.id) }.update.apply()
+  def destroy(entity: WorkflowSteps)(implicit session: DBSession = autoSession): Int = {
+    withSQL { delete.from(WorkflowSteps).where.eq(column.id, entity.id) }.update.apply()
   }
 
 }

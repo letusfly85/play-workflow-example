@@ -1,7 +1,7 @@
 package io.wonder.soft.retail.domain.workflow.entity
 
 import io.wonder.soft.retail.domain.Entity
-import io.wonder.soft.retail.domain.workflow.model.WorkflowDetails
+import io.wonder.soft.retail.domain.workflow.model.WorkflowSteps
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -40,7 +40,7 @@ object WorkflowDetailEntity {
     )(unlift(WorkflowDetailEntity.unapply))
 
   implicit def convertFromModel(
-    model: WorkflowDetails): WorkflowDetailEntity = {
+    model: WorkflowSteps): WorkflowDetailEntity = {
     WorkflowDetailEntity(
       model.workflowId,
       model.name,
@@ -52,7 +52,7 @@ object WorkflowDetailEntity {
     )
   }
 
-  implicit def convertFromModels(models: List[WorkflowDetails]): List[WorkflowDetailEntity] = {
+  implicit def convertFromModels(models: List[WorkflowSteps]): List[WorkflowDetailEntity] = {
     models.map(convertFromModel)
   }
 }
