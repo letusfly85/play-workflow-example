@@ -138,7 +138,7 @@ object WorkflowSteps extends SQLSyntaxSupport[WorkflowSteps] {
         'isLastStep -> entity.isLastStep,
         'createdAt -> entity.createdAt,
         'updatedAt -> entity.updatedAt))
-    SQL("""insert into workflow_details(
+    SQL(s"""insert into ${tableName}(
       workflow_id,
       name,
       status_id,
