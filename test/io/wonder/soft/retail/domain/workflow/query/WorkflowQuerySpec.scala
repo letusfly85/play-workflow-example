@@ -1,6 +1,6 @@
 package io.wonder.soft.retail.domain.workflow.query
 
-import io.wonder.soft.retail.domain.workflow.model.{WorkflowDetails, WorkflowStatuses}
+import io.wonder.soft.retail.domain.workflow.model.{WorkflowSteps, WorkflowStatuses}
 import org.specs2.mock.Mockito
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
@@ -38,8 +38,8 @@ class WorkflowQuerySpec extends Specification with Mockito {
     }
 
     override def after: Any = {
-      WorkflowDetails.findAllBy(
-        sqls.eq(WorkflowDetails.column.workflowId, testWorkflowId)
+      WorkflowSteps.findAllBy(
+        sqls.eq(WorkflowSteps.column.workflowId, testWorkflowId)
       ).foreach(_.destroy())
 
       List(99, 100, 101).foreach {id =>

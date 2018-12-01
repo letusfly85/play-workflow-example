@@ -7,7 +7,7 @@ import org.specs2.specification.BeforeAfterAll
 import scalikejdbc.config.DBs
 
 
-class WorkflowDetailsSpec extends Specification with BeforeAfterAll {
+class WorkflowStepsSpec extends Specification with BeforeAfterAll {
   DBs.setupAll()
 
   def beforeAll = {
@@ -30,35 +30,35 @@ class WorkflowDetailsSpec extends Specification with BeforeAfterAll {
 
   "WorkflowDetails" should {
 
-    val wd = WorkflowDetails.syntax("wd")
+    val wd = WorkflowSteps.syntax("wd")
 
     "find by primary keys" in new AutoRollback {
-      val maybeFound = WorkflowDetails.find(123)
+      val maybeFound = WorkflowSteps.find(123)
       maybeFound.isDefined should beTrue
     }
     "find by where clauses" in new AutoRollback {
-      val maybeFound = WorkflowDetails.findBy(sqls.eq(wd.id, 123))
+      val maybeFound = WorkflowSteps.findBy(sqls.eq(wd.id, 123))
       maybeFound.isDefined should beTrue
     }
     "find all records" in new AutoRollback {
-      val allResults = WorkflowDetails.findAll()
+      val allResults = WorkflowSteps.findAll()
       allResults.size should be_>(0)
     }
     "count all records" in new AutoRollback {
-      val count = WorkflowDetails.countAll()
+      val count = WorkflowSteps.countAll()
       count should be_>(0L)
     }
     "find all by where clauses" in new AutoRollback {
-      val results = WorkflowDetails.findAllBy(sqls.eq(wd.id, 123))
+      val results = WorkflowSteps.findAllBy(sqls.eq(wd.id, 123))
       results.size should be_>(0)
     }
     "count by where clauses" in new AutoRollback {
-      val count = WorkflowDetails.countBy(sqls.eq(wd.id, 123))
+      val count = WorkflowSteps.countBy(sqls.eq(wd.id, 123))
       count should be_>(0L)
     }
     "create new record" in new AutoRollback {
       val created =
-        WorkflowDetails.create(
+        WorkflowSteps.create(
           workflowId = 123,
           name = "MyString",
           statusId = 1,
@@ -69,22 +69,22 @@ class WorkflowDetailsSpec extends Specification with BeforeAfterAll {
       created should not beNull
     }
     "save a record" in new AutoRollback {
-      val entity = WorkflowDetails.find(123).get
+      val entity = WorkflowSteps.find(123).get
       val modified = entity.copy(name = "hoge")
-      val updated = WorkflowDetails.save(modified)
+      val updated = WorkflowSteps.save(modified)
       updated should not equalTo(entity)
     }
     "destroy a record" in new AutoRollback {
-      val entity = WorkflowDetails.find(123).get
-      val deleted = WorkflowDetails.destroy(entity) == 1
+      val entity = WorkflowSteps.find(123).get
+      val deleted = WorkflowSteps.destroy(entity) == 1
       deleted should beTrue
-      val shouldBeNone = WorkflowDetails.find(123)
+      val shouldBeNone = WorkflowSteps.find(123)
       shouldBeNone.isDefined should beFalse
     }
     "perform batch insert" in new AutoRollback {
-      val entities = WorkflowDetails.findAll()
-      entities.foreach(e => WorkflowDetails.destroy(e))
-      val batchInserted = WorkflowDetails.batchInsert(entities)
+      val entities = WorkflowSteps.findAll()
+      entities.foreach(e => WorkflowSteps.destroy(e))
+      val batchInserted = WorkflowSteps.batchInsert(entities)
       batchInserted.size should be_>(0)
     }
   }
