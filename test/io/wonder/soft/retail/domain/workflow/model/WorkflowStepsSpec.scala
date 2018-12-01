@@ -16,19 +16,19 @@ class WorkflowStepsSpec extends Specification with BeforeAfterAll {
     DB localTx { implicit session =>
       SQL("delete from workflow_statuses where id = ?").bind(1).update.apply
       SQL("insert into workflow_statuses (id, name) values (?, ?)").bind(1, "未着手").update.apply
-      SQL("delete from workflow_details where id = ?").bind(123).update.apply
-      SQL("insert into workflow_details (id, workflow_id, name, status_id, step_id, step_label, is_first_step, is_last_step) values (?, ?, ?, ?, ?, ?, ?, ?)")
+      SQL("delete from workflow_steps where id = ?").bind(123).update.apply
+      SQL("insert into workflow_steps (id, workflow_id, name, status_id, step_id, step_label, is_first_step, is_last_step) values (?, ?, ?, ?, ?, ?, ?, ?)")
         .bind(123, testWorkflowId, testWorkflowName, 99, 1, "step1", true, false).update.apply
     }
   }
 
   def afterAll = {
     DB localTx { implicit session =>
-      SQL("delete from workflow_details where id = ?").bind(123).update.apply
+      SQL("delete from workflow_steps where id = ?").bind(123).update.apply
     }
   }
 
-  "WorkflowDetails" should {
+  "WorkflowSteps" should {
 
     val wd = WorkflowSteps.syntax("wd")
 

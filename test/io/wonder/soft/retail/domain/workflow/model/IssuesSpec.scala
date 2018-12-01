@@ -10,6 +10,7 @@ import scalikejdbc.jodatime.JodaTypeBinder._
 
 class IssuesSpec extends Specification {
 
+  /*
   "Issues" should {
 
     val i = Issues.syntax("i")
@@ -63,5 +64,6 @@ class IssuesSpec extends Specification {
       batchInserted.size should be_>(0)
     }
   }
+  */
 
 }
