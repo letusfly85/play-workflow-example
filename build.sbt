@@ -14,7 +14,7 @@ resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
 
 resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 
-scalaVersion := "2.12."
+scalaVersion := "2.12.8"
 
 libraryDependencies ++= {
   val silhouetteVersion = "5.0.6"
