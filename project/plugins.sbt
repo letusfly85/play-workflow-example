@@ -11,7 +11,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.6")
 addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
 
 libraryDependencies += "mysql" % "mysql-connector-java"  % "5.1.47"
-addSbtPlugin("org.scalikejdbc" %% "scalikejdbc-mapper-generator" % "3.2.+")
+addSbtPlugin("org.scalikejdbc" %% "scalikejdbc-mapper-generator" % "3.3.+")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
 
