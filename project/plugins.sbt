@@ -17,3 +17,5 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
 
 addSbtPlugin("io.github.davidmweber" % "flyway-sbt" % "5.2.0")
 resolvers += "Flyway" at "https://flywaydb.org/repo"
+
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.4.0")
