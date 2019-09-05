@@ -10,7 +10,7 @@ import net.codingwell.scalaguice.ScalaModule
 
 class DomainModule extends AbstractModule with ScalaModule {
 
-  def configure = {
+  override def configure = {
 
     bind[WorkflowRepository].to[WorkflowRepositoryImpl]
     bind[WorkflowDetailRepository].to[WorkflowDetailRepositoryImpl]

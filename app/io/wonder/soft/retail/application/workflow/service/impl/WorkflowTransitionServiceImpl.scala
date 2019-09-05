@@ -5,13 +5,13 @@ import io.wonder.soft.retail.domain.workflow.entity.{WorkflowTransitionEntity =>
 import io.wonder.soft.retail.domain.workflow.repository.WorkflowTransitionRepository
 import io.wonder.soft.retail.domain.workflow.query.WorkflowQuery
 import javax.inject.Inject
-import play.api.Logger
+import play.api.Logging
 
 import scala.util.{Failure, Success, Try}
 
 class WorkflowTransitionServiceImpl @Inject() (
   query: WorkflowQuery,
-  transitionRepository: WorkflowTransitionRepository) extends WorkflowTransitionService {
+  transitionRepository: WorkflowTransitionRepository) extends WorkflowTransitionService with Logging {
 
   def listTransition(workflowId: Int): List[TransitionEntity] =
     query.searchTransitions(workflowId)
@@ -28,7 +28,7 @@ class WorkflowTransitionServiceImpl @Inject() (
 
   def destroyTransition(workflowId: Int, transitionId: Int): Either[Exception, TransitionEntity] = {
     Try {
-      Logger.info(s"destroying ${workflowId}, ${transitionId}")
+      logger.info(s"destroying ${workflowId}, ${transitionId}")
       transitionRepository.destroy(transitionId)
     } match {
       case Success(Some(entity)) => Right(entity)

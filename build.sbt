@@ -17,12 +17,12 @@ resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 scalaVersion := "2.12.8"
 
 libraryDependencies ++= {
-  val silhouetteVersion = "5.0.7"
-  val scalikeJDBCV = "3.3.4"
-  val spec2V = "4.5.1"
+  val silhouetteVersion = "6.1.0"
+  val scalikeJDBCV = "3.3.5"
+  val spec2V = "4.7.0"
   val logbackV = "1.2.3"
   val logbackJsonV = "0.1.5"
-  val jacksonV = "2.8.9" // 2.9.3 not working with logback-json dependencies
+  val jacksonV = "2.9.9" // 2.9.3 not working with logback-json dependencies
   Seq(
     jdbc,
     ehcache,
@@ -41,16 +41,16 @@ libraryDependencies ++= {
     "com.mohiva" %% "play-silhouette-testkit" % silhouetteVersion,
 
     //injection dependencies
-    "com.iheart" %% "ficus" % "1.4.6",
-    "net.codingwell" %% "scala-guice" % "4.2.4",
+    "com.iheart" %% "ficus" % "1.4.7",
+    "net.codingwell" %% "scala-guice" % "4.2.6",
 
     //ScalikeJDBC dependencies
     "org.scalikejdbc" %% "scalikejdbc"                     % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-config"              % scalikeJDBCV,
     "org.scalikejdbc" %% "scalikejdbc-joda-time"           % scalikeJDBCV,
-    "org.scalikejdbc" %% "scalikejdbc-play-initializer"    % "2.7.0-scalikejdbc-3.3",
+    "org.scalikejdbc" %% "scalikejdbc-play-initializer"    % "2.7.1-scalikejdbc-3.3",
     "org.scalikejdbc" %% "scalikejdbc-test" % scalikeJDBCV % Test,
-    "mysql" % "mysql-connector-java" % "5.1.47",
+    "mysql" % "mysql-connector-java" % "5.1.48",
 
     "com.typesafe.play" %% "play-mailer" % "7.0.0",
     "com.typesafe.play" %% "play-mailer-guice" % "7.0.0",
@@ -73,7 +73,7 @@ libraryDependencies ++= {
     "org.specs2" %% "specs2-common" % spec2V % Test,
     "org.specs2" %% "specs2-junit" % spec2V % Test,
     "org.specs2" %% "specs2-matcher" % spec2V % Test,
-    "org.scalaz" %% "scalaz-core" % "7.2.27",
+    "org.scalaz" %% "scalaz-core" % "7.2.28",
     "org.mockito" % "mockito-core" % "2.28.2" % Test,
 
     //ScalaCheck

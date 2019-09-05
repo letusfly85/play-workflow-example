@@ -6,14 +6,14 @@ import play.api.libs.json._
 import io.wonder.soft.retail.application.example.order.service.OrderService
 import io.wonder.soft.retail.application.helper.JsResultHelper
 import io.wonder.soft.retail.domain.example.order.entity.OrderEntity
-import play.api.Logger
+import play.api.Logging
 
 import scala.util.{Failure, Success, Try}
 
 @Singleton
 class OrderController @Inject()
 (service: OrderService, cc: ControllerComponents)
-  extends AbstractController(cc) with JsResultHelper {
+  extends AbstractController(cc) with JsResultHelper with Logging {
 
   def listOrder = Action {
     Ok(Json.toJson(service.listOrder))
@@ -31,7 +31,7 @@ class OrderController @Inject()
       case Success(either) => either match {
         case Right(statusEntity) => Created(Json.toJson(statusEntity))
         case Left(exception) =>
-          Logger.info(exception.toString)
+          logger.info(exception.toString)
           InternalServerError(JsObject.empty)
       }
       case Failure(exception) =>

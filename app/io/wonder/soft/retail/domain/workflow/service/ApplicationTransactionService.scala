@@ -8,14 +8,14 @@ import io.wonder.soft.retail.domain.example.order.query.OrderQueryProcessor
 import io.wonder.soft.retail.domain.example.order.repository.OrderRepository
 import io.wonder.soft.retail.domain.workflow.entity.{WorkflowCurrentStateEntity, WorkflowStepEntity}
 import javax.inject.Inject
-import play.api.Logger
+import play.api.{Logger, Logging}
 
 class ApplicationTransactionService @Inject()
   (orderRepository: OrderRepository,
    orderQueryProcessor: OrderQueryProcessor,
    craftLinesRepository: CraftLineRepository,
    craftLineQueryProcessor: CraftLineQueryProcessor
-  )
+  ) extends Logging
 {
   val orderServiceId: Int = 0
   val craftServiceId: Int = 3
@@ -55,7 +55,7 @@ class ApplicationTransactionService @Inject()
   }
 
   private def updateCraftLineRepository(define: WorkflowStepEntity, currentStateEntity: WorkflowCurrentStateEntity): Either[Exception, CraftLineEntity] = {
-    Logger.info(s"update craftLine for ${currentStateEntity.toString}")
+    logger.info(s"update craftLine for ${currentStateEntity.toString}")
     craftLineQueryProcessor.findByTransactionId(currentStateEntity.transactionId) match {
       case Some(craftLineEntity) =>
         val nextCraftLineEntity =

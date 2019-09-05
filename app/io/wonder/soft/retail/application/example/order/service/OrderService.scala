@@ -8,21 +8,21 @@ import io.wonder.soft.retail.domain.example.order.repository.OrderRepository
 import io.wonder.soft.retail.domain.example.order.service.OrderTransitionService
 import io.wonder.soft.retail.domain.example.order.service.orderActions._
 import javax.inject.Inject
-import play.Logger
+import play.api.Logging
 
 class OrderService @Inject()
   (transactionService: WorkflowTransactionService,
    transitionService: OrderTransitionService,
    orderRepository: OrderRepository,
    orderQuery: OrderQueryProcessor
-  ) extends ApplicationService {
+  ) extends ApplicationService with Logging {
 
   def listOrder: List[OrderEntity] = orderQuery.listOrder
 
   def openOrder(workflowId: String, orderEntity: OrderEntity): Either[Exception, OrderEntity] = {
     orderRepository.find(orderEntity.id) match {
       case Some(order) if order.transactionId.getOrElse("") == "" =>
-        Logger.info(s"find not yet initialized order entity ${orderEntity.toString}")
+        logger.info(s"find not yet initialized order entity ${orderEntity.toString}")
         transactionService.openTransaction(userId = "1", workflowId = workflowId.toInt) match {
           case Right(transaction) =>
             val workflowStep = transactionService.findStep(workflowId.toInt, transaction.stepId).get
@@ -38,7 +38,7 @@ class OrderService @Inject()
         }
 
       case Some(order) =>
-        Logger.info(s"find order entity ${order.toString}")
+        logger.info(s"find order entity ${order.toString}")
         Right(order)
 
       case None =>

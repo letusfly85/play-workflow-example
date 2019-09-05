@@ -2,12 +2,12 @@ package io.wonder.soft.retail.application.helper
 
 import io.wonder.soft.retail.domain.ErrorResponseEntity
 import org.joda.time.DateTime
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.{JsError, JsResult, JsSuccess, Json}
 import play.api.mvc.Result
 import play.api.mvc.Results._
 
-trait JsResultHelper {
+trait JsResultHelper extends Logging {
 
   implicit def transJsResultToEither[T](jsResult: JsResult[T]): Either[Exception, T] = jsResult match {
     case JsSuccess(t, _) => Right(t)
@@ -18,7 +18,7 @@ trait JsResultHelper {
   }
 
   def errorHandler(e: Exception): Result  = {
-    Logger.info(e.getMessage)
+    logger.info(e.getMessage)
     val errorEntity = ErrorResponseEntity(
       message = e.getMessage,
       createdAt = new DateTime()

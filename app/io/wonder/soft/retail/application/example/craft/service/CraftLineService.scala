@@ -6,13 +6,13 @@ import io.wonder.soft.retail.domain.example.craft.entity.CraftLineEntity
 import io.wonder.soft.retail.domain.example.craft.query.CraftLineQueryProcessor
 import io.wonder.soft.retail.domain.example.craft.repository.CraftLineRepository
 import javax.inject.Inject
-import play.api.Logger
+import play.api.{Logger, Logging}
 
 class CraftLineService @Inject()
   (transactionService: WorkflowTransactionService,
    craftLinesRepository: CraftLineRepository,
    craftLineQuery: CraftLineQueryProcessor,
-  ) extends ApplicationService {
+  ) extends ApplicationService with Logging {
 
   val craftExampleWorkflowId = 3
 
@@ -21,7 +21,7 @@ class CraftLineService @Inject()
   def openCraftLine(craftLineId: String): Either[Exception, CraftLineEntity] = {
     craftLinesRepository.find(craftLineId.toInt) match {
       case Some(craftLine) if craftLine.transactionId.getOrElse("") == "" =>
-        Logger.info(s"find not yet initialized craft entity ${craftLine.toString}")
+        logger.info(s"find not yet initialized craft entity ${craftLine.toString}")
         transactionService.openTransaction(userId = "1", workflowId = craftExampleWorkflowId) match {
           case Right(transaction) =>
             val define = transactionService.findStep(workflowId = craftExampleWorkflowId, transaction.stepId).get
@@ -37,7 +37,7 @@ class CraftLineService @Inject()
         }
 
       case Some(craftLine) =>
-        Logger.info(s"find craft entity ${craftLine.toString}")
+        logger.info(s"find craft entity ${craftLine.toString}")
         Right(craftLine)
 
       case None =>

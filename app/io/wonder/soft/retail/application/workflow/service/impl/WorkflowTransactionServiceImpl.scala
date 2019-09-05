@@ -2,15 +2,13 @@ package io.wonder.soft.retail.application.workflow.service.impl
 
 import io.wonder.soft.retail.application.ApplicationService
 import io.wonder.soft.retail.application.workflow.service.WorkflowTransactionService
-
 import io.wonder.soft.retail.domain.workflow.entity._
 import io.wonder.soft.retail.domain.workflow.factory.WorkflowTransactionFactory
 import io.wonder.soft.retail.domain.workflow.query.{ActionTransactionQuery, WorkflowQuery, WorkflowTransactionQuery}
 import io.wonder.soft.retail.domain.workflow.repository.{WorkflowCurrentStateRepositoryImpl, WorkflowTransactionRepositoryImpl}
 import io.wonder.soft.retail.domain.workflow.service.ApplicationTransactionService
-
 import javax.inject.Inject
-import play.api.Logger
+import play.api.Logging
 
 import scala.util.{Failure, Success, Try}
 
@@ -21,7 +19,7 @@ class WorkflowTransactionServiceImpl @Inject() (
                                                  transactionRepository: WorkflowTransactionRepositoryImpl,
                                                  actionProcessor: ActionTransactionQuery,
                                                  currentStateRepository: WorkflowCurrentStateRepositoryImpl)
-    extends ApplicationService with WorkflowTransactionService {
+    extends ApplicationService with WorkflowTransactionService with Logging {
 
   def openTransaction(userId: String, workflowId: Int): Either[Exception, WorkflowTransactionEntity] = {
     //find workflow definition
@@ -71,7 +69,7 @@ class WorkflowTransactionServiceImpl @Inject() (
     val maybeCurrentState = transactionQuery.findCurrentStateByTransactionId(transactionId)
     maybeCurrentState match {
       case Some(currentState) =>
-        Logger.info(currentState.toString)
+        logger.info(currentState.toString)
         val transaction =
           WorkflowTransactionFactory.buildTransaction(currentState, transition)
         recordTransaction(transaction)
@@ -83,7 +81,7 @@ class WorkflowTransactionServiceImpl @Inject() (
             generateNextState(currentState, transition)
         }
         result.map{ currentStateEntity =>
-          Logger.info(currentStateEntity.toString)
+          logger.info(currentStateEntity.toString)
           currentStateRepository.update(currentStateEntity)
           proceedAppTransaction(currentStateEntity)
         }
