@@ -10,4 +10,11 @@ package workflow {
     require(id > 0)
   }
 
+  trait WorkflowEvent
+
+  case class WorkflowCreated(workflowId: WorkflowId) extends WorkflowEvent
+
+  case class WorkflowStored(workflowId: WorkflowId) extends WorkflowEvent
+
+  case class WorkflowRemoved(workflowId: WorkflowId) extends WorkflowEvent
 }

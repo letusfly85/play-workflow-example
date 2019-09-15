@@ -8,4 +8,20 @@ final case class Workflow
   steps: List[WorkflowStep]
 )
 
-object Workflow {}
+object Workflow {
+
+  def create(workflowId: WorkflowId, name: String, description: Option[String], steps: List[WorkflowStep]): (Workflow, WorkflowEvent) = {
+    val domainObject =
+      Workflow(
+        workflowId,
+        name,
+        description,
+        steps
+      )
+
+    val domainEvent = WorkflowCreated(workflowId)
+
+    (domainObject, domainEvent)
+  }
+
+}
